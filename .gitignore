@@ -81,10 +81,6 @@ local.properties
 .idea/dynamic.xml
 .idea/uiDesigner.xml
 
-# Gradle:
-.idea/gradle.xml
-.idea/libraries
-
 # Mongo Explorer plugin:
 .idea/mongoSettings.xml
 
