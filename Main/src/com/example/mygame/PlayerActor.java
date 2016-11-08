@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.MoveByAction;
 
 public class PlayerActor extends Actor {
     Sprite sprite = new Sprite(new Texture("Desktop/Assets/player.png"));
+    float speed = 100;
 
     public PlayerActor(){
         setBounds(sprite.getX(),sprite.getY(),sprite.getWidth(),sprite.getHeight());
@@ -20,8 +21,31 @@ public class PlayerActor extends Actor {
             @Override
             public boolean keyDown(InputEvent event, int keycode) {
                 if (keycode == Input.Keys.RIGHT){
+
                     MoveByAction mba = new MoveByAction();
-                    mba.setAmount(100f,10f); //x+100 y+10
+                    mba.setAmount(100f,0f); //x+100 y+0
+                    mba.setDuration(1f); //1 sec
+
+                    PlayerActor.this.addAction(mba);
+                    //PlayerActor.this.setPosition(getX()+speed,getY());
+                }
+                if (keycode == Input.Keys.LEFT){
+                    MoveByAction mba = new MoveByAction();
+                    mba.setAmount(-100f,0f); //x-100 y+0
+                    mba.setDuration(1f); //1 sec
+
+                    PlayerActor.this.addAction(mba);
+                }
+                if (keycode == Input.Keys.UP){
+                    MoveByAction mba = new MoveByAction();
+                    mba.setAmount(0f,100f); //x+0 y+100
+                    mba.setDuration(1f); //1 sec
+
+                    PlayerActor.this.addAction(mba);
+                }
+                if (keycode == Input.Keys.DOWN){
+                    MoveByAction mba = new MoveByAction();
+                    mba.setAmount(0f,-100f); //x+0 y-100
                     mba.setDuration(1f); //1 sec
 
                     PlayerActor.this.addAction(mba);
