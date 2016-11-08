@@ -6,68 +6,23 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
-import com.badlogic.gdx.scenes.scene2d.actions.MoveByAction;
-import com.sun.javaws.Main;
 
 public class PlayerActor extends Actor {
-    Sprite sprite = new Sprite(new Texture("Desktop/Assets/player.png"));
+    Sprite sprite;
     final float max_speed = 10;
     final float acceleration = 1;
     float current_speed = 0;
     final float rotation_speed = 5;
-    float angle = 0;
-
+    public int projectilesFired = 0;
 
     public PlayerActor(){
+        Texture texture = new Texture("Desktop/Assets/player.png");
+        texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        sprite = new Sprite(texture);
+
         setBounds(sprite.getX(),sprite.getY(),sprite.getWidth(),sprite.getHeight());
-        angle = getRotation();
-
-        /*
-        addListener(new InputListener(){
-            @Override
-            public boolean keyDown(InputEvent event, int keycode) {
-                if (keycode == Input.Keys.RIGHT){
-
-                    MoveByAction mba = new MoveByAction();
-                    mba.setAmount(100f,0f); //x+100 y+0
-                    mba.setDuration(1f); //1 sec
-
-                    PlayerActor.this.addAction(mba);
-                    //PlayerActor.this.setPosition(getX()+speed,getY());
-                }
-                if (keycode == Input.Keys.LEFT){
-                    /*
-                    MoveByAction mba = new MoveByAction();
-                    mba.setAmount(-100f,0f); //x-100 y+0
-                    mba.setDuration(1f); //1 sec
-
-                    PlayerActor.this.addAction(mba);
-                    */
-                    PlayerActor.this.setRotation(angle += rotation_speed);
-                    PlayerActor.this.sprite.setRotation(angle);
-/*
-                }
-                if (keycode == Input.Keys.UP){
-                    MoveByAction mba = new MoveByAction();
-                    mba.setAmount(0f,100f); //x+0 y+100
-                    mba.setDuration(1f); //1 sec
-
-                    PlayerActor.this.addAction(mba);
-                }
-                if (keycode == Input.Keys.DOWN){
-                    MoveByAction mba = new MoveByAction();
-                    mba.setAmount(0f,-100f); //x+0 y-100
-                    mba.setDuration(1f); //1 sec
-
-                    PlayerActor.this.addAction(mba);
-                }
-                return true;
-            }
-        });
-                */
     }
 
     @Override
@@ -96,6 +51,16 @@ public class PlayerActor extends Actor {
         if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
             current_speed -= Math.min(0, current_speed - acceleration);
         }
+        if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
+            fireProjectile();
+        }
+        faceMouse();
+    }
+
+    private void fireProjectile() {
+        ProjectileActor projectile = new ProjectileActor(sprite.getX(), sprite.getY(), getRotation(), this);
+        getStage().addActor(projectile);
+        projectilesFired++;
     }
 
     private void updateRotation(float angle) {
@@ -112,11 +77,24 @@ public class PlayerActor extends Actor {
         setPosition(getX() + x, getY() + y);
     }
 
+    private void faceMouse() {
+        float xInput = Gdx.input.getX();
+        float yInput = (Gdx.graphics.getHeight() - Gdx.input.getY());
+
+        float angle = MathUtils.radiansToDegrees * MathUtils.atan2(yInput - getY(), xInput - getX());
+
+        if(angle < 0){
+            angle += 360;
+        }
+        setRotation(angle);
+        sprite.setRotation(angle);
+    }
+
     private boolean outOfBoundsX(float update) {
-        return (getX() + update > myGame.WIDTH - sprite.getWidth()) || (getX() + update < 0);
+        return (getX() + update > GeometryWars.WIDTH - sprite.getWidth()) || (getX() + update < 0);
     }
 
     private boolean outOfBoundsY(float update) {
-        return (getY() + update > myGame.HEIGHT - sprite.getHeight()) || (getY() + update < 0);
+        return (getY() + update > GeometryWars.HEIGHT - sprite.getHeight()) || (getY() + update < 0);
     }
 }
