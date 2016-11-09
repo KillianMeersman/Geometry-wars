@@ -3,78 +3,88 @@ package com.example.mygame;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.sun.media.sound.ModelAbstractChannelMixer;
 
-public class PlayerActor extends Actor {
-    Sprite sprite;
-    final float max_speed = 10;
-    final float acceleration = 1;
+public class PlayerActor extends SpriteActor {
+    final int ROUNDS_PER_SECOND = 15;
+    final float MAX_SPEED = 10;
+    final float ACCEL = 1f;
+    final float ROT_SPEED = 5;
+    final float FRICTION = 0.92f;
+
     float current_speed = 0;
-    final float rotation_speed = 5;
+    float lastDelta = 0;
     public int projectilesFired = 0;
+    ControlScheme controlScheme;
 
     public PlayerActor(){
-        Texture texture = new Texture("Desktop/Assets/player.png");
+        Texture texture = new Texture("Desktop/Assets/spaceship.png");
         texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         sprite = new Sprite(texture);
 
         setBounds(sprite.getX(),sprite.getY(),sprite.getWidth(),sprite.getHeight());
+
+        controlScheme = new ControlScheme();
+        controlScheme.FORWARD = Input.Keys.UP;
+        controlScheme.BACKWARDS = Input.Keys.BACK;
+        controlScheme.LEFT = Input.Keys.LEFT;
+        controlScheme.RIGHT = Input.Keys.RIGHT;
+        controlScheme.FIRE = Input.Keys.SPACE;
     }
 
-    @Override
-    public void draw(Batch batch, float parentAlpha) {
-        sprite.draw(batch);
-    }
-
-    @Override
-    protected void positionChanged() {
-        sprite.setPosition(getX(),getY());
-        super.positionChanged();
+    public PlayerActor(ControlScheme controlScheme) {
+        this();
+        this.controlScheme = controlScheme;
     }
 
     @Override
     public void act(float delta) {
         super.act(delta);
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            updateRotation(rotation_speed);
+        updatePosition(current_speed *= FRICTION);
+        checkInput();
+    }
+
+    private void checkInput() {
+
+        if (Gdx.input.isKeyPressed(controlScheme.FORWARD)) {
+            current_speed = Math.min(current_speed + ACCEL, MAX_SPEED);
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            updateRotation(-rotation_speed);
+        if (Gdx.input.isKeyPressed(controlScheme.BACKWARDS)) {
+            current_speed = Math.max(0, current_speed - ACCEL);
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-            updatePosition(Math.max(max_speed, current_speed + acceleration));
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-            current_speed -= Math.min(0, current_speed - acceleration);
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
+        if (Gdx.input.isKeyPressed(controlScheme.FIRE)) {
             fireProjectile();
         }
-        faceMouse();
+
+        if (controlScheme.USEMOUSE) {
+            faceMouse();
+        } else {
+            if (Gdx.input.isKeyPressed(controlScheme.LEFT)) {
+                updateRotation(ROT_SPEED);
+            }
+            if (Gdx.input.isKeyPressed(controlScheme.RIGHT)) {
+                updateRotation(-ROT_SPEED);
+            }
+
+        }
     }
 
     private void fireProjectile() {
-        ProjectileActor projectile = new ProjectileActor(sprite.getX(), sprite.getY(), getRotation(), this);
-        getStage().addActor(projectile);
-        projectilesFired++;
-    }
+        if (lastDelta > 1f / ROUNDS_PER_SECOND) {
+            ProjectileActor projectile = new ProjectileActor(sprite.getX(), sprite.getY(), getRotation(), this);
+            getStage().addActor(projectile);
+            projectilesFired++;
+            lastDelta = 0;
+        } else {
+            lastDelta += Gdx.graphics.getDeltaTime();
+        }
 
-    private void updateRotation(float angle) {
-        this.setRotation(this.getRotation() + angle);
-        this.sprite.setRotation(this.getRotation());
-    }
-
-    private void updatePosition(float distance) {
-        float rotation = (float) Math.toRadians(getRotation());
-        float x = (float) Math.cos(rotation) * distance;
-        if (outOfBoundsX(x)) { x = 0; }
-        float y = (float) Math.sin(rotation) * distance;
-        if (outOfBoundsY(y)) { y = 0; }
-        setPosition(getX() + x, getY() + y);
     }
 
     private void faceMouse() {
@@ -87,14 +97,44 @@ public class PlayerActor extends Actor {
             angle += 360;
         }
         setRotation(angle);
-        sprite.setRotation(angle);
     }
 
-    private boolean outOfBoundsX(float update) {
-        return (getX() + update > GeometryWars.WIDTH - sprite.getWidth()) || (getX() + update < 0);
-    }
+    class ControlScheme {
+        int FORWARD, BACKWARDS, LEFT, RIGHT, FIRE;
+        boolean USEMOUSE = false;
 
-    private boolean outOfBoundsY(float update) {
-        return (getY() + update > GeometryWars.HEIGHT - sprite.getHeight()) || (getY() + update < 0);
+        /*
+        public void setFORWARD(int key) {
+            FORWARD = key;
+        }
+
+        public int getForward() {
+            return FORWARD;
+        }
+
+        public void setBACKWARDS(int key) {
+            BACKWARDS = key;
+        }
+
+        public int getBACKWARDS() {
+            return BACKWARDS;
+        }
+
+        public void setLEFT(int key) {
+            LEFT = key;
+        }
+
+        public int getLEFT() {
+            return LEFT;
+        }
+
+        public void setRIGHT(int key) {
+            RIGHT = key;
+        }
+
+        public int getRIGHT() {
+            return RIGHT;
+        }
+        */
     }
 }

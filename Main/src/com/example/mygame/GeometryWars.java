@@ -6,12 +6,16 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.example.mygame.enemy.EnemyActor;
+import com.example.mygame.enemy.KamikazeBehavior;
 
 public class GeometryWars extends ApplicationAdapter{
     public static int WIDTH; //800px
@@ -32,17 +36,25 @@ public class GeometryWars extends ApplicationAdapter{
 
 
         OrthographicCamera camera = new OrthographicCamera(WIDTH,HEIGHT);   //set Camera to the gamesize
-        camera.translate(WIDTH/2, HEIGHT/2);                                //Change the position of the camera (By default the origin is centered)
+        //camera.translate(WIDTH/2, HEIGHT/2);                                //Change the position of the camera (By default the origin is centered)
         camera.update(); //Update camera to new location
 
         stage = new Stage(new ScreenViewport(camera));
+        createUI();
+
         Gdx.input.setInputProcessor(stage);
         PlayerActor player = new PlayerActor();
         this.player = player;
         player.setPosition(50, 50);
         stage.addActor(player);
         stage.setKeyboardFocus(player);
-        createUI();
+
+        Texture bacteria2 = new Texture("Desktop/Assets/bacteria2.png");
+        Sprite bacteria2Sprite = new Sprite(bacteria2);
+        EnemyActor enemy1 = new EnemyActor(bacteria2Sprite);
+        enemy1.setBehavior(new KamikazeBehavior(enemy1, player, 3));
+        enemy1.setPosition(10, 10);
+        stage.addActor(enemy1);
     }
 
     public void createUI() {
