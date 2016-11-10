@@ -5,11 +5,16 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.example.mygame.SpriteActor;
 
 public class EnemyActor extends SpriteActor {
-    IEnemyBehavior behavior;
+    IEnemyBehavior behavior;    // Stategy pattern
 
     public EnemyActor(Sprite sprite) {
         this.setSprite(sprite);
         this.behavior = new NoBehavior();
+    }
+
+    public EnemyActor(Sprite sprite, float scale) {
+        this(sprite);
+        this.setScale(scale);
     }
 
     public IEnemyBehavior getBehavior() {

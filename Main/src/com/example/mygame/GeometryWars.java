@@ -2,11 +2,9 @@ package com.example.mygame;
 
 
 import com.badlogic.gdx.ApplicationAdapter;
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL30;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -14,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.example.mygame.enemy.EnemyActor;
 import com.example.mygame.enemy.KamikazeBehavior;
 
@@ -21,7 +20,9 @@ public class GeometryWars extends ApplicationAdapter{
     public static int WIDTH; //800px
     public static int HEIGHT; //480px
     Skin skin;
-    Stage stage;
+    GameStage stage;
+    Viewport viewport;
+    OrthographicCamera camera;
 
     PlayerActor player;
 
@@ -35,11 +36,12 @@ public class GeometryWars extends ApplicationAdapter{
         HEIGHT = Gdx.graphics.getHeight();
 
 
-        OrthographicCamera camera = new OrthographicCamera(WIDTH,HEIGHT);   //set Camera to the gamesize
+        camera = new OrthographicCamera(WIDTH,HEIGHT);   //set Camera to the gamesize
         //camera.translate(WIDTH/2, HEIGHT/2);                                //Change the position of the camera (By default the origin is centered)
         camera.update(); //Update camera to new location
+        viewport = new ScreenViewport(camera);
 
-        stage = new Stage(new ScreenViewport(camera));
+        stage = new GameStage(viewport);
         createUI();
 
         Gdx.input.setInputProcessor(stage);
@@ -49,14 +51,17 @@ public class GeometryWars extends ApplicationAdapter{
         stage.addActor(player);
         stage.setKeyboardFocus(player);
 
+
         Texture bacteria2 = new Texture("Desktop/Assets/bacteria2.png");
         Sprite bacteria2Sprite = new Sprite(bacteria2);
-        EnemyActor enemy1 = new EnemyActor(bacteria2Sprite);
-        enemy1.setBehavior(new KamikazeBehavior(enemy1, player, 3));
-        enemy1.setPosition(10, 10);
-        stage.addActor(enemy1);
+        for (int i = 0; i < 7; i++) {
+            EnemyActor enemy = new EnemyActor(bacteria2Sprite, 0.5f);
+            enemy.setBehavior(new KamikazeBehavior(enemy, player, 3));
+            stage.addActor(enemy);
+        }
     }
 
+    // Create UI elements
     public void createUI() {
         Label.LabelStyle style = new Label.LabelStyle(skin.getFont("default"), Color.WHITE);
         skin.add("default", style);
@@ -75,5 +80,13 @@ public class GeometryWars extends ApplicationAdapter{
         Gdx.gl.glClear(GL30.GL_COLOR_BUFFER_BIT);
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
+    }
+
+    // what to do when screen is resized
+    public void resize(int width, int height) {
+        viewport.update(width, height);
+        camera.update();
+        WIDTH = viewport.getScreenWidth();
+        HEIGHT = viewport.getScreenHeight();
     }
 }

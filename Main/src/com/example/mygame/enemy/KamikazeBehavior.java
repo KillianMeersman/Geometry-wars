@@ -1,13 +1,11 @@
 package com.example.mygame.enemy;
 
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.utils.Cullable;
 import com.example.mygame.CustomUtils;
 import com.example.mygame.PlayerActor;
 import com.example.mygame.SpriteActor;
 
-public class KamikazeBehavior implements IEnemyBehavior {
+public class KamikazeBehavior implements IEnemyBehavior {   // The enemy goes towards the player
     final float SPEED;
 
     SpriteActor target;
@@ -30,8 +28,8 @@ public class KamikazeBehavior implements IEnemyBehavior {
     @Override
     public void act() {
         float angleToFace = CustomUtils.getAngleToFace(actor.getX(), actor.getY(), target.getX(), target.getY());
-        actor.setRotation(angleToFace);
+        actor.setRotation(angleToFace); // Face target
         Vector2 newPos = CustomUtils.getForwardPosition(angleToFace, 2);
-        actor.updatePosition(SPEED);
+        actor.updatePositionForward(SPEED); // Go forward
     }
 }

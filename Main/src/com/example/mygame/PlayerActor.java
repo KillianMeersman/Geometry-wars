@@ -3,22 +3,18 @@ package com.example.mygame;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.sun.media.sound.ModelAbstractChannelMixer;
 
 public class PlayerActor extends SpriteActor {
-    final int ROUNDS_PER_SECOND = 15;
+    int ROUNDS_PER_SECOND = 20;
     final float MAX_SPEED = 10;
     final float ACCEL = 1f;
     final float ROT_SPEED = 5;
     final float FRICTION = 0.92f;
 
-    float current_speed = 0;
+    float speed_x = 0;
+    float speed_y = 0;
     float lastDelta = 0;
     public int projectilesFired = 0;
     ControlScheme controlScheme;
@@ -31,8 +27,8 @@ public class PlayerActor extends SpriteActor {
         setBounds(sprite.getX(),sprite.getY(),sprite.getWidth(),sprite.getHeight());
 
         controlScheme = new ControlScheme();
-        controlScheme.FORWARD = Input.Keys.UP;
-        controlScheme.BACKWARDS = Input.Keys.BACK;
+        controlScheme.UP = Input.Keys.UP;
+        controlScheme.DOWN = Input.Keys.DOWN;
         controlScheme.LEFT = Input.Keys.LEFT;
         controlScheme.RIGHT = Input.Keys.RIGHT;
         controlScheme.FIRE = Input.Keys.SPACE;
@@ -46,78 +42,66 @@ public class PlayerActor extends SpriteActor {
     @Override
     public void act(float delta) {
         super.act(delta);
-        updatePosition(current_speed *= FRICTION);
+        updatePositionAbsolute(speed_x *= FRICTION, speed_y *= FRICTION);
         checkInput();
     }
 
-    private void checkInput() {
+    private void checkInput() { // check for pressed keys
+        if (Gdx.input.isKeyPressed(controlScheme.UP)) {
+            speed_y = Math.min(speed_y + ACCEL, MAX_SPEED);
+        }
+        if (Gdx.input.isKeyPressed(controlScheme.DOWN)) {
+            speed_y = Math.max(-MAX_SPEED, speed_y - ACCEL);
+        }
+        if (Gdx.input.isKeyPressed(controlScheme.LEFT)) {
+            speed_x = Math.max(-MAX_SPEED, speed_x - ACCEL);
+        }
+        if (Gdx.input.isKeyPressed(controlScheme.RIGHT)) {
+            speed_x = Math.min(speed_x + ACCEL, MAX_SPEED);
+        }
 
-        if (Gdx.input.isKeyPressed(controlScheme.FORWARD)) {
-            current_speed = Math.min(current_speed + ACCEL, MAX_SPEED);
-        }
-        if (Gdx.input.isKeyPressed(controlScheme.BACKWARDS)) {
-            current_speed = Math.max(0, current_speed - ACCEL);
-        }
         if (Gdx.input.isKeyPressed(controlScheme.FIRE)) {
             fireProjectile();
         }
-
-        if (controlScheme.USEMOUSE) {
-            faceMouse();
-        } else {
-            if (Gdx.input.isKeyPressed(controlScheme.LEFT)) {
-                updateRotation(ROT_SPEED);
-            }
-            if (Gdx.input.isKeyPressed(controlScheme.RIGHT)) {
-                updateRotation(-ROT_SPEED);
-            }
-
+        if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
+            fireProjectile();
         }
+        faceMouse();
     }
 
     private void fireProjectile() {
-        if (lastDelta > 1f / ROUNDS_PER_SECOND) {
-            ProjectileActor projectile = new ProjectileActor(sprite.getX(), sprite.getY(), getRotation(), this);
+        if (lastDelta > 1f / ROUNDS_PER_SECOND) { // check if not over rate of fire (delta is the time since last frame)
+            ProjectileActor projectile = new ProjectileActor(sprite.getX(), sprite.getY(), CustomUtils.getAngleToMouse(getX(), getY()), this);
             getStage().addActor(projectile);
             projectilesFired++;
-            lastDelta = 0;
+            lastDelta = 0; // reset lastDelta
         } else {
-            lastDelta += Gdx.graphics.getDeltaTime();
+            lastDelta += Gdx.graphics.getDeltaTime(); // add time since last frame to lastDelta)
         }
-
     }
 
     private void faceMouse() {
-        float xInput = Gdx.input.getX();
-        float yInput = (Gdx.graphics.getHeight() - Gdx.input.getY());
-
-        float angle = MathUtils.radiansToDegrees * MathUtils.atan2(yInput - getY(), xInput - getX());
-
-        if(angle < 0){
-            angle += 360;
-        }
-        setRotation(angle);
+        setRotation(CustomUtils.getAngleToMouse(getX(), getY()));
     }
 
     class ControlScheme {
-        int FORWARD, BACKWARDS, LEFT, RIGHT, FIRE;
-        boolean USEMOUSE = false;
+        int UP, DOWN, LEFT, RIGHT, FIRE;
 
         /*
         public void setFORWARD(int key) {
-            FORWARD = key;
+            UP = key;
         }
 
         public int getForward() {
-            return FORWARD;
+            return UP;
         }
 
         public void setBACKWARDS(int key) {
-            BACKWARDS = key;
+            DOWN = key;
         }
 
         public int getBACKWARDS() {
-            return BACKWARDS;
+            return DOWN;
         }
 
         public void setLEFT(int key) {
