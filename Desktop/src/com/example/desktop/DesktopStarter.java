@@ -2,7 +2,7 @@ package com.example.desktop;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-import com.example.mygame.GeometryWars;
+import com.example.mygame.GameScreen;
 
 //This is the frontend, running this class will display a screen
 public class DesktopStarter {
@@ -11,6 +11,6 @@ public class DesktopStarter {
         cfg.title = "Example";
         cfg.width = 1200;
         cfg.height = 650;
-        new LwjglApplication(new GeometryWars(),cfg);
+        new LwjglApplication(GameScreen.getInstance(),cfg);
     }
 }

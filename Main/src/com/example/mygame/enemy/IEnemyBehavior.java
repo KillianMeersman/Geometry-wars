@@ -1,5 +1,5 @@
 package com.example.mygame.enemy;
 
-public interface IEnemyBehavior {
+interface IEnemyBehavior {
     void act();
 }

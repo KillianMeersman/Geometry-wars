@@ -1,21 +1,22 @@
 package com.example.mygame;
 
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g3d.particles.influencers.ColorInfluencer;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.example.mygame.enemy.EnemyActor;
 
 import java.util.Random;
 
-public class ProjectileActor extends SpriteActor {
-    Random random = new Random();
-    float speed;
-    float xAmount, yAmount;
-    int bounces;
-    Actor owner;
+class ProjectileActor extends SpriteActor {
+    private Random random = new Random();
+    private float speed;
+    private float xAmount, yAmount;
+    private int bounces;
+    private Actor owner;
 
-    public ProjectileActor(float x, float y, float rotation, Actor owner) {
+    ProjectileActor(GameStage stage, float x, float y, float rotation, Actor owner) {
+        super(stage);
         speed = 15;
         this.owner = owner;
         Texture texture = new Texture("Desktop/Assets/blueProjectile.png");
@@ -25,6 +26,7 @@ public class ProjectileActor extends SpriteActor {
         sprite.setScale(0.1f);
         this.setPosition(x, y);
         this.setRotation(rotation);
+        setBounds(new Rectangle(sprite.getX(), sprite.getY(), getWidth(), getHeight()));
         calcMovement(); // Because it moves in a straight line, calculate movement on x and y-axis per turn only once (saves cpu)
         if (random.nextInt(10) == 9) { // 1 in 10 change to bounce (once)
             bounces = 1;
@@ -36,6 +38,18 @@ public class ProjectileActor extends SpriteActor {
         setPosition(getX() + xAmount, getY() + yAmount); // Go forward
         if (CustomUtils.outOfBoundsX(getX(), owner.getWidth(), speed)) { bounce(); } // Check if at border of screen, of so: bounce or be removed
         if (CustomUtils.outOfBoundsY(getY(), owner.getHeight(), speed)) { bounce(); }
+        checkCollisions();
+    }
+
+    private void checkCollisions() {
+        outerLoop:
+            for (EnemyActor actor : gameStage.getEnemyActors()) {
+                if (actor.getBounds().overlaps(getBounds())) {
+                    ((GameStage) getStage()).removeEnemyActor(actor);
+                    ((GameStage) getStage()).removeProjectile(this);
+                    break outerLoop;
+                }
+            }
     }
 
     public void bounce() {

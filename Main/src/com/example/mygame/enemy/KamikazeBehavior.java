@@ -1,6 +1,5 @@
 package com.example.mygame.enemy;
 
-import com.badlogic.gdx.math.Vector2;
 import com.example.mygame.CustomUtils;
 import com.example.mygame.PlayerActor;
 import com.example.mygame.SpriteActor;
@@ -29,7 +28,6 @@ public class KamikazeBehavior implements IEnemyBehavior {   // The enemy goes to
     public void act() {
         float angleToFace = CustomUtils.getAngleToFace(actor.getX(), actor.getY(), target.getX(), target.getY());
         actor.setRotation(angleToFace); // Face target
-        Vector2 newPos = CustomUtils.getForwardPosition(angleToFace, 2);
         actor.updatePositionForward(SPEED); // Go forward
     }
 }

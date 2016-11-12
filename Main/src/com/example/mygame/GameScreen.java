@@ -2,29 +2,32 @@ package com.example.mygame;
 
 
 import com.badlogic.gdx.ApplicationAdapter;
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.example.mygame.enemy.EnemyActor;
-import com.example.mygame.enemy.KamikazeBehavior;
 
-public class GeometryWars extends ApplicationAdapter{
-    public static int WIDTH; //800px
-    public static int HEIGHT; //480px
-    Skin skin;
-    GameStage stage;
-    Viewport viewport;
-    OrthographicCamera camera;
+public class GameScreen extends ApplicationAdapter{
+    static int WIDTH; //800px
+    static int HEIGHT; //480px
+    private Skin skin;
+    private GameStage stage;
+    private Viewport viewport;
+    private OrthographicCamera camera;
 
-    PlayerActor player;
+    private Label score1Label;
+    private static GameScreen instance = new GameScreen();
+
+    public static GameScreen getInstance() {
+        return instance;
+    }
+
+    private GameScreen() {
+
+    }
 
     @Override
     public void create(){
@@ -32,8 +35,8 @@ public class GeometryWars extends ApplicationAdapter{
         BitmapFont bfont = new BitmapFont();
         skin.add("default", bfont);
 
-        WIDTH = Gdx.graphics.getWidth();
-        HEIGHT = Gdx.graphics.getHeight();
+        WIDTH = 1200;
+        HEIGHT = 650;
 
 
         camera = new OrthographicCamera(WIDTH,HEIGHT);   //set Camera to the gamesize
@@ -45,41 +48,30 @@ public class GeometryWars extends ApplicationAdapter{
         createUI();
 
         Gdx.input.setInputProcessor(stage);
-        PlayerActor player = new PlayerActor();
-        this.player = player;
+        PlayerActor player = new PlayerActor(stage);
         player.setPosition(50, 50);
-        stage.addActor(player);
+        stage.addPlayer(player);
         stage.setKeyboardFocus(player);
-
-
-        Texture bacteria2 = new Texture("Desktop/Assets/bacteria2.png");
-        Sprite bacteria2Sprite = new Sprite(bacteria2);
-        for (int i = 0; i < 7; i++) {
-            EnemyActor enemy = new EnemyActor(bacteria2Sprite, 0.5f);
-            enemy.setBehavior(new KamikazeBehavior(enemy, player, 3));
-            stage.addActor(enemy);
-        }
     }
 
     // Create UI elements
     public void createUI() {
         Label.LabelStyle style = new Label.LabelStyle(skin.getFont("default"), Color.WHITE);
         skin.add("default", style);
-        Label label = new Label("TEST", style);
-        label.setPosition(10, HEIGHT - 30);
-        stage.addActor(label);
+        score1Label = new Label("TEST", style);
+        score1Label.setPosition(10, HEIGHT - 30);
+        stage.addActor(score1Label);
     }
 
     public void render(){
         //clear screen to black
-        for (Actor actor : stage.getActors()) {
-            if (actor instanceof Label) {
-                ((Label) actor).setText(Integer.toString(player.projectilesFired) + " ROUNDS FIRED");
-            }
-        }
         Gdx.gl.glClear(GL30.GL_COLOR_BUFFER_BIT);
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
+    }
+
+    public void setScore1Label(String text) {
+        score1Label.setText(text);
     }
 
     // what to do when screen is resized
