@@ -17,13 +17,12 @@ public class SpriteActor extends Actor { // An actor that holds a sprite, and up
     public SpriteActor(GameStage stage) {
         this.gameStage = stage;
         bounds = new Rectangle(getX(), getY(), getWidth(), getHeight());
-        //polygon = new Polygon(getSprite().getVertices());
     }
 
     public void setSprite(Sprite sprite) {
         this.sprite = sprite;
-        SPRITE_WIDTH = sprite.getWidth() / sprite.getScaleX();
-        SPRITE_HEIGHT = sprite.getHeight() / sprite.getScaleY();
+        SPRITE_WIDTH = sprite.getWidth() * sprite.getScaleX();
+        SPRITE_HEIGHT = sprite.getHeight() * sprite.getScaleY();
     }
 
     public Sprite getSprite() {
@@ -80,9 +79,9 @@ public class SpriteActor extends Actor { // An actor that holds a sprite, and up
 
     @Override
     protected void positionChanged() {
-            super.positionChanged();
-            sprite.setPosition(getX(), getY());
-            bounds.setPosition(getX() + SPRITE_WIDTH, getY() + SPRITE_HEIGHT);
+        super.positionChanged();
+        sprite.setPosition(getX(), getY());
+        bounds.setPosition(getX() + SPRITE_WIDTH, getY() + SPRITE_HEIGHT);
     }
 
     @Override

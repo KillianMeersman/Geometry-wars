@@ -1,84 +1,97 @@
 package com.example.mygame;
 
-
-import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.*;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.sun.corba.se.impl.oa.poa.ActiveObjectMap;
 
-public class GameScreen extends ApplicationAdapter{
-    static int WIDTH; //800px
-    static int HEIGHT; //480px
-    private Skin skin;
+public class GameScreen implements Screen {
     private GameStage stage;
-    private Viewport viewport;
-    private OrthographicCamera camera;
-
     private Label score1Label;
-    private static GameScreen instance = new GameScreen();
+    private Label centerLabel;
+    private Skin skin;
+    private boolean paused = false;
+    private float lastDelta = 0.2f;
 
-    public static GameScreen getInstance() {
-        return instance;
-    }
-
-    private GameScreen() {
-
-    }
-
-    @Override
-    public void create(){
-        skin = new Skin();
-        BitmapFont bfont = new BitmapFont();
-        skin.add("default", bfont);
-
-        WIDTH = 1200;
-        HEIGHT = 650;
-
-
-        camera = new OrthographicCamera(WIDTH,HEIGHT);   //set Camera to the gamesize
-        //camera.translate(WIDTH/2, HEIGHT/2);                                //Change the position of the camera (By default the origin is centered)
-        camera.update(); //Update camera to new location
-        viewport = new ScreenViewport(camera);
-
+    public GameScreen(Viewport viewport, Skin skin) {
         stage = new GameStage(viewport);
-        createUI();
-
         Gdx.input.setInputProcessor(stage);
+        this.skin = skin;
         PlayerActor player = new PlayerActor(stage);
         player.setPosition(50, 50);
         stage.addPlayer(player);
         stage.setKeyboardFocus(player);
+        createUI();
     }
 
     // Create UI elements
-    public void createUI() {
-        Label.LabelStyle style = new Label.LabelStyle(skin.getFont("default"), Color.WHITE);
+    private void createUI() {
+        Label.LabelStyle style = new Label.LabelStyle(skin.getFont("default"), Color.DARK_GRAY);
         skin.add("default", style);
         score1Label = new Label("TEST", style);
-        score1Label.setPosition(10, HEIGHT - 30);
+        score1Label.setPosition(10, Gdx.graphics.getHeight() - 30);
         stage.addActor(score1Label);
-    }
-
-    public void render(){
-        //clear screen to black
-        Gdx.gl.glClear(GL30.GL_COLOR_BUFFER_BIT);
-        stage.act(Gdx.graphics.getDeltaTime());
-        stage.draw();
     }
 
     public void setScore1Label(String text) {
         score1Label.setText(text);
     }
 
-    // what to do when screen is resized
+    @Override
+    public void show() {
+
+    }
+
+    @Override
+    public void render(float delta) {
+        if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
+            if (lastDelta > 0.1f) {
+                if (paused) {
+                    resume();
+                } else {
+                    pause();
+                }
+                lastDelta = 0;
+            } else {
+                lastDelta += delta;
+            }
+        }
+
+        if (!paused) {
+            setScore1Label(stage.getPlayers().get(0).getScore() + " KILLS");
+            stage.act(delta);
+        } else {
+            setScore1Label("PAUSED");
+        }
+        stage.draw();
+    }
+
+    @Override
     public void resize(int width, int height) {
-        viewport.update(width, height);
-        camera.update();
-        WIDTH = viewport.getScreenWidth();
-        HEIGHT = viewport.getScreenHeight();
+
+    }
+
+    @Override
+    public void pause() {
+        paused  = true;
+    }
+
+    @Override
+    public void resume() {
+        paused = false;
+    }
+
+    @Override
+    public void hide() {
+
+    }
+
+    @Override
+    public void dispose() {
+
     }
 }

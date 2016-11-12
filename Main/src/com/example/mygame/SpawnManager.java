@@ -19,7 +19,7 @@ class SpawnManager extends Actor {
     @Override
     public void act(float delta) {
         try {
-            if (gameStage.getEnemyActors().size() < 1) {
+            if (gameStage.getEnemyActors().size() < 5) {
                 spawnEnemy();
             }
         } catch (NullPointerException e) {
@@ -28,9 +28,9 @@ class SpawnManager extends Actor {
     }
 
     private void spawnEnemy() {
-        Texture bacteria2 = new Texture("Desktop/Assets/bacteria2.png");
+        Texture bacteria2 = new Texture("Desktop/Assets/greyRectangle.png");
         Sprite bacteria2Sprite = new Sprite(bacteria2);
-        EnemyActor enemy = new EnemyActor(gameStage, bacteria2Sprite, 0.5f);
+        EnemyActor enemy = new EnemyActor(gameStage, bacteria2Sprite, 0.2f);
         enemy.setBehavior(new KamikazeBehavior(enemy, gameStage.getPlayers().get(0), 3));
         enemy.setPosition(random.nextInt(1000), random.nextInt(500));
         gameStage.addEnemyActor(enemy);

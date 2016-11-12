@@ -1,7 +1,6 @@
 package com.example.mygame;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
@@ -40,12 +39,12 @@ public class CustomUtils {
 
     // Is the object at the edge of the screen? (left & right borders)
     public static boolean outOfBoundsX(float x, float sizeX, float update) {
-        return (x + update > GameScreen.WIDTH - sizeX) || (x + update < 0);
+        return (x + update > GeometryWars.WIDTH - sizeX) || (x + update < 0);
     }
 
     // Is the object at the edge of the screen? (upper & lower borders)
     public static boolean outOfBoundsY(float y, float sizeY, float update) {
-        return (y + update > GameScreen.HEIGHT - sizeY) || (y + update  < 0);
+        return (y + update > GeometryWars.HEIGHT - sizeY) || (y + update  < 0);
     }
 
     public static boolean isColliding(SpriteActor actorA, SpriteActor actorB) {

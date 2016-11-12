@@ -10,7 +10,7 @@ import com.example.mygame.enemy.EnemyActor;
 
 public class PlayerActor extends SpriteActor {
     // Constants
-    private int ROUNDS_PER_SECOND = 20;
+    private int ROUNDS_PER_SECOND = 15;
     private final float MAX_SPEED = 10;
     private final float ACCEL = 1f;
     private final float ROT_SPEED = 5;
@@ -26,7 +26,7 @@ public class PlayerActor extends SpriteActor {
 
     PlayerActor(GameStage stage){
         super(stage);
-        Texture texture = new Texture("Desktop/Assets/spaceship.png");
+        Texture texture = new Texture("Desktop/Assets/player.png");
         texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         sprite = new Sprite(texture);
 
@@ -80,7 +80,7 @@ public class PlayerActor extends SpriteActor {
 
         for (EnemyActor enemy : ((GameStage) getStage()).getEnemyActors()) {
             if (enemy.getBounds().overlaps(getBounds())) {
-                GameScreen.getInstance().setScore1Label("GAME OVER");
+                GeometryWars.getInstance().getGameScreen().setScore1Label("GAME OVER");
             }
         }
     }
@@ -102,6 +102,10 @@ public class PlayerActor extends SpriteActor {
 
     public int getScore() {
         return score;
+    }
+
+    public void updateScore(int scoreUpdate) {
+        score += scoreUpdate;
     }
 
     public int getProjectilesFired() {
