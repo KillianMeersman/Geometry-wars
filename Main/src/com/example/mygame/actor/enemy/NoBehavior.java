@@ -1,4 +1,4 @@
-package com.example.mygame.enemy;
+package com.example.mygame.actor.enemy;
 
 public class NoBehavior implements IEnemyBehavior {
     @Override

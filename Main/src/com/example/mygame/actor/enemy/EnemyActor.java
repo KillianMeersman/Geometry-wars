@@ -1,11 +1,10 @@
-package com.example.mygame.enemy;
+package com.example.mygame.actor.enemy;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.example.mygame.GameStage;
-import com.example.mygame.SpriteActor;
+import com.example.mygame.actor.SpriteActor;
 
 public class EnemyActor extends SpriteActor {
     private IEnemyBehavior behavior; // Stategy pattern
@@ -21,7 +20,9 @@ public class EnemyActor extends SpriteActor {
         this(stage, sprite);
         this.sprite.setScale(scale);
         this.setScale(scale);
-        setBounds(new Rectangle(sprite.getX(), sprite.getY(), sprite.getWidth() * sprite.getScaleX(), sprite.getHeight() * sprite.getScaleY()));
+        float width = sprite.getWidth() * sprite.getScaleX();
+        float height = sprite.getWidth() * sprite.getScaleX();
+        setBounds(new Rectangle(sprite.getX(), sprite.getY(), width, height));
     }
 
     public IEnemyBehavior getBehavior() {

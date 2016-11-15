@@ -2,7 +2,9 @@ package com.example.mygame;
 
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.example.mygame.enemy.EnemyActor;
+import com.example.mygame.actor.PlayerActor;
+import com.example.mygame.actor.ProjectileActor;
+import com.example.mygame.actor.enemy.EnemyActor;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,7 +14,7 @@ public class GameStage extends Stage {
     private List<PlayerActor> players = new ArrayList<PlayerActor>();
     private SpawnManager spawnManager;
 
-    GameStage(Viewport viewport) {
+    public GameStage(Viewport viewport) {
         super(viewport);
         spawnManager = new SpawnManager(this);
         addActor(spawnManager);

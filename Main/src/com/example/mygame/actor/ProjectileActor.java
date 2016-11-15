@@ -1,23 +1,22 @@
-package com.example.mygame;
+package com.example.mygame.actor;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.example.mygame.enemy.EnemyActor;
+import com.example.mygame.CustomUtils;
+import com.example.mygame.GameStage;
+import com.example.mygame.actor.enemy.EnemyActor;
 
 import java.util.Random;
 
-class ProjectileActor extends SpriteActor {
+public class ProjectileActor extends SpriteActor {
     private Random random = new Random();
     private float speed;
     private float xAmount, yAmount;
     private int bounces;
     private PlayerActor owner;
 
-    ProjectileActor(GameStage stage, float x, float y, float rotation, PlayerActor owner) {
+    public ProjectileActor(GameStage stage, float x, float y, float rotation, PlayerActor owner) {
         super(stage);
         speed = 15;
         this.owner = owner;
@@ -36,11 +35,7 @@ class ProjectileActor extends SpriteActor {
         if (random.nextInt(10) == 9) { // 1 in 10 change to bounce (once)
             bounces = 1;
         }
-
-        Sound shootSound = Gdx.audio.newSound(Gdx.files.internal("Desktop/Assets/laser.mp3"));
-        shootSound.play(0.1f);
 }
-
 
     public void act(float delta) {
         super.act(delta);
@@ -51,17 +46,18 @@ class ProjectileActor extends SpriteActor {
     }
 
     private void checkCollisions() {
-        outerLoop:
+        try {
             for (EnemyActor actor : gameStage.getEnemyActors()) {
                 if (actor.getBounds().overlaps(getBounds())) {
                     ((GameStage) getStage()).removeEnemyActor(actor);
                     ((GameStage) getStage()).removeProjectile(this);
                     owner.updateScore(1);
-                    Sound blipSound = Gdx.audio.newSound(Gdx.files.internal("Desktop/Assets/blip.mp3"));
-                    blipSound.play();
-                    break outerLoop;
+                    break;
                 }
             }
+        } catch (NullPointerException npe) {
+            System.err.println("nullpointer!");
+        }
     }
 
     public void bounce() {

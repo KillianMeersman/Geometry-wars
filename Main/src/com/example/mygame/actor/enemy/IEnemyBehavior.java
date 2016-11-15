@@ -1,4 +1,4 @@
-package com.example.mygame.enemy;
+package com.example.mygame.actor.enemy;
 
 interface IEnemyBehavior {
     void act();

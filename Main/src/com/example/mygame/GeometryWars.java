@@ -5,10 +5,14 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.badlogic.gdx.utils.viewport.Viewport;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.utils.viewport.*;
+import com.example.mygame.screen.GameScreen;
+import com.example.mygame.screen.MenuScreen;
+import com.example.mygame.screen.SettingScreen;
 
 public class GeometryWars extends Game {
     static int WIDTH; //800px
@@ -19,6 +23,7 @@ public class GeometryWars extends Game {
     private OrthographicCamera camera;
     private GameScreen gameScreen;
     private MenuScreen menuScreen;
+    private SettingScreen settingScreen;
 
     private static GeometryWars instance = new GeometryWars();
 
@@ -34,16 +39,55 @@ public class GeometryWars extends Game {
         return gameScreen;
     }
 
+    public MenuScreen getMenuScreen() {
+        return menuScreen;
+    }
+
+    public SettingScreen getSettingScreen() {
+        return settingScreen;
+    }
+
+    public void newGame() {
+        gameScreen = new GameScreen(viewport, skin);
+        setScreen(gameScreen);
+    }
+
+    public Camera getCamera() {
+        return camera;
+    }
+
+    public Viewport getViewPort() {
+        return viewport;
+    }
+
     @Override
     public void create(){
-        skin = new Skin();
+        skin = generateSkin();
+
+        WIDTH = 1200;
+        HEIGHT = 650;
+
+        camera = new OrthographicCamera(WIDTH,HEIGHT);   //set Camera to the gamesize
+        //camera.translate(WIDTH/2, HEIGHT/2);           //Change the position of the camera (By default the origin is centered)
+        camera.update(); //Update camera to new location
+        //viewport = new ScreenViewport(camera);
+        viewport = new ScreenViewport(camera);
+
+        gameScreen = new GameScreen(viewport, skin);
+        menuScreen = new MenuScreen(viewport, skin);
+        settingScreen = new SettingScreen(viewport, skin);
+        setScreen(menuScreen);
+    }
+
+    private Skin generateSkin() {
+        Skin skin = new Skin();
+
         BitmapFont bfont = new BitmapFont();
         skin.add("default", bfont);
 
         Pixmap pixmap = new Pixmap(100, 100, Pixmap.Format.RGBA8888);
         pixmap.setColor(Color.DARK_GRAY);
         pixmap.fill();
-
         skin.add("white", new Texture(pixmap));
 
         TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
@@ -52,20 +96,16 @@ public class GeometryWars extends Game {
         textButtonStyle.over = skin.newDrawable("white", Color.BLUE);
         //textButtonStyle.checked = skin.newDrawable("white", Color.BLACK);
         textButtonStyle.font = skin.getFont("default");
-
         skin.add("default", textButtonStyle);
 
-        WIDTH = 1200;
-        HEIGHT = 650;
+        Label.LabelStyle style = new Label.LabelStyle(skin.getFont("default"), Color.DARK_GRAY);
+        skin.add("default", style);
 
-        camera = new OrthographicCamera(WIDTH,HEIGHT);   //set Camera to the gamesize
-        //camera.translate(WIDTH/2, HEIGHT/2);                                //Change the position of the camera (By default the origin is centered)
-        camera.update(); //Update camera to new location
-        viewport = new ScreenViewport(camera);
+        TextField.TextFieldStyle textFieldStyle = new TextField.TextFieldStyle();
+        textFieldStyle.font = bfont;
+        skin.add("default", textFieldStyle);
 
-        gameScreen = new GameScreen(viewport, skin);
-        menuScreen = new MenuScreen(viewport, skin);
-        setScreen(menuScreen);
+        return skin;
     }
 
     public void render(){
@@ -80,7 +120,6 @@ public class GeometryWars extends Game {
     public void resize(int width, int height) {
         viewport.update(width, height);
         camera.update();
-        WIDTH = viewport.getScreenWidth();
-        HEIGHT = viewport.getScreenHeight();
+
     }
 }

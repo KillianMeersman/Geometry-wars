@@ -2,7 +2,10 @@ package com.example.mygame;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
 public class CustomUtils {
     // Get the angle towards another object (useful for facing an enemy or following)
@@ -39,15 +42,28 @@ public class CustomUtils {
 
     // Is the object at the edge of the screen? (left & right borders)
     public static boolean outOfBoundsX(float x, float sizeX, float update) {
-        return (x + update > GeometryWars.WIDTH - sizeX) || (x + update < 0);
+        return (x + update > Gdx.graphics.getWidth() - sizeX) || (x + update < 0);
     }
 
     // Is the object at the edge of the screen? (upper & lower borders)
     public static boolean outOfBoundsY(float y, float sizeY, float update) {
-        return (y + update > GeometryWars.HEIGHT - sizeY) || (y + update  < 0);
+        return (y + update > Gdx.graphics.getHeight() - sizeY) || (y + update  < 0);
     }
 
-    public static boolean isColliding(SpriteActor actorA, SpriteActor actorB) {
-        return false;
+    public static TextButton generateTextButton(Skin skin, String text, float x, float y, float width, float height) {
+        TextButton button = new TextButton(text, skin);
+        button.setWidth(width);
+        button.setHeight(height);
+        button.setPosition(x, y);
+        return button;
+    }
+
+    public static boolean booleanArrayTrue(boolean[] booleanArray) {
+        for (boolean bool : booleanArray) {
+            if (!bool) {
+                return false;
+            }
+        }
+        return true;
     }
 }

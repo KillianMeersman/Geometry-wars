@@ -1,8 +1,8 @@
-package com.example.mygame.enemy;
+package com.example.mygame.actor.enemy;
 
 import com.example.mygame.CustomUtils;
-import com.example.mygame.PlayerActor;
-import com.example.mygame.SpriteActor;
+import com.example.mygame.actor.PlayerActor;
+import com.example.mygame.actor.SpriteActor;
 
 public class KamikazeBehavior implements IEnemyBehavior {   // The enemy goes towards the player
     final float SPEED;

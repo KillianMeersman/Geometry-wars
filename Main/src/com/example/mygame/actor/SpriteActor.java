@@ -1,10 +1,13 @@
-package com.example.mygame;
+package com.example.mygame.actor;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.example.mygame.CustomUtils;
+import com.example.mygame.GameStage;
 
 public class SpriteActor extends Actor { // An actor that holds a sprite, and updates it
     protected Rectangle bounds;
@@ -71,10 +74,18 @@ public class SpriteActor extends Actor { // An actor that holds a sprite, and up
         sprite.setRotation(degrees);
     }
 
+    public Vector2 getPosition() {
+        return new Vector2(getX(), getY());
+    }
+
     @Override
     public void setPosition(float x, float y) {
         super.setPosition(x, y);
         sprite.setPosition(x, y);
+    }
+
+    public void setPosition(Vector2 position) {
+        setPosition(position.x, position.y);
     }
 
     @Override
@@ -95,7 +106,9 @@ public class SpriteActor extends Actor { // An actor that holds a sprite, and up
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        sprite.draw(batch);
+        if (isVisible()) {
+            sprite.draw(batch);
+        }
     }
 
     @Override
