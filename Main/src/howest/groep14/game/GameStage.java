@@ -1,10 +1,16 @@
-package com.example.mygame;
+package howest.groep14.game;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.utils.IntFloatMap;
+import com.badlogic.gdx.utils.IntIntMap;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.example.mygame.actor.PlayerActor;
-import com.example.mygame.actor.ProjectileActor;
-import com.example.mygame.actor.enemy.EnemyActor;
+import howest.groep14.game.actor.PlayerActor;
+import howest.groep14.game.actor.ProjectileActor;
+import howest.groep14.game.actor.enemy.EnemyActor;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,6 +19,8 @@ public class GameStage extends Stage {
     private List<EnemyActor> enemyActors = new ArrayList<EnemyActor>();
     private List<PlayerActor> players = new ArrayList<PlayerActor>();
     private SpawnManager spawnManager;
+
+    private boolean collisionsEnabled = true;
 
     public GameStage(Viewport viewport) {
         super(viewport);
@@ -37,6 +45,21 @@ public class GameStage extends Stage {
         return players;
     }
 
+    public boolean isCollisionsEnabled() {
+        return collisionsEnabled;
+    }
+
+    public void setCollisionsEnabled(boolean collisionsEnabled) {
+        this.collisionsEnabled = collisionsEnabled;
+        Label debugLabel = GeometryWars.getInstance().getGameScreen().getDebugLabel();
+        if (!collisionsEnabled) {
+            debugLabel.setText("COLLISIONS DISABLED (C to enable)");
+            debugLabel.setVisible(true);
+        } else {
+            debugLabel.setText("");
+        }
+    }
+
     public void addProjectile(ProjectileActor projectile) {
         addActor(projectile);
         projectiles.add(projectile);
@@ -59,11 +82,6 @@ public class GameStage extends Stage {
 
     public void removeEnemyActor(EnemyActor actor) {
         enemyActors.remove(actor);
-        actor.remove();
-    }
-
-    public void removePlayer(PlayerActor actor) {
-        players.remove(actor);
         actor.remove();
     }
 }

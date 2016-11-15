@@ -1,4 +1,4 @@
-package com.example.mygame.actor.enemy;
+package howest.groep14.game.actor.enemy;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;

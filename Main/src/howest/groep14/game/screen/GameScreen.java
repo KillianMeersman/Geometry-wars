@@ -1,9 +1,8 @@
-package com.example.mygame.screen;
+package howest.groep14.game.screen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -12,18 +11,18 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.example.mygame.CustomUtils;
-import com.example.mygame.GameStage;
-import com.example.mygame.GeometryWars;
-import com.example.mygame.actor.PlayerActor;
-import com.example.mygame.actor.SpriteActor;
+import howest.groep14.game.CustomUtils;
+import howest.groep14.game.GameStage;
+import howest.groep14.game.GeometryWars;
+import howest.groep14.game.actor.PlayerActor;
 
 public class GameScreen implements Screen {
     private GameStage stage;
-    private Label score1Label, score2Label;
-    private Label centerLabel;
+    private Label score1Label, score2Label, centerLabel, debugLabel;
     private TextButton toMenuButton, restartButton;
     private Skin skin;
+
+    // State variables
     private boolean paused = false;
     private boolean gameOver = false;
     private float lastDelta = 0.2f;
@@ -56,6 +55,11 @@ public class GameScreen implements Screen {
         centerLabel.setPosition(screenWidth / 2, screenHeight / 2, Align.center);
         stage.addActor(centerLabel);
 
+        debugLabel = new Label("", skin);
+        debugLabel.setVisible(false);
+        debugLabel.setPosition(25, 25, Align.bottomLeft);
+        stage.addActor(debugLabel);
+
         toMenuButton = CustomUtils.generateTextButton(skin, "T O  M E N U", screenWidth / 2 - 25, screenHeight - 75, 150, 50);
         toMenuButton.setVisible(false);
         toMenuButton.addListener(new ClickListener() {
@@ -79,12 +83,24 @@ public class GameScreen implements Screen {
         stage.addActor(restartButton);
     }
 
-    public void setScore1Label(String text) {
-        score1Label.setText(text);
+    public Label getScore1Label() {
+        return score1Label;
     }
 
-    public void setScore2Label(String text) {
-        score2Label.setText(text);
+    public Label getScore2Label() {
+        return score2Label;
+    }
+
+    public Label getCenterLabel() {
+        return centerLabel;
+    }
+
+    public Label getDebugLabel() {
+        return debugLabel;
+    }
+
+    public GameStage getStage() {
+        return stage;
     }
 
     public void gameOver() {
@@ -118,12 +134,13 @@ public class GameScreen implements Screen {
                 lastDelta += delta;
             }
         }
+        if (Gdx.input.isKeyPressed(Input.Keys.C)) {
+            stage.setCollisionsEnabled(true);
+        }
 
         if (!paused) {
-            setScore1Label(stage.getPlayers().get(0).getScore() + " KILLS");
+            score1Label.setText(stage.getPlayers().get(0).getScore() + " KILLS");
             stage.act(delta);
-        } else {
-            setScore1Label("PAUSED");
         }
         stage.draw();
     }
@@ -138,6 +155,8 @@ public class GameScreen implements Screen {
         paused  = true;
         toMenuButton.setVisible(true);
         restartButton.setVisible(true);
+        centerLabel.setText("PAUSED");
+        centerLabel.setVisible(true);
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.example.mygame.actor;
+package howest.groep14.game.actor;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -6,8 +6,8 @@ import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.example.mygame.CustomUtils;
-import com.example.mygame.GameStage;
+import howest.groep14.game.CustomUtils;
+import howest.groep14.game.GameStage;
 
 public class SpriteActor extends Actor { // An actor that holds a sprite, and updates it
     protected Rectangle bounds;

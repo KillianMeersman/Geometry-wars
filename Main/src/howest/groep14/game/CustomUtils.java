@@ -1,4 +1,4 @@
-package com.example.mygame;
+package howest.groep14.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.MathUtils;

@@ -1,11 +1,12 @@
-package com.example.mygame;
+package howest.groep14.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.example.mygame.actor.enemy.EnemyActor;
-import com.example.mygame.actor.enemy.KamikazeBehavior;
+import howest.groep14.game.actor.enemy.EnemyActor;
+import howest.groep14.game.actor.enemy.KamikazeBehavior;
+
 import java.util.Random;
 
 class SpawnManager extends Actor {

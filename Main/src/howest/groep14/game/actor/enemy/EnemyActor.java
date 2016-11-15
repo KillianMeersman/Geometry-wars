@@ -1,10 +1,10 @@
-package com.example.mygame.actor.enemy;
+package howest.groep14.game.actor.enemy;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Rectangle;
-import com.example.mygame.GameStage;
-import com.example.mygame.actor.SpriteActor;
+import howest.groep14.game.GameStage;
+import howest.groep14.game.actor.SpriteActor;
 
 public class EnemyActor extends SpriteActor {
     private IEnemyBehavior behavior; // Stategy pattern

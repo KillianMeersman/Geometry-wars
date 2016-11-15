@@ -1,11 +1,11 @@
-package com.example.mygame.actor;
+package howest.groep14.game.actor;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Rectangle;
-import com.example.mygame.CustomUtils;
-import com.example.mygame.GameStage;
-import com.example.mygame.actor.enemy.EnemyActor;
+import howest.groep14.game.CustomUtils;
+import howest.groep14.game.GameStage;
+import howest.groep14.game.actor.enemy.EnemyActor;
 
 import java.util.Random;
 

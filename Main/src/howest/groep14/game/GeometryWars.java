@@ -1,4 +1,4 @@
-package com.example.mygame;
+package howest.groep14.game;
 
 
 import com.badlogic.gdx.Game;
@@ -10,9 +10,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.utils.viewport.*;
-import com.example.mygame.screen.GameScreen;
-import com.example.mygame.screen.MenuScreen;
-import com.example.mygame.screen.SettingScreen;
+import howest.groep14.game.screen.GameScreen;
+import howest.groep14.game.screen.MenuScreen;
+import howest.groep14.game.screen.SettingScreen;
 
 public class GeometryWars extends Game {
     static int WIDTH; //800px
@@ -74,6 +74,7 @@ public class GeometryWars extends Game {
         viewport = new ScreenViewport(camera);
 
         gameScreen = new GameScreen(viewport, skin);
+        gameScreen.getStage().setCollisionsEnabled(false);
         menuScreen = new MenuScreen(viewport, skin);
         settingScreen = new SettingScreen(viewport, skin);
         setScreen(menuScreen);
