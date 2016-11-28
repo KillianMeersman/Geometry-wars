@@ -2,12 +2,32 @@ package howest.groep14.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Vector;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import howest.groep14.game.actor.SpriteActor;
+
+import java.util.Random;
 
 public class CustomUtils {
+    private static final Random random = new Random();
+
+    public static int intRandom(int bound) {
+        return random.nextInt(bound);
+    }
+
+    public static boolean booleanRandom(int chance) {
+        return random.nextInt(chance) == 9;
+    }
+
+    public static boolean booleanRandom() {
+        return random.nextBoolean();
+    }
+
+    public static float getAngleToFace(SpriteActor actorA, SpriteActor actorB) {
+        return getAngleToFace(actorA.getX(), actorA.getY(), actorB.getX(), actorB.getY());
+    }
+
     // Get the angle towards another object (useful for facing an enemy or following)
     public static float getAngleToFace(float posX, float posY, float tarX, float tarY) {
         float angle = MathUtils.radiansToDegrees * MathUtils.atan2(tarY - posY, tarX - posX);
@@ -48,6 +68,20 @@ public class CustomUtils {
     // Is the object at the edge of the screen? (upper & lower borders)
     public static boolean outOfBoundsY(float y, float sizeY, float update) {
         return (y + update > Gdx.graphics.getHeight() - sizeY) || (y + update  < 0);
+    }
+
+    public static boolean isColliding(SpriteActor actorA, SpriteActor actorB) {
+        Vector2 positionA = new Vector2(actorA.getX(), actorA.getY());
+        Vector2 positionB = new Vector2(actorB.getX(), actorB.getY());
+        boolean x = false;
+        boolean y = false;
+        if (Math.abs(positionA.x - positionB.x) < 30) {
+            x = true;
+        }
+        if (Math.abs(positionA.y - positionB.y) < 30) {
+            y = true;
+        }
+        return x && y;
     }
 
     public static TextButton generateTextButton(Skin skin, String text, float x, float y, float width, float height) {

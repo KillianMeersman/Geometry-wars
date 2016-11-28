@@ -2,17 +2,21 @@ package howest.groep14.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import howest.groep14.game.actor.enemy.EnemyActor;
 import howest.groep14.game.actor.enemy.KamikazeBehavior;
+import howest.groep14.game.actor.enemy.SniperBehavior;
 
 import java.util.Random;
 
 class SpawnManager extends Actor {
     private final int SPAWN_PLAYER_MARGIN = 100;
-    private Random random = new Random();
-    private GameStage gameStage;
+    private final int NUMBER_CUBES = 5;
+    private final int NUMBER_CIRCLES = 2;
+    private final Random random = new Random();
+    private final GameStage gameStage;
+    private int cubes, circles;
 
     SpawnManager(GameStage stage) {
         gameStage = stage;
@@ -20,23 +24,32 @@ class SpawnManager extends Actor {
 
     @Override
     public void act(float delta) {
-        try {
-            if (gameStage.getEnemyActors().size() < 5) {
-                spawnEnemy();
-            }
-        } catch (NullPointerException e) {
-            spawnEnemy();
+        if (gameStage.getEnemyActors().size() - 5 < 2) {
+            spawnCube();
+        }
+        if (gameStage.getEnemyActors().size() - 2 < 5) {
+            spawnCircle();
         }
     }
 
-    private void spawnEnemy() {
-        Texture bacteria2 = new Texture("Desktop/Assets/greyRectangle.png");
-        Sprite bacteria2Sprite = new Sprite(bacteria2);
-        EnemyActor enemy = new EnemyActor(gameStage, bacteria2Sprite, 0.2f);
-        enemy.setBehavior(new KamikazeBehavior(enemy, gameStage.getPlayers().get(0), 2));
-        enemy.setPosition(random.nextInt(Gdx.graphics.getWidth() - 150), random.nextInt(Gdx.graphics.getHeight() - 150));
-        enemy.setVisible(true);
-        gameStage.addEnemyActor(enemy);
+    private void spawnCube() {
+        Texture cubeTexture = new Texture("Desktop/Assets/greyRectangle.png");
+        Sprite cubeSprite = new Sprite(cubeTexture);
+        EnemyActor enemyActor = new EnemyActor(gameStage, cubeSprite, 0.2f);
+        enemyActor.setBehavior(new KamikazeBehavior(enemyActor, gameStage.getPlayers().get(0), 5));
+        enemyActor.setPosition(random.nextInt(Gdx.graphics.getWidth() - 150), random.nextInt(Gdx.graphics.getHeight() - 150));
+        enemyActor.setVisible(true);
+        gameStage.addEnemyActor(enemyActor);
+    }
+
+    private void spawnCircle() {
+        Texture circleTexture = new Texture("Desktop/Assets/greyCircle.png");
+        Sprite circleSprite = new Sprite(circleTexture);
+        EnemyActor enemyActor = new EnemyActor(gameStage, circleSprite, 0.2f);
+        enemyActor.setBehavior(new SniperBehavior(enemyActor, gameStage.getPlayers().get(0)));
+        enemyActor.setPosition(random.nextInt(Gdx.graphics.getWidth() - 150), random.nextInt(Gdx.graphics.getHeight() - 150));
+        enemyActor.setVisible(true);
+        gameStage.addEnemyActor(enemyActor);
     }
 
     /*

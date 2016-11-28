@@ -10,7 +10,7 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 public class SettingScreen implements Screen {
-    private Stage stage;
+    private final Stage stage;
 
     public SettingScreen(Viewport viewport, Skin skin) {
         float screenWidth = Gdx.graphics.getWidth();

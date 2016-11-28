@@ -14,7 +14,7 @@ import howest.groep14.game.GeometryWars;
 
 public class MenuScreen implements Screen {
     private TextButton[] buttons = new TextButton[5];
-    private Stage stage;
+    private final Stage stage;
 
     public MenuScreen(Viewport viewport, Skin skin) {
         float screenWidth = Gdx.graphics.getWidth();

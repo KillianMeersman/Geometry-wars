@@ -8,10 +8,10 @@ public class KamikazeBehavior implements IEnemyBehavior {   // The enemy goes to
     final float SPEED;
 
     SpriteActor target;
-    SpriteActor actor;
+    final SpriteActor owner;
 
     public KamikazeBehavior(SpriteActor actor ,SpriteActor target, float speed) {
-        this.actor = actor;
+        this.owner = actor;
         this.target = target;
         this.SPEED = speed;
     }
@@ -26,8 +26,8 @@ public class KamikazeBehavior implements IEnemyBehavior {   // The enemy goes to
 
     @Override
     public void act() {
-        float angleToFace = CustomUtils.getAngleToFace(actor.getX(), actor.getY(), target.getX(), target.getY());
-        actor.setRotation(angleToFace); // Face target
-        actor.updatePositionForward(SPEED); // Go forward
+        float angleToFace = CustomUtils.getAngleToFace(owner.getX(), owner.getY(), target.getX(), target.getY());
+        owner.setRotation(angleToFace); // Face target
+        owner.updatePositionForward(SPEED); // Go forward
     }
 }

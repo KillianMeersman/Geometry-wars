@@ -12,7 +12,7 @@ import howest.groep14.game.GameStage;
 public class SpriteActor extends Actor { // An actor that holds a sprite, and updates it
     protected Rectangle bounds;
     protected Sprite sprite;
-    protected GameStage gameStage;
+    protected final GameStage gameStage;
     Polygon polygon;
     float SPRITE_WIDTH;
     float SPRITE_HEIGHT;

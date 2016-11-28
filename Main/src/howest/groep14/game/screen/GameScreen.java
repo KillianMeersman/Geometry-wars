@@ -164,6 +164,7 @@ public class GameScreen implements Screen {
         paused = false;
         toMenuButton.setVisible(false);
         restartButton.setVisible(false);
+        centerLabel.setVisible(false);
     }
 
     @Override

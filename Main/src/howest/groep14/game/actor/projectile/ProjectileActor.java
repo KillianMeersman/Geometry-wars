@@ -1,25 +1,24 @@
-package howest.groep14.game.actor;
+package howest.groep14.game.actor.projectile;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Rectangle;
 import howest.groep14.game.CustomUtils;
 import howest.groep14.game.GameStage;
-import howest.groep14.game.actor.enemy.EnemyActor;
-
-import java.util.Random;
+import howest.groep14.game.actor.SpriteActor;
 
 public class ProjectileActor extends SpriteActor {
-    private Random random = new Random();
-    private float speed;
+    private float speed = 15;
     private float xAmount, yAmount;
     private int bounces;
-    private PlayerActor owner;
+    private final SpriteActor owner;
+    private INotifyProjectileEvents observer;
+    private IProjectileCollisionBehavior collisionBehavior;
 
-    public ProjectileActor(GameStage stage, float x, float y, float rotation, PlayerActor owner) {
+    public ProjectileActor(GameStage stage, float x, float y, float rotation, SpriteActor owner) {
         super(stage);
-        speed = 15;
         this.owner = owner;
+        this.collisionBehavior = new DestroyEnemyCollisionBehavior(this);
 
         Texture texture = new Texture("Desktop/Assets/greyProjectile.png");
         texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
@@ -32,37 +31,41 @@ public class ProjectileActor extends SpriteActor {
         setBounds(new Rectangle(sprite.getX(), sprite.getY(), getWidth(), getHeight()));
 
         calcMovement(); // Because it moves in a straight line, calculate movement on x and y-axis per turn only once (saves cpu)
-        if (random.nextInt(10) == 9) { // 1 in 10 change to bounce (once)
+        if (CustomUtils.booleanRandom(10)) { // 1 in 10 change to bounce (once)
             bounces = 1;
         }
-}
+    }
+
+    public ProjectileActor(GameStage stage, float x, float y, float rotation, SpriteActor owner, INotifyProjectileEvents observer) {
+        this(stage, x, y, rotation, owner);
+        this.observer = observer;
+    }
+
+    public void setCollisionBehavior(IProjectileCollisionBehavior collisionBehavior) {
+        this.collisionBehavior = collisionBehavior;
+    }
+
+    public void setSpeed(float speed) {
+        this.speed = speed;
+    }
 
     public void act(float delta) {
         super.act(delta);
         setPosition(getX() + xAmount, getY() + yAmount); // Go forward
-        if (CustomUtils.outOfBoundsX(getX(), owner.getWidth(), speed)) { bounce(); } // Check if at border of screen, of so: bounce or be removed
-        if (CustomUtils.outOfBoundsY(getY(), owner.getHeight(), speed)) { bounce(); }
+        if (CustomUtils.outOfBoundsX(getX(), sprite.getWidth(), speed)) { bounce(); } // Check if at border of screen, of so: bounce or be removed
+        if (CustomUtils.outOfBoundsY(getY(), sprite.getHeight(), speed)) { bounce(); }
         checkCollisions();
     }
 
     private void checkCollisions() {
-        try {
-            for (EnemyActor actor : gameStage.getEnemyActors()) {
-                if (actor.getBounds().overlaps(getBounds())) {
-                    ((GameStage) getStage()).removeEnemyActor(actor);
-                    ((GameStage) getStage()).removeProjectile(this);
-                    owner.updateScore(1);
-                    break;
-                }
-            }
-        } catch (NullPointerException npe) {
-            System.err.println("nullpointer!");
+        if (collisionBehavior.checkCollisions() && observer != null) {
+            observer.projectileHit(this);
         }
     }
 
     public void bounce() {
         if (bounces > 0) {
-            if (random.nextBoolean()) {
+            if (CustomUtils.booleanRandom()) {
                 setRotation(getRotation() + 130); // Add or subtract 130 degrees from rotation
             } else {
                 setRotation(getRotation() - 130);
@@ -70,6 +73,9 @@ public class ProjectileActor extends SpriteActor {
             bounces--;
             calcMovement(); // we have rotated, so we need to recalculate x and y movement per turn
         } else {
+            if (observer != null) {
+                observer.projectileOutOfBounds(this);
+            }
             this.remove();
         }
     }

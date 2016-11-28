@@ -11,8 +11,10 @@ import howest.groep14.game.CustomUtils;
 import howest.groep14.game.GameStage;
 import howest.groep14.game.GeometryWars;
 import howest.groep14.game.actor.enemy.EnemyActor;
+import howest.groep14.game.actor.projectile.INotifyProjectileEvents;
+import howest.groep14.game.actor.projectile.ProjectileActor;
 
-public class PlayerActor extends SpriteActor {
+public class PlayerActor extends SpriteActor implements INotifyProjectileEvents {
     // Constants
     private int ROUNDS_PER_SECOND = 15;
     private final float MAX_SPEED = 10;
@@ -90,7 +92,7 @@ public class PlayerActor extends SpriteActor {
 
     private void fireProjectile() {
         if (lastDelta > 1f / ROUNDS_PER_SECOND) { // check if not over rate of fire (delta is the time since last frame)
-            ProjectileActor projectile = new ProjectileActor(gameStage, sprite.getX(), sprite.getY(), CustomUtils.getAngleToMouse(getX(), getY()), this);
+            ProjectileActor projectile = new ProjectileActor(gameStage, sprite.getX(), sprite.getY(), CustomUtils.getAngleToMouse(getX(), getY()), this, this);
             gameStage.addProjectile(projectile);
             projectilesFired++;
             lastDelta = 0; // reset lastDelta
@@ -121,6 +123,16 @@ public class PlayerActor extends SpriteActor {
 
     public ControlScheme getControlScheme() {
         return controlScheme;
+    }
+
+    @Override
+    public void projectileHit(ProjectileActor projectileActor) {
+        updateScore(1);
+    }
+
+    @Override
+    public void projectileOutOfBounds(ProjectileActor projectileActor) {
+
     }
 
     class ControlScheme {

@@ -1,14 +1,10 @@
 package howest.groep14.game;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.utils.IntFloatMap;
-import com.badlogic.gdx.utils.IntIntMap;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import howest.groep14.game.actor.PlayerActor;
-import howest.groep14.game.actor.ProjectileActor;
+import howest.groep14.game.actor.projectile.ProjectileActor;
 import howest.groep14.game.actor.enemy.EnemyActor;
 
 import java.util.ArrayList;
@@ -83,5 +79,12 @@ public class GameStage extends Stage {
     public void removeEnemyActor(EnemyActor actor) {
         enemyActors.remove(actor);
         actor.remove();
+    }
+
+    public void removePlayer(PlayerActor actor) {
+        players.remove(actor);
+        if (players.size() < 1) {
+            GeometryWars.getInstance().getGameScreen().gameOver();
+        }
     }
 }
