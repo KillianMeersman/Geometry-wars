@@ -83,7 +83,7 @@ public class PlayerActor extends SpriteActor implements INotifyProjectileEvents 
     }
 
     private void checkCollisions() {
-        for (EnemyActor enemy : ((GameStage) getStage()).getEnemyActors()) {
+        for (EnemyActor enemy : ((GameStage) getStage()).getCubeEnemies()) {
             if (enemy.getBounds().overlaps(getBounds())) {
                 GeometryWars.getInstance().getGameScreen().gameOver();
             }

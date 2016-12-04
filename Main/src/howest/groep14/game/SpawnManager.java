@@ -24,10 +24,10 @@ class SpawnManager extends Actor {
 
     @Override
     public void act(float delta) {
-        if (gameStage.getEnemyActors().size() - 5 < 2) {
+        if (gameStage.getCubeEnemies().size() < NUMBER_CUBES) {
             spawnCube();
         }
-        if (gameStage.getEnemyActors().size() - 2 < 5) {
+        if (gameStage.getCircleEnemies().size() < NUMBER_CIRCLES) {
             spawnCircle();
         }
     }
@@ -36,10 +36,10 @@ class SpawnManager extends Actor {
         Texture cubeTexture = new Texture("Desktop/Assets/greyRectangle.png");
         Sprite cubeSprite = new Sprite(cubeTexture);
         EnemyActor enemyActor = new EnemyActor(gameStage, cubeSprite, 0.2f);
-        enemyActor.setBehavior(new KamikazeBehavior(enemyActor, gameStage.getPlayers().get(0), 5));
+        enemyActor.setBehavior(new KamikazeBehavior(enemyActor, gameStage.getPlayers().get(0), 3));
         enemyActor.setPosition(random.nextInt(Gdx.graphics.getWidth() - 150), random.nextInt(Gdx.graphics.getHeight() - 150));
         enemyActor.setVisible(true);
-        gameStage.addEnemyActor(enemyActor);
+        gameStage.addCubeEnemy(enemyActor);
     }
 
     private void spawnCircle() {
@@ -49,7 +49,7 @@ class SpawnManager extends Actor {
         enemyActor.setBehavior(new SniperBehavior(enemyActor, gameStage.getPlayers().get(0)));
         enemyActor.setPosition(random.nextInt(Gdx.graphics.getWidth() - 150), random.nextInt(Gdx.graphics.getHeight() - 150));
         enemyActor.setVisible(true);
-        gameStage.addEnemyActor(enemyActor);
+        gameStage.addCircleEnemy(enemyActor);
     }
 
     /*

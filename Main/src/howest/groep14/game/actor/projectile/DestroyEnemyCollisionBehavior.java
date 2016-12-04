@@ -15,9 +15,9 @@ public class DestroyEnemyCollisionBehavior implements IProjectileCollisionBehavi
     public boolean checkCollisions() {
                 /*
         try {
-            for (EnemyActor actor : gameStage.getEnemyActors()) {
+            for (EnemyActor actor : gameStage.getCubeEnemies()) {
                 if (actor.getBounds().overlaps(getBounds())) {
-                    ((GameStage) getStage()).removeEnemyActor(actor);
+                    ((GameStage) getStage()).removeCubeEnemy(actor);
                     ((GameStage) getStage()).removeProjectile(this);
                     owner.updateScore(1);
                     break;
@@ -29,9 +29,16 @@ public class DestroyEnemyCollisionBehavior implements IProjectileCollisionBehavi
         */
         GameStage stage = (GameStage) owner.getStage();
         try {
-            for (EnemyActor actor : stage.getEnemyActors()) {
+            for (EnemyActor actor : stage.getCubeEnemies()) {
                 if (CustomUtils.isColliding(owner, actor)) {
-                    stage.removeEnemyActor(actor);
+                    stage.removeCubeEnemy(actor);
+                    stage.removeProjectile(owner);
+                    return true;
+                }
+            }
+            for (EnemyActor actor : stage.getCircleEnemies()) {
+                if (CustomUtils.isColliding(owner, actor)) {
+                    stage.removeCircleEnemy(actor);
                     stage.removeProjectile(owner);
                     return true;
                 }

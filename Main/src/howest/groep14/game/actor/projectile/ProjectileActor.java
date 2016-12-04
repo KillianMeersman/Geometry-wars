@@ -47,6 +47,7 @@ public class ProjectileActor extends SpriteActor {
 
     public void setSpeed(float speed) {
         this.speed = speed;
+        calcMovement();
     }
 
     public void act(float delta) {

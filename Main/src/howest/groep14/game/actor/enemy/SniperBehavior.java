@@ -43,7 +43,7 @@ public class SniperBehavior implements IEnemyBehavior {
         GameStage stage = (GameStage) owner.getStage();
         ProjectileActor projectileActor = new ProjectileActor(stage, owner.getX(), owner.getY(), CustomUtils.getAngleToFace(owner, target), owner);
         projectileActor.setCollisionBehavior(new DestroyPlayersBehavior(projectileActor));
-        projectileActor.setSpeed(1);
+        projectileActor.setSpeed(5);
         stage.addProjectile(projectileActor);
     }
 }

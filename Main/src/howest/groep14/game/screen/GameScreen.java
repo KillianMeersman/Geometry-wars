@@ -11,10 +11,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import howest.groep14.game.CustomUtils;
-import howest.groep14.game.GameStage;
-import howest.groep14.game.GeometryWars;
+import howest.groep14.game.*;
 import howest.groep14.game.actor.PlayerActor;
+
+import java.sql.SQLException;
+
+import static sun.audio.AudioPlayer.player;
 
 public class GameScreen implements Screen {
     private GameStage stage;
@@ -28,6 +30,14 @@ public class GameScreen implements Screen {
     private float lastDelta = 0.2f;
 
     public GameScreen(Viewport viewport, Skin skin) {
+        try {
+            PlayerMapper testMapper = new PlayerMapper("geometry-wars", "eit3gBETvDovluE4mfLd");
+            int id = testMapper.addPlayer("test", "test@gmail.com", "password123");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
         stage = new GameStage(viewport);
         this.skin = skin;
         PlayerActor player = new PlayerActor(stage);

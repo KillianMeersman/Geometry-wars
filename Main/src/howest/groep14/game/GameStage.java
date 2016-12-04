@@ -12,7 +12,8 @@ import java.util.List;
 
 public class GameStage extends Stage {
     private List<ProjectileActor> projectiles = new ArrayList<ProjectileActor>();
-    private List<EnemyActor> enemyActors = new ArrayList<EnemyActor>();
+    private List<EnemyActor> cubeEnemies = new ArrayList<EnemyActor>();
+    private List<EnemyActor> circleEnemies = new ArrayList<EnemyActor>();
     private List<PlayerActor> players = new ArrayList<PlayerActor>();
     private SpawnManager spawnManager;
 
@@ -33,8 +34,22 @@ public class GameStage extends Stage {
         return projectiles;
     }
 
-    public List<EnemyActor> getEnemyActors() {
-        return enemyActors;
+    public List<EnemyActor> getCubeEnemies() {
+        return cubeEnemies;
+    }
+
+    public void addCubeEnemy(EnemyActor enemy) {
+        addActor(enemy);
+        cubeEnemies.add(enemy);
+    }
+
+    public List<EnemyActor> getCircleEnemies() {
+        return circleEnemies;
+    }
+
+    public void addCircleEnemy(EnemyActor enemy) {
+        addActor(enemy);
+        circleEnemies.add(enemy);
     }
 
     public List<PlayerActor> getPlayers() {
@@ -61,11 +76,6 @@ public class GameStage extends Stage {
         projectiles.add(projectile);
     }
 
-    public void addEnemyActor(EnemyActor enemy) {
-        addActor(enemy);
-        enemyActors.add(enemy);
-    }
-
     public void addPlayer(PlayerActor player) {
         addActor(player);
         players.add(player);
@@ -76,8 +86,13 @@ public class GameStage extends Stage {
         actor.remove();
     }
 
-    public void removeEnemyActor(EnemyActor actor) {
-        enemyActors.remove(actor);
+    public void removeCubeEnemy(EnemyActor actor) {
+        cubeEnemies.remove(actor);
+        actor.remove();
+    }
+
+    public void removeCircleEnemy(EnemyActor actor) {
+        circleEnemies.remove(actor);
         actor.remove();
     }
 
