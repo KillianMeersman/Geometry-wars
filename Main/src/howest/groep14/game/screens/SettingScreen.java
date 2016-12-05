@@ -1,4 +1,4 @@
-package howest.groep14.game.screen;
+package howest.groep14.game.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;

@@ -53,7 +53,7 @@ public class ProjectileActor extends SpriteActor {
     public void act(float delta) {
         super.act(delta);
         setPosition(getX() + xAmount, getY() + yAmount); // Go forward
-        if (CustomUtils.outOfBoundsX(getX(), sprite.getWidth(), speed)) { bounce(); } // Check if at border of screen, of so: bounce or be removed
+        if (CustomUtils.outOfBoundsX(getX(), sprite.getWidth(), speed)) { bounce(); } // Check if at border of screens, of so: bounce or be removed
         if (CustomUtils.outOfBoundsY(getY(), sprite.getHeight(), speed)) { bounce(); }
         checkCollisions();
     }

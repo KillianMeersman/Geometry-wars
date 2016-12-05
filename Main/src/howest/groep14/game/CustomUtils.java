@@ -60,12 +60,12 @@ public class CustomUtils {
         return angle;
     }
 
-    // Is the object at the edge of the screen? (left & right borders)
+    // Is the object at the edge of the screens? (left & right borders)
     public static boolean outOfBoundsX(float x, float sizeX, float update) {
         return (x + update > Gdx.graphics.getWidth() - sizeX) || (x + update < 0);
     }
 
-    // Is the object at the edge of the screen? (upper & lower borders)
+    // Is the object at the edge of the screens? (upper & lower borders)
     public static boolean outOfBoundsY(float y, float sizeY, float update) {
         return (y + update > Gdx.graphics.getHeight() - sizeY) || (y + update  < 0);
     }

@@ -5,25 +5,29 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.*;
-import howest.groep14.game.screen.GameScreen;
-import howest.groep14.game.screen.MenuScreen;
-import howest.groep14.game.screen.SettingScreen;
+import howest.groep14.game.player.PlayerRepository;
+import howest.groep14.game.screens.GameScreen;
+import howest.groep14.game.screens.MenuScreen;
+import howest.groep14.game.screens.SettingScreen;
 
 public class GeometryWars extends Game {
-    static int WIDTH; //800px
-    static int HEIGHT; //480px
     private Skin skin;
 
     private Viewport viewport;
-    private OrthographicCamera camera;
     private GameScreen gameScreen;
     private MenuScreen menuScreen;
     private SettingScreen settingScreen;
+
+    private PlayerRepository playerRepository;
+
+    private boolean dbConnection = true;
 
     private static GeometryWars instance = new GeometryWars();
 
@@ -32,7 +36,12 @@ public class GeometryWars extends Game {
     }
 
     private GeometryWars() {
-
+        try {
+            PlayerRepository.init();
+            playerRepository = PlayerRepository.getInstance();
+        } catch (Exception e) {
+            dbConnection = false;
+        }
     }
 
     public GameScreen getGameScreen() {
@@ -47,31 +56,27 @@ public class GeometryWars extends Game {
         return settingScreen;
     }
 
+    public Viewport getViewPort() {
+        return viewport;
+    }
+
     public void newGame() {
         gameScreen = new GameScreen(viewport, skin);
         setScreen(gameScreen);
-    }
-
-    public Camera getCamera() {
-        return camera;
-    }
-
-    public Viewport getViewPort() {
-        return viewport;
     }
 
     @Override
     public void create(){
         skin = generateSkin();
 
-        WIDTH = 1200;
-        HEIGHT = 650;
-
-        camera = new OrthographicCamera(WIDTH,HEIGHT);   //set Camera to the gamesize
+        //camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());   //set Camera to the gamesize
         //camera.translate(WIDTH/2, HEIGHT/2);           //Change the position of the camera (By default the origin is centered)
-        camera.update(); //Update camera to new location
-        //viewport = new ScreenViewport(camera);
-        viewport = new ScreenViewport(camera);
+        //camera.update(); //Update camera to new location
+        Gdx.graphics.setDisplayMode(
+                Gdx.graphics.getDesktopDisplayMode().width,
+                Gdx.graphics.getDesktopDisplayMode().height,
+                true);
+        viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
         gameScreen = new GameScreen(viewport, skin);
         gameScreen.getStage().setCollisionsEnabled(false);
@@ -89,38 +94,48 @@ public class GeometryWars extends Game {
         Pixmap pixmap = new Pixmap(100, 100, Pixmap.Format.RGBA8888);
         pixmap.setColor(Color.DARK_GRAY);
         pixmap.fill();
-        skin.add("white", new Texture(pixmap));
+        skin.add("solid", new Texture(pixmap));
+
+        TextField.TextFieldStyle textFieldStyle = new TextField.TextFieldStyle();
+        textFieldStyle.font = bfont;
+        textFieldStyle.fontColor = Color.WHITE;
+        textFieldStyle.background = skin.newDrawable("solid", Color.GRAY);
+        skin.add("default", textFieldStyle);
 
         TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
-        textButtonStyle.up = skin.newDrawable("white", Color.LIGHT_GRAY);
-        textButtonStyle.down =  skin.newDrawable("white", Color.DARK_GRAY);
-        textButtonStyle.over = skin.newDrawable("white", Color.BLUE);
+        textButtonStyle.up = skin.newDrawable("solid", Color.LIGHT_GRAY);
+        textButtonStyle.down =  skin.newDrawable("solid", Color.DARK_GRAY);
+        textButtonStyle.over = skin.newDrawable("solid", Color.BLUE);
         //textButtonStyle.checked = skin.newDrawable("white", Color.BLACK);
         textButtonStyle.font = skin.getFont("default");
         skin.add("default", textButtonStyle);
 
-        Label.LabelStyle style = new Label.LabelStyle(skin.getFont("default"), Color.DARK_GRAY);
-        skin.add("default", style);
-
-        TextField.TextFieldStyle textFieldStyle = new TextField.TextFieldStyle();
-        textFieldStyle.font = bfont;
-        skin.add("default", textFieldStyle);
+        Label.LabelStyle labelStyle = new Label.LabelStyle(skin.getFont("default"), Color.DARK_GRAY);
+        skin.add("default", labelStyle);
 
         return skin;
     }
 
     public void render(){
-        //clear screen to black
+        //clear screens to black
         float color = 230 / 255f;
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         Gdx.gl.glClearColor(color, color, color, 1);
         getScreen().render(Gdx.graphics.getDeltaTime());
     }
 
-    // what to do when screen is resized
+    // what to do when screens is resized
     public void resize(int width, int height) {
         viewport.update(width, height);
-        camera.update();
+        //camera.update();
+        //getScreen().resize(width, height);
+    }
 
+    public PlayerRepository getPlayerRepository() {
+        return playerRepository;
+    }
+
+    public boolean connectionReady() {
+        return dbConnection;
     }
 }

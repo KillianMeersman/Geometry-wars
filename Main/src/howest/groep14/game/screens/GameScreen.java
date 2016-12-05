@@ -1,4 +1,4 @@
-package howest.groep14.game.screen;
+package howest.groep14.game.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -16,8 +16,6 @@ import howest.groep14.game.actor.PlayerActor;
 
 import java.sql.SQLException;
 
-import static sun.audio.AudioPlayer.player;
-
 public class GameScreen implements Screen {
     private GameStage stage;
     private Label score1Label, score2Label, centerLabel, debugLabel;
@@ -30,14 +28,6 @@ public class GameScreen implements Screen {
     private float lastDelta = 0.2f;
 
     public GameScreen(Viewport viewport, Skin skin) {
-        try {
-            PlayerMapper testMapper = new PlayerMapper("geometry-wars", "eit3gBETvDovluE4mfLd");
-            int id = testMapper.addPlayer("test", "test@gmail.com", "password123");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
         stage = new GameStage(viewport);
         this.skin = skin;
         PlayerActor player = new PlayerActor(stage);

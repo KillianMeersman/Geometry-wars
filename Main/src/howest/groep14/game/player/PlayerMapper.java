@@ -1,21 +1,15 @@
-package howest.groep14.game;
+package howest.groep14.game.player;
 
+import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
 
-import javax.crypto.SecretKeyFactory;
-import javax.crypto.spec.PBEKeySpec;
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
-import java.security.spec.KeySpec;
+import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.List;
-import java.util.Random;
-import java.util.concurrent.ExecutionException;
 
 
-public class PlayerMapper {
+class PlayerMapper {
     private Connection connection;
     private String sqlUser, sqlPassword;
 
@@ -36,12 +30,17 @@ public class PlayerMapper {
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery("SELECT * FROM players");
 
+            BASE64Decoder dec = new BASE64Decoder();
             while (resultSet.next()) {
-                Player player = new Player(resultSet.getInt("playerID"), resultSet.getString("username"),
-                        resultSet.getString("passwordHash"), resultSet.getString("passwordSalt"));
-                players.add(player);
+                try {
+                    byte[] hash = dec.decodeBuffer(resultSet.getString("passwordHash"));
+                    byte[] salt = dec.decodeBuffer(resultSet.getString("passwordSalt"));
+                    Player player = new Player(resultSet.getInt("playerID"), resultSet.getString("username"), hash, salt);
+                    players.add(player);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
-
             return players;
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
@@ -62,9 +61,16 @@ public class PlayerMapper {
                 String email = results.getString("email");
                 String passwordHash = results.getString("passwordHash");
                 String passwordSalt = results.getString("passwordSalt");
-                Player player = new Player(id, username, passwordHash, passwordSalt);
-                player.setEmail(email);
-                return player;
+                BASE64Decoder dec = new BASE64Decoder();
+                try {
+                    byte[] hash = dec.decodeBuffer(passwordHash);
+                    byte[] salt = dec.decodeBuffer(passwordSalt);
+                    Player player = new Player(id, username, hash, salt);
+                    player.setEmail(email);
+                    return player;
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             } else {
                 throw new Exception("User not found");
             }
@@ -75,7 +81,7 @@ public class PlayerMapper {
         return null;
     }
 
-    public int addPlayer(String username, String email, String password) throws SQLException {
+    public int addPlayer(String username, String email, byte[] passwordHash, byte[] passwordSalt) throws SQLException {
         try {
             Class.forName("com.mysql.jdbc.Driver");
 
@@ -83,15 +89,9 @@ public class PlayerMapper {
                     "(username, email, passwordHash, passwordSalt)" +
                     "VALUES (?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
 
-            Random random = new Random();
-            byte[] salt = new byte[16];
-            random.nextBytes(salt);
-            KeySpec spec = new PBEKeySpec(password.toCharArray(), salt, 65536, 128);
-            SecretKeyFactory f = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
-            byte[] hash = f.generateSecret(spec).getEncoded();
             BASE64Encoder enc = new BASE64Encoder();
-            String hashBase64 = enc.encode(hash);
-            String saltBase64 = enc.encode(salt);
+            String hashBase64 = enc.encode(passwordHash);
+            String saltBase64 = enc.encode(passwordSalt);
 
             prep.setString(1, username);
             prep.setString(2, email);
@@ -111,12 +111,29 @@ public class PlayerMapper {
 
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (InvalidKeySpecException e) {
-            e.printStackTrace();
         }
         return -1;
+    }
+
+    public void updatePlayer(Player player) {
+        try {
+            PreparedStatement prep = connection.prepareStatement("UPDATE players SET username = ?, email = ?, passwordHash = ?, passwordSalt = ?" +
+                    "WHERE playerID = ?");
+            prep.setString(1, player.getUsername());
+            prep.setString(2, player.getEmail());
+            BASE64Encoder enc = new BASE64Encoder();
+            String hash = enc.encode(player.getPasswordHash());
+            String salt = enc.encode(player.getPasswordSalt());
+            prep.setString(3, hash);
+            prep.setString(4, salt);
+            prep.setInt(5, player.getId());
+
+            prep.execute();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
     }
 
     public void finalize() throws Throwable {

@@ -1,10 +1,11 @@
-package howest.groep14.game;
+package howest.groep14.game.player;
 
 public class Player {
     private int id;
-    private String username, email, passwordHash, passwordSalt;
+    private String username, email;
+    private byte[] passwordHash, passwordSalt;
 
-    public Player(int id, String username, String passwordHash, String passwordSalt) {
+    public Player(int id, String username, byte[] passwordHash, byte[] passwordSalt) {
         this.id = id;
         this.username = username;
         this.passwordHash = passwordHash;
@@ -31,19 +32,19 @@ public class Player {
         this.email = email;
     }
 
-    public String getPasswordHash() {
+    public byte[] getPasswordHash() {
         return passwordHash;
     }
 
-    public void setPasswordHash(String passwordHash) {
+    public void setPasswordHash(byte[] passwordHash) {
         this.passwordHash = passwordHash;
     }
 
-    public String getPasswordSalt() {
+    public byte[] getPasswordSalt() {
         return passwordSalt;
     }
 
-    public void setPasswordSalt(String passwordSalt) {
+    public void setPasswordSalt(byte[] passwordSalt) {
         this.passwordSalt = passwordSalt;
     }
 }
