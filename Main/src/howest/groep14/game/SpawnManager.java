@@ -3,7 +3,9 @@ package howest.groep14.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import howest.groep14.game.actor.PlayerActor;
 import howest.groep14.game.actor.enemy.EnemyActor;
 import howest.groep14.game.actor.enemy.KamikazeBehavior;
 import howest.groep14.game.actor.enemy.SniperBehavior;
@@ -11,12 +13,11 @@ import howest.groep14.game.actor.enemy.SniperBehavior;
 import java.util.Random;
 
 class SpawnManager extends Actor {
-    private final int SPAWN_PLAYER_MARGIN = 100;
+    private final int SPAWN_PLAYER_MARGIN = 250;
     private final int NUMBER_CUBES = 5;
     private final int NUMBER_CIRCLES = 2;
     private final Random random = new Random();
     private final GameStage gameStage;
-    private int cubes, circles;
 
     SpawnManager(GameStage stage) {
         gameStage = stage;
@@ -36,8 +37,9 @@ class SpawnManager extends Actor {
         Texture cubeTexture = new Texture("Desktop/Assets/greyRectangle.png");
         Sprite cubeSprite = new Sprite(cubeTexture);
         EnemyActor enemyActor = new EnemyActor(gameStage, cubeSprite, 0.2f);
-        enemyActor.setBehavior(new KamikazeBehavior(enemyActor, gameStage.getPlayers().get(0), 3));
-        enemyActor.setPosition(random.nextInt(Gdx.graphics.getWidth() - 150), random.nextInt(Gdx.graphics.getHeight() - 150));
+        enemyActor.setBehavior(new KamikazeBehavior(enemyActor, gameStage.getPlayers().get(0), 1));
+        Vector2 position = getSpawnCoordinates(SPAWN_PLAYER_MARGIN);
+        enemyActor.setPosition(position);
         enemyActor.setVisible(true);
         gameStage.addCubeEnemy(enemyActor);
     }
@@ -47,9 +49,36 @@ class SpawnManager extends Actor {
         Sprite circleSprite = new Sprite(circleTexture);
         EnemyActor enemyActor = new EnemyActor(gameStage, circleSprite, 0.2f);
         enemyActor.setBehavior(new SniperBehavior(enemyActor, gameStage.getPlayers().get(0)));
-        enemyActor.setPosition(random.nextInt(Gdx.graphics.getWidth() - 150), random.nextInt(Gdx.graphics.getHeight() - 150));
+        Vector2 position = getSpawnCoordinates(SPAWN_PLAYER_MARGIN);
+        enemyActor.setPosition(position);
         enemyActor.setVisible(true);
         gameStage.addCircleEnemy(enemyActor);
+    }
+
+    private Vector2 getSpawnCoordinates(float margin) {
+        float x = 0;
+        float y = 0;
+        boolean xClear = false;
+        boolean yClear = false;
+
+        while (!xClear || !yClear) {
+            xClear = true;
+            yClear = true;
+            x = random.nextInt(Math.round(gameStage.getWidth() - 100));
+            y = random.nextInt(Math.round(gameStage.getHeight() - 100));
+
+            for (PlayerActor player : gameStage.getPlayers()) {
+                if (!(Math.abs(player.getX() - x) >= margin)) {
+                    xClear = false;
+                    break;
+                }
+                if (!(Math.abs(player.getY() - y) >= margin)) {
+                    yClear = false;
+                    break;
+                }
+            }
+        }
+        return new Vector2(x, y);
     }
 
     /*

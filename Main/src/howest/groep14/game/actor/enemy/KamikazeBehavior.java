@@ -28,6 +28,6 @@ public class KamikazeBehavior implements IEnemyBehavior {   // The enemy goes to
     public void act() {
         float angleToFace = CustomUtils.getAngleToFace(owner.getX(), owner.getY(), target.getX(), target.getY());
         owner.setRotation(angleToFace); // Face target
-        owner.updatePositionForward(SPEED); // Go forward
+        owner.updatePositionForward(SPEED, false); // Go forward
     }
 }

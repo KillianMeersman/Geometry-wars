@@ -1,12 +1,10 @@
 package howest.groep14.game.actor;
 
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.math.Rectangle;
 import howest.groep14.game.CustomUtils;
 import howest.groep14.game.GameStage;
 import howest.groep14.game.GeometryWars;
@@ -15,28 +13,23 @@ import howest.groep14.game.actor.projectile.INotifyProjectileEvents;
 import howest.groep14.game.actor.projectile.ProjectileActor;
 
 public class PlayerActor extends SpriteActor implements INotifyProjectileEvents {
-    // Constants
-    private int ROUNDS_PER_SECOND = 15;
     private final float MAX_SPEED = 10;
     private final float ACCEL = 1f;
     private final float ROT_SPEED = 5;
     private final float FRICTION = 0.92f;
-
+    // Constants
+    private int ROUNDS_PER_SECOND = 15;
     // Class vars
     private float speed_x = 0;
     private float speed_y = 0;
     private float lastDelta = 0;
-    private int projectilesFired = 0;
-    private int score = 0;
+    private int score, kills, projectilesFired;
     private ControlScheme controlScheme;
 
-    public PlayerActor(GameStage stage){
-        super(stage);
-        Texture texture = new Texture("Desktop/Assets/player.png");
-        texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-        sprite = new Sprite(texture);
+    public PlayerActor(GameStage stage, Sprite sprite) {
+        super(stage, sprite);
 
-        setBounds(new Rectangle(sprite.getX(), sprite.getY(), sprite.getWidth(), sprite.getHeight()));
+        setBounds(sprite.getX(), sprite.getY(), sprite.getWidth(), sprite.getHeight());
 
         controlScheme = new ControlScheme();
         controlScheme.UP = Input.Keys.UP;
@@ -44,19 +37,22 @@ public class PlayerActor extends SpriteActor implements INotifyProjectileEvents 
         controlScheme.LEFT = Input.Keys.LEFT;
         controlScheme.RIGHT = Input.Keys.RIGHT;
         controlScheme.FIRE = Input.Keys.SPACE;
+
     }
 
-    public PlayerActor(GameStage stage, ControlScheme controlScheme) {
-        this(stage);
+    public PlayerActor(GameStage stage, Sprite sprite, ControlScheme controlScheme) {
+        this(stage, sprite);
         this.controlScheme = controlScheme;
     }
 
     @Override
     public void act(float delta) {
         super.act(delta);
-        updatePositionAbsolute(speed_x *= FRICTION, speed_y *= FRICTION);
+        updatePositionAbsolute(speed_x *= FRICTION, speed_y *= FRICTION, true);
         checkInput();
-        if (gameStage.isCollisionsEnabled()) { checkCollisions(); }
+        if (gameStage.isCollisionsEnabled()) {
+            checkCollisions();
+        }
     }
 
     private void checkInput() { // check for pressed keys
@@ -84,7 +80,7 @@ public class PlayerActor extends SpriteActor implements INotifyProjectileEvents 
 
     private void checkCollisions() {
         for (EnemyActor enemy : ((GameStage) getStage()).getCubeEnemies()) {
-            if (enemy.getBounds().overlaps(getBounds())) {
+            if (CustomUtils.isColliding(this, enemy)) {
                 GeometryWars.getInstance().getGameScreen().gameOver();
             }
         }
@@ -92,10 +88,17 @@ public class PlayerActor extends SpriteActor implements INotifyProjectileEvents 
 
     private void fireProjectile() {
         if (lastDelta > 1f / ROUNDS_PER_SECOND) { // check if not over rate of fire (delta is the time since last frame)
-            ProjectileActor projectile = new ProjectileActor(gameStage, sprite.getX(), sprite.getY(), CustomUtils.getAngleToMouse(getX(), getY()), this, this);
+            Texture texture = new Texture("Desktop/Assets/greyProjectile.png");
+            texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+            Sprite projectileSprite = new Sprite(texture);
+
+            ProjectileActor projectile = new ProjectileActor(gameStage, projectileSprite, getX(), getY(), CustomUtils.getAngleToMouse(getX(), getY()), this, this);
+            projectile.setScale(0.1f);
             gameStage.addProjectile(projectile);
+
             projectilesFired++;
             lastDelta = 0; // reset lastDelta
+
             Sound shootSound = Gdx.audio.newSound(Gdx.files.internal("Desktop/Assets/laser.mp3"));
             shootSound.play(0.1f);
         } else {
@@ -117,6 +120,10 @@ public class PlayerActor extends SpriteActor implements INotifyProjectileEvents 
         blipSound.play(0.5f);
     }
 
+    private void updateKills(int update) {
+        kills += update;
+    }
+
     public int getProjectilesFired() {
         return projectilesFired;
     }
@@ -127,7 +134,7 @@ public class PlayerActor extends SpriteActor implements INotifyProjectileEvents 
 
     @Override
     public void projectileHit(ProjectileActor projectileActor) {
-        updateScore(1);
+        updateKills(1);
     }
 
     @Override

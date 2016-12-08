@@ -10,10 +10,10 @@ public class DesktopStarter {
     public static void main(String[] args){
         LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
         cfg.title = "Example";
-        cfg.fullscreen = true;
+        cfg.fullscreen = false;
 
-        cfg.width = 1920;
-        cfg.height = 1080;
+        cfg.width = 1620;
+        cfg.height = 800;
 
         new LwjglApplication(GeometryWars.getInstance(),cfg);
     }

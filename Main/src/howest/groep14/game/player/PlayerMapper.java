@@ -53,7 +53,6 @@ class PlayerMapper {
     public Player getPlayerByUsername(String username) throws Exception {
         try {
             PreparedStatement prep = connection.prepareStatement("SELECT * FROM players WHERE username = '"+username+"'");
-
             ResultSet results = prep.executeQuery();
 
             if (results.next()) {

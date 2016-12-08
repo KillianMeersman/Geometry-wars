@@ -7,12 +7,15 @@ import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
 public class PlayerRepository {
     private List<Player> players;
     private PlayerMapper playerMapper;
+    private Player activePlayer;
+
     private static PlayerRepository instance;
 
     public static void init() throws Exception {
@@ -37,11 +40,16 @@ public class PlayerRepository {
         players.add(player);
     }
 
-    public boolean checkPlayerLogin(String username, String password) throws Exception {
+    public boolean loginPlayer(String username, String password) throws Exception {
         Player player = playerMapper.getPlayerByUsername(username);
 
         byte[] hash = getPasswordHash(password, player.getPasswordSalt());
-        return player.getPasswordHash() == hash;
+        if (Arrays.equals(player.getPasswordHash(), hash)) {
+            activePlayer = player;
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public Player getPlayerByUsername(String username) throws Exception {
@@ -90,5 +98,9 @@ public class PlayerRepository {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public Player getActivePlayer() {
+        return activePlayer;
     }
 }

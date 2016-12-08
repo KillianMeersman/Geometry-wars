@@ -1,6 +1,8 @@
 package howest.groep14.game.actor.enemy;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import howest.groep14.game.CustomUtils;
 import howest.groep14.game.GameStage;
 import howest.groep14.game.actor.projectile.DestroyPlayersBehavior;
@@ -29,7 +31,7 @@ public class SniperBehavior implements IEnemyBehavior {
                 angle = CustomUtils.intRandom(360);
             }
             owner.setRotation(angle);
-            owner.updatePositionForward(SPEED);
+            owner.updatePositionForward(SPEED, false);
         }
         if (lastDelta > 1f / ROUNDS_PER_SECOND) {
             fireProjectile();
@@ -41,9 +43,13 @@ public class SniperBehavior implements IEnemyBehavior {
 
     private void fireProjectile() {
         GameStage stage = (GameStage) owner.getStage();
-        ProjectileActor projectileActor = new ProjectileActor(stage, owner.getX(), owner.getY(), CustomUtils.getAngleToFace(owner, target), owner);
+        Texture texture = new Texture("Desktop/Assets/greyProjectile.png");
+        texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        Sprite projectileSprite = new Sprite(texture);
+        ProjectileActor projectileActor = new ProjectileActor(stage, projectileSprite, owner.getX(), owner.getY(), CustomUtils.getAngleToFace(owner, target), owner);
         projectileActor.setCollisionBehavior(new DestroyPlayersBehavior(projectileActor));
         projectileActor.setSpeed(5);
+        projectileActor.setScale(0.1f);
         stage.addProjectile(projectileActor);
     }
 }

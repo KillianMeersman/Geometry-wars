@@ -62,12 +62,12 @@ public class CustomUtils {
 
     // Is the object at the edge of the screens? (left & right borders)
     public static boolean outOfBoundsX(float x, float sizeX, float update) {
-        return (x + update > Gdx.graphics.getWidth() - sizeX) || (x + update < 0);
+        return (x + update > GeometryWars.getInstance().getGameScreen().getStage().getWidth() - sizeX / 2) || (x + update < 0 - sizeX / 2);
     }
 
     // Is the object at the edge of the screens? (upper & lower borders)
     public static boolean outOfBoundsY(float y, float sizeY, float update) {
-        return (y + update > Gdx.graphics.getHeight() - sizeY) || (y + update  < 0);
+        return (y + update > GeometryWars.getInstance().getGameScreen().getStage().getHeight() - sizeY / 2) || (y + update  < 0 - sizeY / 2);
     }
 
     public static boolean isColliding(SpriteActor actorA, SpriteActor actorB) {

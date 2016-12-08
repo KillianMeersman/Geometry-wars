@@ -17,6 +17,8 @@ import howest.groep14.game.screens.GameScreen;
 import howest.groep14.game.screens.MenuScreen;
 import howest.groep14.game.screens.SettingScreen;
 
+import java.sql.SQLException;
+
 public class GeometryWars extends Game {
     private Skin skin;
 
@@ -42,6 +44,13 @@ public class GeometryWars extends Game {
         } catch (Exception e) {
             dbConnection = false;
         }
+        /*
+        try {
+            playerRepository.createPlayer("waddup", "", "testing");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        */
     }
 
     public GameScreen getGameScreen() {
@@ -72,10 +81,12 @@ public class GeometryWars extends Game {
         //camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());   //set Camera to the gamesize
         //camera.translate(WIDTH/2, HEIGHT/2);           //Change the position of the camera (By default the origin is centered)
         //camera.update(); //Update camera to new location
+        /*
         Gdx.graphics.setDisplayMode(
                 Gdx.graphics.getDesktopDisplayMode().width,
                 Gdx.graphics.getDesktopDisplayMode().height,
                 true);
+                */
         viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
         gameScreen = new GameScreen(viewport, skin);

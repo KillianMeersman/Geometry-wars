@@ -10,19 +10,18 @@ public class EnemyActor extends SpriteActor {
     private IEnemyBehavior behavior; // Stategy pattern
 
     public EnemyActor(GameStage stage, Sprite sprite) {
-        super(stage);
+        super(stage, sprite);
         this.setSprite(sprite);
         this.behavior = new NoBehavior();
-        setBounds(new Rectangle(sprite.getX(), sprite.getY(), sprite.getWidth() * sprite.getScaleX(), sprite.getHeight() * sprite.getScaleY()));
+        setBounds(sprite.getX(), sprite.getY(), sprite.getWidth() * sprite.getScaleX(), sprite.getHeight() * sprite.getScaleY());
     }
 
     public EnemyActor(GameStage stage, Sprite sprite, float scale) {
         this(stage, sprite);
-        this.sprite.setScale(scale);
         this.setScale(scale);
         float width = sprite.getWidth() * sprite.getScaleX();
         float height = sprite.getWidth() * sprite.getScaleX();
-        setBounds(new Rectangle(sprite.getX(), sprite.getY(), width, height));
+        setBounds(sprite.getX(), sprite.getY(), width, height);
     }
 
     public IEnemyBehavior getBehavior() {

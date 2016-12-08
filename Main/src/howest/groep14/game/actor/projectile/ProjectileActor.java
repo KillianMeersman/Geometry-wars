@@ -15,20 +15,13 @@ public class ProjectileActor extends SpriteActor {
     private INotifyProjectileEvents observer;
     private IProjectileCollisionBehavior collisionBehavior;
 
-    public ProjectileActor(GameStage stage, float x, float y, float rotation, SpriteActor owner) {
-        super(stage);
+    public ProjectileActor(GameStage stage, Sprite sprite, float x, float y, float rotation, SpriteActor owner) {
+        super(stage, sprite);
         this.owner = owner;
         this.collisionBehavior = new DestroyEnemyCollisionBehavior(this);
 
-        Texture texture = new Texture("Desktop/Assets/greyProjectile.png");
-        texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-        sprite = new Sprite(texture);
-        sprite.setRotation(rotation);
-        sprite.setScale(0.1f);
-
         this.setPosition(x, y);
         this.setRotation(rotation);
-        setBounds(new Rectangle(sprite.getX(), sprite.getY(), getWidth(), getHeight()));
 
         calcMovement(); // Because it moves in a straight line, calculate movement on x and y-axis per turn only once (saves cpu)
         if (CustomUtils.booleanRandom(10)) { // 1 in 10 change to bounce (once)
@@ -36,8 +29,8 @@ public class ProjectileActor extends SpriteActor {
         }
     }
 
-    public ProjectileActor(GameStage stage, float x, float y, float rotation, SpriteActor owner, INotifyProjectileEvents observer) {
-        this(stage, x, y, rotation, owner);
+    public ProjectileActor(GameStage stage, Sprite sprite, float x, float y, float rotation, SpriteActor owner, INotifyProjectileEvents observer) {
+        this(stage, sprite, x, y, rotation, owner);
         this.observer = observer;
     }
 

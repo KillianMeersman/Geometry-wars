@@ -11,10 +11,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
 import howest.groep14.game.CustomUtils;
 import howest.groep14.game.GeometryWars;
-import org.omg.PortableInterceptor.USER_EXCEPTION;
+import howest.groep14.game.player.PlayerRepository;
 
 public class MenuScreen implements Screen {
     private Stage stage;
@@ -65,7 +64,10 @@ public class MenuScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 try {
-                    if (!GeometryWars.getInstance().getPlayerRepository().checkPlayerLogin(usernameField.getText(), passwordField.getText())) {
+                    PlayerRepository repo = GeometryWars.getInstance().getPlayerRepository();
+                    if (repo.loginPlayer(usernameField.getText(), passwordField.getText())) {
+                        loginNotification.setText("WELCOME " + repo.getActivePlayer().getUsername());
+                    } else {
                         loginNotification.setText("INVALID LOGIN");
                     }
                 } catch (Exception e) {

@@ -3,6 +3,8 @@ package howest.groep14.game.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -30,8 +32,12 @@ public class GameScreen implements Screen {
     public GameScreen(Viewport viewport, Skin skin) {
         stage = new GameStage(viewport);
         this.skin = skin;
-        PlayerActor player = new PlayerActor(stage);
+        Texture texture = new Texture("Desktop/Assets/arrow.png");
+        texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        Sprite playerSprite = new Sprite(texture);
+        PlayerActor player = new PlayerActor(stage, playerSprite);
         player.setPosition(50, 50);
+        player.setScale(0.3f);
         stage.addPlayer(player);
         stage.setKeyboardFocus(player);
         createUI();
