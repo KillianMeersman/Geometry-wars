@@ -9,14 +9,13 @@ import howest.groep14.game.GameStage;
 import howest.groep14.game.actor.movement.MovementBehavior;
 import howest.groep14.game.actor.movement.NoMovement;
 
-public class SpriteActor extends Actor { // An actor that holds a sprite, and updates it
-    protected final GameStage gameStage;
+public abstract class SpriteActor extends Actor { // An actor that holds a sprite, and updates it
+    protected final GameStage stage;
     protected Sprite sprite;
     protected MovementBehavior movementBehavior;
 
-
     public SpriteActor(GameStage stage, Sprite sprite) {
-        this.gameStage = stage;
+        this.stage = stage;
         this.sprite = sprite;
         setPosition(1, 1);
         this.movementBehavior = new NoMovement(this);
@@ -29,13 +28,6 @@ public class SpriteActor extends Actor { // An actor that holds a sprite, and up
         this.movementBehavior = movementBehavior;
     }
 
-    public Sprite getSprite() {
-        return sprite;
-    }
-
-    public void setSprite(Sprite sprite) {
-        this.sprite = sprite;
-    }
 
     public void updateRotation(float angle) {
         this.setRotation(this.getRotation() + angle);
@@ -73,10 +65,12 @@ public class SpriteActor extends Actor { // An actor that holds a sprite, and up
         updatePositionForward(distance, distance, checkBounds);
     }
 
-    @Override
-    public void setRotation(float degrees) {
-        super.setRotation(degrees);
-        sprite.setRotation(degrees);
+    public Sprite getSprite() {
+        return sprite;
+    }
+
+    public void setSprite(Sprite sprite) {
+        this.sprite = sprite;
     }
 
     public Vector2 getPosition() {
@@ -87,18 +81,24 @@ public class SpriteActor extends Actor { // An actor that holds a sprite, and up
         setPosition(position.x, position.y);
     }
 
-    @Override
-    public void setPosition(float x, float y) {
-        super.setPosition(x, y);
-        sprite.setPosition(x, y);
-    }
-
     public MovementBehavior getMovementBehavior() {
         return movementBehavior;
     }
 
     public void setMovementBehavior(MovementBehavior movementBehavior) {
         this.movementBehavior = movementBehavior;
+    }
+
+    @Override
+    public void setRotation(float degrees) {
+        super.setRotation(degrees);
+        sprite.setRotation(degrees);
+    }
+
+    @Override
+    public void setPosition(float x, float y) {
+        super.setPosition(x, y);
+        sprite.setPosition(x, y);
     }
 
     @Override
@@ -131,6 +131,10 @@ public class SpriteActor extends Actor { // An actor that holds a sprite, and up
         return super.remove();
     }
 
+    @Override
+    public GameStage getStage() {
+        return stage;
+    }
 
     public float getCenterX() {
         return getX() + getWidth();

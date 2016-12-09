@@ -40,11 +40,5 @@ public class EnemyActor extends SpriteActor {
     @Override
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
-        /*
-        ShapeRenderer ren = new ShapeRenderer();
-        ren.begin(ShapeRenderer.ShapeType.Line);
-        ren.rect(bounds.getX(), bounds.getY(), bounds.getWidth(), bounds.getHeight());
-        ren.end();
-        */
     }
 }

@@ -12,7 +12,7 @@ public class DestroyPlayersBehavior implements IProjectileCollisionBehavior {
     }
 
     @Override
-    public boolean checkCollisions() {
+    public boolean checkCollisions(float delta) {
         GameStage stage = (GameStage) owner.getStage();
         try {
             for (PlayerActor player : stage.getPlayers()) {

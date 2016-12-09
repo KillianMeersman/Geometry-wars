@@ -1,14 +1,12 @@
 package howest.groep14.game.actor.projectile;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.math.Rectangle;
 import howest.groep14.game.CustomUtils;
 import howest.groep14.game.GameStage;
 import howest.groep14.game.actor.SpriteActor;
 
 public class ProjectileActor extends SpriteActor {
-    private float speed = 15;
+    private float speed = 12;
     private float xAmount, yAmount;
     private int bounces;
     private final SpriteActor owner;
@@ -48,11 +46,11 @@ public class ProjectileActor extends SpriteActor {
         setPosition(getX() + xAmount, getY() + yAmount); // Go forward
         if (CustomUtils.outOfBoundsX(getX(), sprite.getWidth(), speed)) { bounce(); } // Check if at border of screens, of so: bounce or be removed
         if (CustomUtils.outOfBoundsY(getY(), sprite.getHeight(), speed)) { bounce(); }
-        checkCollisions();
+        checkCollisions(delta);
     }
 
-    private void checkCollisions() {
-        if (collisionBehavior.checkCollisions() && observer != null) {
+    private void checkCollisions(float delta) {
+        if (collisionBehavior.checkCollisions(delta) && observer != null) {
             observer.projectileHit(this);
         }
     }

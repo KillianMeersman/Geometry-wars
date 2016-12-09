@@ -1,11 +1,13 @@
 package howest.groep14.game;
 
-import com.badlogic.gdx.Gdx;
+
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import howest.groep14.game.actor.PlayerActor;
+import howest.groep14.game.actor.SpriteActor;
+import howest.groep14.game.actor.actions.SnipeAction;
 import howest.groep14.game.actor.enemy.EnemyActor;
 import howest.groep14.game.actor.enemy.KamikazeBehavior;
 import howest.groep14.game.actor.enemy.SniperBehavior;
@@ -13,7 +15,7 @@ import howest.groep14.game.actor.enemy.SniperBehavior;
 import java.util.Random;
 
 class SpawnManager extends Actor {
-    private final int SPAWN_PLAYER_MARGIN = 250;
+    private final int SPAWN_PLAYER_MARGIN = 100;
     private final int NUMBER_CUBES = 5;
     private final int NUMBER_CIRCLES = 2;
     private final Random random = new Random();
@@ -47,11 +49,12 @@ class SpawnManager extends Actor {
     private void spawnCircle() {
         Texture circleTexture = new Texture("Desktop/Assets/greyCircle.png");
         Sprite circleSprite = new Sprite(circleTexture);
-        EnemyActor enemyActor = new EnemyActor(gameStage, circleSprite, 0.2f);
-        enemyActor.setBehavior(new SniperBehavior(enemyActor, gameStage.getPlayers().get(0)));
+        SpriteActor enemyActor = new EnemyActor(gameStage, circleSprite, 0.2f);
+        enemyActor = new SnipeAction(enemyActor, gameStage.getPlayers().get(0), 1);
         Vector2 position = getSpawnCoordinates(SPAWN_PLAYER_MARGIN);
         enemyActor.setPosition(position);
         enemyActor.setVisible(true);
+
         gameStage.addCircleEnemy(enemyActor);
     }
 

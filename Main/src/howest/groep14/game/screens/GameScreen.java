@@ -15,8 +15,8 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import howest.groep14.game.*;
 import howest.groep14.game.actor.PlayerActor;
-
-import java.sql.SQLException;
+import howest.groep14.game.actor.drone.DroneActor;
+import howest.groep14.game.actor.movement.StayAroundActor;
 
 public class GameScreen implements Screen {
     private GameStage stage;
@@ -35,11 +35,20 @@ public class GameScreen implements Screen {
         Texture texture = new Texture("Desktop/Assets/arrow.png");
         texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         Sprite playerSprite = new Sprite(texture);
-        PlayerActor player = new PlayerActor(stage, playerSprite);
+        PlayerActor player = new PlayerActor(stage, playerSprite, 1);
         player.setPosition(50, 50);
         player.setScale(0.3f);
         stage.addPlayer(player);
         stage.setKeyboardFocus(player);
+
+        texture = new Texture("Desktop/Assets/greyProjectile.png");
+        texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        Sprite projectileSprite = new Sprite(texture);
+        DroneActor droneActor = new DroneActor(stage, projectileSprite, player);
+        droneActor.setMovementBehavior(new StayAroundActor(droneActor, player, 25, 250, 3));
+        droneActor.setScale(0.5f);
+        player.setDrone(droneActor);
+
         createUI();
     }
 

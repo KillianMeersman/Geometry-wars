@@ -8,27 +8,32 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import howest.groep14.game.CustomUtils;
 import howest.groep14.game.GameStage;
 import howest.groep14.game.GeometryWars;
+import howest.groep14.game.actor.drone.DroneActor;
 import howest.groep14.game.actor.enemy.EnemyActor;
+import howest.groep14.game.actor.projectile.ExplodeDestroyEnemies;
 import howest.groep14.game.actor.projectile.INotifyProjectileEvents;
 import howest.groep14.game.actor.projectile.ProjectileActor;
 
 public class PlayerActor extends SpriteActor implements INotifyProjectileEvents {
+    // Constants
     private final float MAX_SPEED = 10;
     private final float ACCEL = 1f;
     private final float ROT_SPEED = 5;
     private final float FRICTION = 0.92f;
-    // Constants
     private int ROUNDS_PER_SECOND = 15;
+
     // Class vars
     private float speed_x = 0;
     private float speed_y = 0;
     private float lastDelta = 0;
     private int score, kills, projectilesFired;
+    private int lives;
     private ControlScheme controlScheme;
+    private DroneActor drone;
 
-    public PlayerActor(GameStage stage, Sprite sprite) {
+    public PlayerActor(GameStage stage, Sprite sprite, int lives) {
         super(stage, sprite);
-
+        this.lives = lives;
         setBounds(sprite.getX(), sprite.getY(), sprite.getWidth(), sprite.getHeight());
 
         controlScheme = new ControlScheme();
@@ -36,12 +41,15 @@ public class PlayerActor extends SpriteActor implements INotifyProjectileEvents 
         controlScheme.DOWN = Input.Keys.DOWN;
         controlScheme.LEFT = Input.Keys.LEFT;
         controlScheme.RIGHT = Input.Keys.RIGHT;
-        controlScheme.FIRE = Input.Keys.SPACE;
+        controlScheme.ROTATE_LEFT = Input.Keys.L;
+        controlScheme.ROTATE_RIGHT = Input.Keys.M;
+        controlScheme.FIRE = Input.Buttons.LEFT;
+        controlScheme.POWERUP = Input.Buttons.RIGHT;
 
     }
 
-    public PlayerActor(GameStage stage, Sprite sprite, ControlScheme controlScheme) {
-        this(stage, sprite);
+    public PlayerActor(GameStage stage, Sprite sprite, int lives, ControlScheme controlScheme) {
+        this(stage, sprite, lives);
         this.controlScheme = controlScheme;
     }
 
@@ -50,7 +58,7 @@ public class PlayerActor extends SpriteActor implements INotifyProjectileEvents 
         super.act(delta);
         updatePositionAbsolute(speed_x *= FRICTION, speed_y *= FRICTION, true);
         checkInput();
-        if (gameStage.isCollisionsEnabled()) {
+        if (stage.isCollisionsEnabled()) {
             checkCollisions();
         }
     }
@@ -68,18 +76,27 @@ public class PlayerActor extends SpriteActor implements INotifyProjectileEvents 
         if (Gdx.input.isKeyPressed(controlScheme.RIGHT)) {
             speed_x = Math.min(speed_x + ACCEL, MAX_SPEED);
         }
+        if (controlScheme.FOLLOW_MOUSE) {
+            faceMouse();
+        } else {
+            if (Gdx.input.isKeyPressed(controlScheme.ROTATE_LEFT)) {
+                updateRotation(ROT_SPEED);
+            }
+            if (Gdx.input.isKeyPressed(controlScheme.ROTATE_LEFT)) {
+                updateRotation(-ROT_SPEED);
+            }
+        }
 
-        if (Gdx.input.isKeyPressed(controlScheme.FIRE)) {
+        if (Gdx.input.isButtonPressed(controlScheme.FIRE) || Gdx.input.isButtonPressed(controlScheme.FIRE)) {
             fireProjectile();
         }
-        if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
-            fireProjectile();
+        if (Gdx.input.isButtonPressed(controlScheme.POWERUP) || Gdx.input.isButtonPressed(controlScheme.POWERUP)) {
+            fireExplodingProjectile();
         }
-        faceMouse();
     }
 
     private void checkCollisions() {
-        for (EnemyActor enemy : ((GameStage) getStage()).getCubeEnemies()) {
+        for (SpriteActor enemy : ((GameStage) getStage()).getCubeEnemies()) {
             if (CustomUtils.isColliding(this, enemy)) {
                 GeometryWars.getInstance().getGameScreen().gameOver();
             }
@@ -92,9 +109,30 @@ public class PlayerActor extends SpriteActor implements INotifyProjectileEvents 
             texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
             Sprite projectileSprite = new Sprite(texture);
 
-            ProjectileActor projectile = new ProjectileActor(gameStage, projectileSprite, getX(), getY(), CustomUtils.getAngleToMouse(getX(), getY()), this, this);
+            ProjectileActor projectile = new ProjectileActor(stage, projectileSprite, getX(), getY(), getRotation(), this, this);
             projectile.setScale(0.1f);
-            gameStage.addProjectile(projectile);
+            stage.addProjectile(projectile);
+
+            projectilesFired++;
+            lastDelta = 0; // reset lastDelta
+
+            Sound shootSound = Gdx.audio.newSound(Gdx.files.internal("Desktop/Assets/laser.mp3"));
+            shootSound.play(0.1f);
+        } else {
+            lastDelta += Gdx.graphics.getDeltaTime(); // add time since last frame to lastDelta)
+        }
+    }
+
+    private void fireExplodingProjectile() {
+        if (lastDelta > 1f / ROUNDS_PER_SECOND) { // check if not over rate of fire (delta is the time since last frame)
+            Texture texture = new Texture("Desktop/Assets/greyProjectile.png");
+            texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+            Sprite projectileSprite = new Sprite(texture);
+
+            ProjectileActor projectile = new ProjectileActor(stage, projectileSprite, getX(), getY(), getRotation(), this, this);
+            projectile.setCollisionBehavior(new ExplodeDestroyEnemies(projectile, 1));
+            projectile.setScale(0.3f);
+            stage.addProjectile(projectile);
 
             projectilesFired++;
             lastDelta = 0; // reset lastDelta
@@ -132,6 +170,13 @@ public class PlayerActor extends SpriteActor implements INotifyProjectileEvents 
         return controlScheme;
     }
 
+    public void damage(int damage) {
+        this.lives -= damage;
+        if (lives < 1) {
+            stage.removePlayer(this);
+        }
+    }
+
     @Override
     public void projectileHit(ProjectileActor projectileActor) {
         updateKills(1);
@@ -142,8 +187,21 @@ public class PlayerActor extends SpriteActor implements INotifyProjectileEvents 
 
     }
 
+    public DroneActor getDrone() {
+        return drone;
+    }
+
+    public void setDrone(DroneActor drone) {
+        this.drone = drone;
+        if (drone != null) {
+            drone.remove();
+        }
+        stage.addActor(drone);
+    }
+
     class ControlScheme {
-        int UP, DOWN, LEFT, RIGHT, FIRE;
+        int UP, DOWN, LEFT, RIGHT, ROTATE_LEFT, ROTATE_RIGHT, FIRE, POWERUP;
+        boolean FOLLOW_MOUSE = true;
 
         /*
         public void setFORWARD(int key) {

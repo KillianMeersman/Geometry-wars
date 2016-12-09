@@ -18,8 +18,8 @@ import java.util.List;
 
 public class GameStage extends Stage {
     private List<ProjectileActor> projectiles = new ArrayList<ProjectileActor>();
-    private List<EnemyActor> cubeEnemies = new ArrayList<EnemyActor>();
-    private List<EnemyActor> circleEnemies = new ArrayList<EnemyActor>();
+    private List<SpriteActor> cubeEnemies = new ArrayList<SpriteActor>();
+    private List<SpriteActor> circleEnemies = new ArrayList<SpriteActor>();
     private List<SpriteActor> geomes = new ArrayList<SpriteActor>();
     private List<PlayerActor> players = new ArrayList<PlayerActor>();
     private SpawnManager spawnManager;
@@ -41,20 +41,20 @@ public class GameStage extends Stage {
         return projectiles;
     }
 
-    public List<EnemyActor> getCubeEnemies() {
+    public List<SpriteActor> getCubeEnemies() {
         return cubeEnemies;
     }
 
-    public void addCubeEnemy(EnemyActor enemy) {
+    public void addCubeEnemy(SpriteActor enemy) {
         addActor(enemy);
         cubeEnemies.add(enemy);
     }
 
-    public List<EnemyActor> getCircleEnemies() {
+    public List<SpriteActor> getCircleEnemies() {
         return circleEnemies;
     }
 
-    public void addCircleEnemy(EnemyActor enemy) {
+    public void addCircleEnemy(SpriteActor enemy) {
         addActor(enemy);
         circleEnemies.add(enemy);
     }
@@ -86,15 +86,7 @@ public class GameStage extends Stage {
     public void addPlayer(PlayerActor player) {
         addActor(player);
         players.add(player);
-
-        Texture texture = new Texture("Desktop/Assets/greyProjectile.png");
-        texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-        Sprite projectileSprite = new Sprite(texture);
-        DroneActor actor = new DroneActor(this, projectileSprite, player);
-        actor.setScale(0.5f);
-        addActor(actor);
-        test_shield();
-
+        //test_shield();
     }
 
     private void test_shield() {
@@ -102,7 +94,7 @@ public class GameStage extends Stage {
         texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         Sprite projectileSprite = new Sprite(texture);
 
-        SpriteActor shieldActor = new SpriteActor(this, projectileSprite);
+        SpriteActor shieldActor = new EnemyActor(this, projectileSprite);
         shieldActor.setScale(0.5f);
         shieldActor.setMovementBehavior(new StayOnActor(shieldActor, players.get(0)));
         addActor(shieldActor);
@@ -113,13 +105,13 @@ public class GameStage extends Stage {
         actor.remove();
     }
 
-    public void removeCubeEnemy(EnemyActor actor) {
+    public void removeCubeEnemy(SpriteActor actor) {
         cubeEnemies.remove(actor);
         spawnGeome(actor.getX(), actor.getY());
         actor.remove();
     }
 
-    public void removeCircleEnemy(EnemyActor actor) {
+    public void removeCircleEnemy(SpriteActor actor) {
         circleEnemies.remove(actor);
         spawnGeome(actor.getX(), actor.getY());
         actor.remove();
