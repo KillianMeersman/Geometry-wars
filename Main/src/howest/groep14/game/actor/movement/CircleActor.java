@@ -13,6 +13,11 @@ public class CircleActor extends MovementBehavior {
     }
 
     @Override
+    public MovementBehavior copy(SpriteActor newOwner) {
+        return null;
+    }
+
+    @Override
     public void move(float delta) {
         /*
         float x = ((target.getX() - target.getSprite().getWidth() / 2) + (float) Math.cos(CustomUtils.getAngleToFace(owner, target)) * 100);

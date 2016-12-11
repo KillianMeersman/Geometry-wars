@@ -3,6 +3,7 @@ package howest.groep14.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import howest.groep14.game.actor.SpriteActor;
@@ -70,7 +71,7 @@ public class CustomUtils {
         return (y + update > GeometryWars.getInstance().getGameScreen().getStage().getHeight() - sizeY / 2) || (y + update  < 0 - sizeY / 2);
     }
 
-    public static boolean isColliding(SpriteActor actorA, SpriteActor actorB) {
+    public static boolean isColliding(Actor actorA, Actor actorB) {
         Vector2 positionA = new Vector2(actorA.getX(), actorA.getY());
         Vector2 positionB = new Vector2(actorB.getX(), actorB.getY());
         boolean x = false;

@@ -16,6 +16,11 @@ public class Kamikaze extends MovementBehavior {
     }
 
     @Override
+    public MovementBehavior copy(SpriteActor newOwner) {
+        return null;
+    }
+
+    @Override
     public void move(float delta) {
         float angleToFace = CustomUtils.getAngleToFace(owner.getX(), owner.getY(), target.getX(), target.getY());
         owner.setRotation(angleToFace); // Face target

@@ -76,6 +76,7 @@ public class GeometryWars extends Game {
 
     @Override
     public void create(){
+        SpriteRepository.init();
         skin = generateSkin();
 
         //camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());   //set Camera to the gamesize

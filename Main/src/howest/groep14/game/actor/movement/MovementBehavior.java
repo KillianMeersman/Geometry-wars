@@ -4,10 +4,25 @@ import howest.groep14.game.actor.SpriteActor;
 
 public abstract class MovementBehavior {
     protected SpriteActor owner;
+    protected boolean checkBounds = false;
 
-    MovementBehavior(SpriteActor owner) {
+    public MovementBehavior(SpriteActor owner) {
         this.owner = owner;
     }
 
+    public abstract MovementBehavior copy(SpriteActor newOwner);
+
+    public void setBoundsChecking(boolean set) {
+        this.checkBounds = set;
+    }
+
+    public SpriteActor getOwner() {
+        return owner;
+    }
+
     public abstract void move(float delta);
+
+    public void setPosition(float x, float y) {}
+
+    public void setRotation(float degrees) {}
 }

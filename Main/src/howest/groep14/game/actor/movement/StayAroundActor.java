@@ -18,6 +18,11 @@ public class StayAroundActor extends MovementBehavior {
     }
 
     @Override
+    public MovementBehavior copy(SpriteActor newOwner) {
+        return null;
+    }
+
+    @Override
     public void move(float delta) {
         float distanceX = owner.getX() - target.getX();
         float distanceY = owner.getY() - target.getY();

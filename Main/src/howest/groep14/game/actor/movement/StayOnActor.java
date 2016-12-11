@@ -11,6 +11,11 @@ public class StayOnActor extends MovementBehavior {
     }
 
     @Override
+    public MovementBehavior copy(SpriteActor newOwner) {
+        return null;
+    }
+
+    @Override
     public void move(float delta) {
         owner.setPosition(target.getX(), target.getY());
     }

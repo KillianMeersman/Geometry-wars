@@ -3,8 +3,6 @@ package howest.groep14.game.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -15,7 +13,7 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import howest.groep14.game.*;
 import howest.groep14.game.actor.PlayerActor;
-import howest.groep14.game.actor.drone.DroneActor;
+import howest.groep14.game.actor.DroneActor;
 import howest.groep14.game.actor.movement.StayAroundActor;
 
 public class GameScreen implements Screen {
@@ -32,22 +30,17 @@ public class GameScreen implements Screen {
     public GameScreen(Viewport viewport, Skin skin) {
         stage = new GameStage(viewport);
         this.skin = skin;
-        Texture texture = new Texture("Desktop/Assets/arrow.png");
-        texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-        Sprite playerSprite = new Sprite(texture);
-        PlayerActor player = new PlayerActor(stage, playerSprite, 1);
+
+        PlayerActor player = new PlayerActor(stage, SpriteRepository.getArrow());
         player.setPosition(50, 50);
         player.setScale(0.3f);
         stage.addPlayer(player);
         stage.setKeyboardFocus(player);
-
-        texture = new Texture("Desktop/Assets/greyProjectile.png");
-        texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-        Sprite projectileSprite = new Sprite(texture);
-        DroneActor droneActor = new DroneActor(stage, projectileSprite, player);
+/*
+        DroneActor droneActor = new DroneActor(stage, SpriteRepository.getProjectile(), player);
         droneActor.setMovementBehavior(new StayAroundActor(droneActor, player, 25, 250, 3));
         droneActor.setScale(0.5f);
-        player.setDrone(droneActor);
+        player.setDrone(droneActor);*/
 
         createUI();
     }
@@ -154,7 +147,7 @@ public class GameScreen implements Screen {
         }
 
         if (!paused) {
-            score1Label.setText(stage.getPlayers().get(0).getScore() + " KILLS");
+            score1Label.setText(stage.getPlayers().get(0).getScore() + " POINTS");
             stage.act(delta);
         }
         stage.draw();

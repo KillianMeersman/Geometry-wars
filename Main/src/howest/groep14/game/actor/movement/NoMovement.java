@@ -9,6 +9,11 @@ public class NoMovement extends MovementBehavior {
     }
 
     @Override
+    public MovementBehavior copy(SpriteActor newOwner) {
+        return null;
+    }
+
+    @Override
     public void move(float delta) {
 
     }

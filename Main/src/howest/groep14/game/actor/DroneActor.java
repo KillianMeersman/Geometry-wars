@@ -1,4 +1,4 @@
-package howest.groep14.game.actor.drone;
+package howest.groep14.game.actor;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import howest.groep14.game.GameStage;
