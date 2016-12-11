@@ -1,23 +1,18 @@
 package howest.groep14.game;
 
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import howest.groep14.game.actor.GeomeActor;
 import howest.groep14.game.actor.PlayerActor;
-import howest.groep14.game.actor.SpriteActor;
-import howest.groep14.game.actor.movement.StayOnActor;
+import howest.groep14.game.actor.collision.NoCollisions;
 import howest.groep14.game.actor.ProjectileActor;
 import howest.groep14.game.actor.EnemyActor;
-import howest.groep14.game.player.Player;
+import howest.groep14.game.actor.health.Invulnerable;
+import howest.groep14.game.actor.health.StandardHealth;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 public class GameStage extends Stage {
     private List<PlayerActor> players = new ArrayList<PlayerActor>();
@@ -25,8 +20,6 @@ public class GameStage extends Stage {
     private List<ProjectileActor> projectiles = new ArrayList<ProjectileActor>();
     private List<GeomeActor> geomes = new ArrayList<GeomeActor>();
     private SpawnManager spawnManager;
-
-    private boolean collisionsEnabled = true;
 
     public GameStage(Viewport viewport) {
         super(viewport);
@@ -39,24 +32,7 @@ public class GameStage extends Stage {
         super.act();
     }
 
-    public List<PlayerActor> getPlayers() {
-        return players;
-    }
 
-    public boolean isCollisionsEnabled() {
-        return collisionsEnabled;
-    }
-
-    public void setCollisionsEnabled(boolean collisionsEnabled) {
-        this.collisionsEnabled = collisionsEnabled;
-        Label debugLabel = GeometryWars.getInstance().getGameScreen().getDebugLabel();
-        if (!collisionsEnabled) {
-            debugLabel.setText("COLLISIONS DISABLED (C to enable)");
-            debugLabel.setVisible(true);
-        } else {
-            debugLabel.setText("");
-        }
-    }
 
     private void test_shield() {
         /*
@@ -69,6 +45,10 @@ public class GameStage extends Stage {
         shieldActor.setMovementBehavior(new StayOnActor(shieldActor, players.get(0)));
         addActor(shieldActor);
         */
+    }
+
+    public List<PlayerActor> getPlayers() {
+        return players;
     }
 
     public void addPlayer(PlayerActor player) {

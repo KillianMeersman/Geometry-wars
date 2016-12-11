@@ -15,7 +15,7 @@ import howest.groep14.game.actor.health.StandardHealth;
 import howest.groep14.game.actor.movement.MovementBehavior;
 import howest.groep14.game.actor.movement.NoMovement;
 
-public abstract class SpriteActor extends Actor { // An actor that holds a sprite, and updates it
+public class SpriteActor extends Actor { // An actor that holds a sprite, and updates it
     protected final GameStage stage;
     protected Sprite sprite;
     protected MovementBehavior movementBehavior;
@@ -180,6 +180,12 @@ public abstract class SpriteActor extends Actor { // An actor that holds a sprit
     public void setScale(float scaleXY) {
         super.setScale(scaleXY);
         this.sprite.setScale(scaleXY);
+    }
+
+    @Override
+    public void setScale(float scaleX, float scaleY) {
+        super.setScale(scaleX, scaleY);
+        this.sprite.setScale(scaleX, scaleY);
     }
 
     @Override

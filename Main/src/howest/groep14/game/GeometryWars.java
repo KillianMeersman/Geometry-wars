@@ -5,19 +5,15 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.*;
 import howest.groep14.game.player.PlayerRepository;
 import howest.groep14.game.screens.GameScreen;
 import howest.groep14.game.screens.MenuScreen;
 import howest.groep14.game.screens.SettingScreen;
-
-import java.sql.SQLException;
 
 public class GeometryWars extends Game {
     private Skin skin;
@@ -91,7 +87,7 @@ public class GeometryWars extends Game {
         viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
         gameScreen = new GameScreen(viewport, skin);
-        gameScreen.getStage().setCollisionsEnabled(false);
+        gameScreen.setPlayerHealthEnabled(false);
         menuScreen = new MenuScreen(viewport, skin);
         settingScreen = new SettingScreen(viewport, skin);
         setScreen(menuScreen);

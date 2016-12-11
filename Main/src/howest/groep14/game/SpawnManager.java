@@ -14,9 +14,12 @@ import java.util.Random;
 
 class SpawnManager extends Actor {
     private final int SPAWN_PLAYER_MARGIN = 100;
-    private final int NUMBER_CUBES = 6;
-    private final int NUMBER_CIRCLES = 0;
+    private int NUMBER_CUBES = 5;
+    private int NUMBER_CIRCLES = 0;
     private final float CUBE_SPEED = 2f;
+
+    private int destoyed_cubes, destroyed_circles;
+
     private final Random random = new Random();
     private final GameStage stage;
 
@@ -96,9 +99,14 @@ class SpawnManager extends Actor {
         switch (actor.getTypeCode()) {
             case CUBE:
                 cube_amount--;
+                destoyed_cubes++;
+                if (destoyed_cubes % 25 == 0) {
+                    NUMBER_CUBES++;
+                }
                 break;
             case CIRCLE:
                 circle_amount--;
+                destroyed_circles++;
                 break;
         }
         spawnGeome(actor.getX(), actor.getY());

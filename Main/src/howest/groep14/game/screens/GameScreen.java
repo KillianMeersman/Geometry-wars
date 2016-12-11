@@ -13,8 +13,9 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import howest.groep14.game.*;
 import howest.groep14.game.actor.PlayerActor;
-import howest.groep14.game.actor.DroneActor;
-import howest.groep14.game.actor.movement.StayAroundActor;
+import howest.groep14.game.actor.health.Invulnerable;
+import howest.groep14.game.actor.health.Shield;
+import howest.groep14.game.actor.health.StandardHealth;
 
 public class GameScreen implements Screen {
     private GameStage stage;
@@ -26,6 +27,8 @@ public class GameScreen implements Screen {
     private boolean paused = false;
     private boolean gameOver = false;
     private float lastDelta = 0.2f;
+
+    private boolean playerHealthEnabled = true;
 
     public GameScreen(Viewport viewport, Skin skin) {
         stage = new GameStage(viewport);
@@ -46,7 +49,7 @@ public class GameScreen implements Screen {
     }
 
     // Create UI elements
-    public void createUI() {
+    private void createUI() {
         float screenWidth = Gdx.graphics.getWidth();
         float screenHeight = Gdx.graphics.getHeight();
 
@@ -67,6 +70,7 @@ public class GameScreen implements Screen {
         debugLabel.setVisible(false);
         debugLabel.setPosition(25, 25, Align.bottomLeft);
         stage.addActor(debugLabel);
+        initDebugLabel();
 
         toMenuButton = CustomUtils.generateTextButton(skin, "T O  M E N U", screenWidth / 2 - 25, screenHeight - 75, 150, 50);
         toMenuButton.setVisible(false);
@@ -123,6 +127,36 @@ public class GameScreen implements Screen {
         restartButton.setVisible(true);
     }
 
+    public boolean isPlayerHealthEnabled() {
+        return playerHealthEnabled;
+    }
+
+    public void setPlayerHealthEnabled(boolean playerHealthEnabled) {
+        this.playerHealthEnabled = playerHealthEnabled;
+        if (playerHealthEnabled) {
+            for (PlayerActor player : stage.getPlayers()) {
+                if (player.getHealthBehavior() instanceof Shield) {
+                    ((Shield) player.getHealthBehavior()).remove();
+                }
+                player.setHealthBehavior(new StandardHealth(player, 1));
+            }
+        } else {
+            for (PlayerActor player : stage.getPlayers()) {
+                player.setHealthBehavior(new Shield(player, SpriteRepository.getShield()));
+            }
+        }
+        initDebugLabel();
+    }
+
+    private void initDebugLabel() {;
+        if (!playerHealthEnabled) {
+            debugLabel.setText("SHIELD ENABLED (C to enable)");
+            debugLabel.setVisible(true);
+        } else {
+            debugLabel.setText("SHIELD DISABLED (C to disable)");
+        }
+    }
+
     @Override
     public void show() {
         Gdx.input.setInputProcessor(stage);
@@ -143,7 +177,13 @@ public class GameScreen implements Screen {
             }
         }
         if (Gdx.input.isKeyPressed(Input.Keys.C)) {
-            stage.setCollisionsEnabled(true);
+            if (lastDelta > 0.1f) {
+                setPlayerHealthEnabled(!playerHealthEnabled);
+                lastDelta = 0;
+            } else {
+                lastDelta += delta;
+            }
+
         }
 
         if (!paused) {
