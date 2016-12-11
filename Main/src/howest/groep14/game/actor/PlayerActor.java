@@ -94,10 +94,10 @@ public class PlayerActor extends SpriteActor implements IProjectileObserver {
             projectilesFired++;
             lastDelta = 0; // reset lastDelta
 
-            /*
+
             Sound shootSound = Gdx.audio.newSound(Gdx.files.internal("Desktop/Assets/laser.mp3"));
-            shootSound.play(0.1f);
-            */
+            shootSound.play(0.06f);
+
         } else {
             lastDelta += delta; // add time since last frame to lastDelta)
         }
@@ -113,10 +113,10 @@ public class PlayerActor extends SpriteActor implements IProjectileObserver {
 
     public void updateScore(int scoreUpdate) {
         score += scoreUpdate;
-        /*
+
         Sound blipSound = Gdx.audio.newSound(Gdx.files.internal("Desktop/Assets/blip.mp3"));
         blipSound.play(0.5f);
-        */
+
     }
 
     public ControlScheme getControlScheme() {
