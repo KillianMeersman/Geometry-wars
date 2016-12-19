@@ -1,7 +1,6 @@
 package howest.groep14.game.actor.collision;
 
-import howest.groep14.game.CustomUtils;
-import howest.groep14.game.actor.PlayerActor;
+import howest.groep14.game.actor.EnemyActor;
 import howest.groep14.game.actor.SpriteActor;
 
 public class DamagePlayersOnContact extends DamageOnContact {
@@ -11,17 +10,17 @@ public class DamagePlayersOnContact extends DamageOnContact {
     }
 
     public void checkCollisions(float delta) {
-        for (PlayerActor actor : owner.getStage().getPlayers()) {
-            if (CustomUtils.isColliding(actor, owner)) {
-                actor.damage(damage);
-                owner.collide(actor);
-                owner.damage(selfDamage);
-            }
-        }
+        checkPlayerCollisions(delta);
+        checkEnemyCollisions(delta);
     }
 
     @Override
     public CollisionBehavior copy(SpriteActor newOwner) {
         return new DamagePlayersOnContact(newOwner, damage, selfDamage);
+    }
+
+    @Override
+    protected void damageEnemy(EnemyActor enemy) {
+        enemy.collide(owner);
     }
 }

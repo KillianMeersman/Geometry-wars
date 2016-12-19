@@ -1,24 +1,40 @@
 package howest.groep14.game.actor;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import howest.groep14.game.CustomUtils;
 import howest.groep14.game.GameStage;
 
 public class GeomeActor extends SpriteActor {
     private final int scoreAmount;
+    private final float lifeTime;
+    private float time;
 
-    public GeomeActor(GameStage stage, Sprite sprite, int scoreAmount) {
+    public GeomeActor(GameStage stage, Sprite sprite, int scoreAmount, float lifeTime) {
         super(stage, sprite);
         this.scoreAmount = scoreAmount;
+        this.lifeTime = lifeTime;
     }
 
     public void act(float delta) {
+        super.act(delta);
+        if (time >= lifeTime) {
+            this.remove();
+        } else {
+            time += delta;
+        }
+        /*
         for (PlayerActor player : stage.getPlayers()) {
+            if (player.getDrone() instanceof IGeomeCollector) {
+                if (CustomUtils.isColliding(player.getDrone(), this)) {
+                    player.updateScore(scoreAmount);
+                    this.remove();
+                }
+            }
             if (CustomUtils.isColliding(player, this)) {
                 player.updateScore(scoreAmount);
                 this.remove();
             }
         }
+        */
     }
 
     @Override

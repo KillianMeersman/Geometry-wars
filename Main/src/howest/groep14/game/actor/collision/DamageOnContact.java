@@ -2,6 +2,7 @@ package howest.groep14.game.actor.collision;
 
 import howest.groep14.game.CustomUtils;
 import howest.groep14.game.actor.EnemyActor;
+import howest.groep14.game.actor.GeomeActor;
 import howest.groep14.game.actor.PlayerActor;
 import howest.groep14.game.actor.SpriteActor;
 
@@ -21,19 +22,24 @@ public class DamageOnContact extends CollisionBehavior {
 
     @Override
     public void checkCollisions(float delta) {
-        for (EnemyActor actor : owner.getStage().getEnemies()) {
-            if (CustomUtils.isColliding(actor, owner)) {
-                actor.damage(damage);
-                owner.collide(actor);
-                owner.damage(selfDamage);
-            }
-        }
-        for (PlayerActor actor : owner.getStage().getPlayers()) {
-            if (CustomUtils.isColliding(actor, owner)) {
-                actor.damage(damage);
-                owner.collide(actor);
-                owner.damage(selfDamage);
-            }
-        }
+        checkEnemyCollisions(delta);
+        checkPlayerCollisions(delta);
+    }
+
+    @Override
+    protected void damageEnemy(EnemyActor enemy) {
+        enemy.collide(owner);
+        enemy.damage(damage);
+    }
+
+    @Override
+    protected void damagePlayer(PlayerActor player) {
+        player.collide(owner);
+        player.damage(damage);
+    }
+
+    @Override
+    protected void damageGeome(GeomeActor geome) {
+        geome.damage(damage);
     }
 }

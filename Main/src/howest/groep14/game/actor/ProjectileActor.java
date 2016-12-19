@@ -1,6 +1,7 @@
 package howest.groep14.game.actor;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import howest.groep14.game.CustomUtils;
 import howest.groep14.game.GameStage;
 import howest.groep14.game.IProjectileObserver;
 import howest.groep14.game.actor.collision.DamageEnemiesOnContact;
@@ -17,7 +18,8 @@ public class ProjectileActor extends SpriteActor {
         this.owner = owner;
         this.setRotation(owner.getOwner().getRotation());
         this.setPosition(owner.getOwner().getPosition());
-        this.movementBehavior = new StraightLine(this, this.getRotation(), DEFAULT_SPEED, DEFAULT_BOUNCE_BOUND);
+        int bounces = CustomUtils.booleanRandom(10) ? 1 : 0;
+        this.movementBehavior = new StraightLine(this, this.getRotation(), DEFAULT_SPEED, bounces);
         this.collisionBehavior = new DamageEnemiesOnContact(this, 1, 1);
     }
 
@@ -26,7 +28,8 @@ public class ProjectileActor extends SpriteActor {
         this.owner = owner;
         this.setRotation(rotation);
         this.setPosition(owner.getOwner().getPosition());
-        this.movementBehavior = new StraightLine(this, rotation, DEFAULT_SPEED, DEFAULT_BOUNCE_BOUND);
+        int bounces = CustomUtils.booleanRandom(10) ? 1 : 0;
+        this.movementBehavior = new StraightLine(this, rotation, DEFAULT_SPEED, bounces);
         this.collisionBehavior = new DamageEnemiesOnContact(this, 1, 1);
     }
 

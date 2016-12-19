@@ -12,10 +12,11 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import howest.groep14.game.*;
+import howest.groep14.game.actor.DroneActor;
 import howest.groep14.game.actor.PlayerActor;
-import howest.groep14.game.actor.health.Invulnerable;
 import howest.groep14.game.actor.health.Shield;
 import howest.groep14.game.actor.health.StandardHealth;
+import howest.groep14.game.actor.movement.StayAroundActor;
 
 public class GameScreen implements Screen {
     private GameStage stage;
@@ -36,14 +37,14 @@ public class GameScreen implements Screen {
 
         PlayerActor player = new PlayerActor(stage, SpriteRepository.getArrow());
         player.setPosition(50, 50);
-        player.setScale(0.3f);
+        player.setScale(0.3f * SettingsRepository.getActorScale());
         stage.addPlayer(player);
         stage.setKeyboardFocus(player);
-/*
-        DroneActor droneActor = new DroneActor(stage, SpriteRepository.getProjectile(), player);
-        droneActor.setMovementBehavior(new StayAroundActor(droneActor, player, 25, 250, 3));
-        droneActor.setScale(0.5f);
-        player.setDrone(droneActor);*/
+
+        DroneActor droneActor = new DroneActor(stage, SpriteRepository.getGeome(), player);
+        droneActor.setMovementBehavior(new StayAroundActor(droneActor, player, 25, 50, 3));
+        droneActor.setScale(0.2f * SettingsRepository.getActorScale());
+        player.setDrone(droneActor);
 
         createUI();
     }
@@ -187,7 +188,8 @@ public class GameScreen implements Screen {
         }
 
         if (!paused) {
-            score1Label.setText(stage.getPlayers().get(0).getScore() + " POINTS");
+            //score1Label.setText(stage.getPlayers().get(0).getScore() + " POINTS");
+            score1Label.setText(stage.getPlayers().get(0).getPosition().toString() + " " + stage.getPlayers().get(0).getScore() + " POINTS");
             stage.act(delta);
         }
         stage.draw();

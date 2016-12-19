@@ -22,6 +22,8 @@ public abstract class MovementBehavior {
 
     public abstract void move(float delta);
 
+    public void collide(SpriteActor victim) {}
+
     public void setPosition(float x, float y) {}
 
     public void setRotation(float degrees) {}

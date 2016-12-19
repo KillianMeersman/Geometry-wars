@@ -208,7 +208,7 @@ public class SpriteActor extends Actor { // An actor that holds a sprite, and up
     }
 
     public void collide(SpriteActor victim) {
-
+        
     }
 
 }

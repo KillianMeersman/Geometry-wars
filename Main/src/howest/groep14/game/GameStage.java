@@ -41,7 +41,7 @@ public class GameStage extends Stage {
         Sprite projectileSprite = new Sprite(texture);
 
         SpriteActor shieldActor = new EnemyActor(this, projectileSprite);
-        shieldActor.setScale(0.5f);
+        shieldActor.setActorScale(0.5f);
         shieldActor.setMovementBehavior(new StayOnActor(shieldActor, players.get(0)));
         addActor(shieldActor);
         */

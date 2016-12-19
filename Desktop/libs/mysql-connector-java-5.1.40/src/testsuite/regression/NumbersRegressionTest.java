@@ -171,7 +171,7 @@ public class NumbersRegressionTest extends BaseTestCase {
                     rsmd.getPrecision(1) == m);
 
             if (d != -1) {
-                assertTrue("Scale returned incorrectly for type " + typeName + ", " + d + " != rsmd.getScale() = " + rsmd.getScale(1), rsmd.getScale(1) == d);
+                assertTrue("Scale returned incorrectly for type " + typeName + ", " + d + " != rsmd.getActorScale() = " + rsmd.getScale(1), rsmd.getScale(1) == d);
             }
         } finally {
             if (this.rs != null) {

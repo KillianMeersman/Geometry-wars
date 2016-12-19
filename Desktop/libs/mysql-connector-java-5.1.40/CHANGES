@@ -3269,8 +3269,8 @@ nn-nn-07 - Version 3.1.15
     - Fixed BUG#9682 - Stored procedures with DECIMAL parameters with
 	  storage specifications that contained "," in them would fail.
 
-	- PreparedStatement.setObject(int, Object, int type, int scale) now
-	  uses scale value for BigDecimal instances.
+	- PreparedStatement.setObject(int, Object, int type, int actorScale) now
+	  uses actorScale value for BigDecimal instances.
 
 	- Fixed BUG#9704 - Statement.getMoreResults() could throw NPE when
 	  existing result set was .close()d.
@@ -3391,7 +3391,7 @@ nn-nn-07 - Version 3.1.15
       returns "null"), which is not correct for the method in question.
 
     - Fixed BUG#8484 - ResultSet.getBigDecimal() throws exception
-      when rounding would need to occur to set scale. The driver now
+      when rounding would need to occur to set actorScale. The driver now
       chooses a rounding mode of 'half up' if non-rounding
       BigDecimal.setScale() fails.
 
@@ -3477,7 +3477,7 @@ nn-nn-07 - Version 3.1.15
     - Use null-safe-equals for key comparisons in updatable result sets.
 
     - Fixed BUG#6537, SUM() on Decimal with server-side prepared statement ignores
-      scale if zero-padding is needed (this ends up being due to conversion to DOUBLE
+      actorScale if zero-padding is needed (this ends up being due to conversion to DOUBLE
       by server, which when converted to a string to parse into BigDecimal, loses all
       'padding' zeros).
 
@@ -3937,7 +3937,7 @@ nn-nn-07 - Version 3.1.15
       throws ArrayOutOfBoundsException.
 
     - Fixed DatabaseMetaData.getTypes() returning incorrect (i.e. non-negative)
-      scale for the 'NUMERIC' type.
+      actorScale for the 'NUMERIC' type.
 
     - Fixed BUG#6198, off-by-one bug in Buffer.readString(string).
 
@@ -4963,7 +4963,7 @@ Fixed PreparedStatement parameter checking
 
 12-03-00 - Version 2.0.3
 
-     - Implemented getBigDecimal() without scale component
+     - Implemented getBigDecimal() without actorScale component
        for JDBC2.
 
      - Fixed composite key problem with updateable result sets.

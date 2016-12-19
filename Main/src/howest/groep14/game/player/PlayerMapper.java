@@ -13,11 +13,16 @@ class PlayerMapper {
     private Connection connection;
     private String sqlUser, sqlPassword;
 
-    public PlayerMapper(String sqlUser, String sqlPassword) throws SQLException, ClassNotFoundException {
+    public PlayerMapper(String sqlUser, String sqlPassword) throws SQLException {
         this.sqlUser = sqlUser;
         this.sqlPassword = sqlPassword;
 
-        Class.forName("com.mysql.jdbc.Driver");
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        DriverManager.setLoginTimeout(3);
         connection = DriverManager.getConnection("jdbc:mysql://sporegen.net/geometry-wars?"
                 + "user="+sqlUser+"&password="+sqlPassword);
     }

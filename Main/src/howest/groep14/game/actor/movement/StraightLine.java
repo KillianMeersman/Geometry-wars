@@ -27,9 +27,8 @@ public class StraightLine extends MovementBehavior {
         }
         else if (CustomUtils.outOfBoundsY(owner.getY(), owner.getHeight(), speed)) {
             bounce();
-        } else {
-            owner.updatePositionAbsolute(xMovement, yMovement, checkBounds);
         }
+        owner.updatePositionAbsolute(xMovement, yMovement, checkBounds);
     }
 
     @Override
@@ -62,9 +61,11 @@ public class StraightLine extends MovementBehavior {
     private void bounce() {
         if (bounces > 0) {
             if (CustomUtils.booleanRandom()) {
-                owner.setRotation(owner.getRotation() + 130);
+                this.rotation = owner.getRotation() + 130;
+                owner.setRotation(rotation);
             } else {
-                owner.setRotation(owner.getRotation() - 130);
+                this.rotation = owner.getRotation() - 130;
+                owner.setRotation(rotation);
             }
             bounces--;
             calcMovement(rotation); // we have rotated, so we need to recalculate x and y movement per turn

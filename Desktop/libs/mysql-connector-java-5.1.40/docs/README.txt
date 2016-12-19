@@ -169,7 +169,7 @@ Chapter 1 Overview of MySQL Connector/J
    implementation of the MySQL protocol and does not rely on the
    MySQL client libraries.
 
-   For large-scale programs that use common design patterns of
+   For large-actorScale programs that use common design patterns of
    data access, consider using one of the popular persistence
    frameworks such as Hibernate (http://www.hibernate.org/),
    Spring's JDBC templates (http://www.springframework.org/) or

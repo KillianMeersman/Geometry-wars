@@ -2,7 +2,6 @@ package howest.groep14.game.actor.health;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import howest.groep14.game.actor.SpriteActor;
-import howest.groep14.game.actor.decorators.RemoveOwnerOnNoTarget;
 import howest.groep14.game.actor.movement.MovementBehavior;
 import howest.groep14.game.actor.movement.StayOnActor;
 

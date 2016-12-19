@@ -2,8 +2,8 @@ package howest.groep14.game.actor;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import howest.groep14.game.GameStage;
-import howest.groep14.game.actor.PlayerActor;
-import howest.groep14.game.actor.SpriteActor;
+import howest.groep14.game.actor.collision.CollectGeomes;
+import howest.groep14.game.actor.health.Invulnerable;
 import howest.groep14.game.actor.movement.CircleActor;
 
 public class DroneActor extends SpriteActor {
@@ -13,9 +13,9 @@ public class DroneActor extends SpriteActor {
         super(stage, sprite);
         this.player = player;
         this.movementBehavior = new CircleActor(this, player, 1f);
+        this.healthBehavior = new Invulnerable(this);
+        this.collisionBehavior = new CollectGeomes(this, player);
     }
 
-    public void act(float delta) {
-        movementBehavior.move(delta);
-    }
+
 }

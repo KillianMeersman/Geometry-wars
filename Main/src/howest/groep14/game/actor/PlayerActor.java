@@ -5,11 +5,10 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import howest.groep14.game.*;
-import howest.groep14.game.actor.collision.CollisionBehavior;
-import howest.groep14.game.actor.collision.NoCollisions;
-import howest.groep14.game.actor.health.Invulnerable;
+import howest.groep14.game.actor.collision.CollectGeomesDamaged;
+import howest.groep14.game.actor.health.StandardHealth;
 
-public class PlayerActor extends SpriteActor implements IProjectileObserver {
+public class PlayerActor extends SpriteActor implements IProjectileObserver, IGeomeCollector {
     // Constants
     private final float MAX_SPEED = 10;
     private final float ACCEL = 1f;
@@ -30,8 +29,8 @@ public class PlayerActor extends SpriteActor implements IProjectileObserver {
         super(stage, sprite);
         setBounds(sprite.getX(), sprite.getY(), sprite.getWidth(), sprite.getHeight());
 
-        this.collisionBehavior = new NoCollisions(this);
-        this.healthBehavior = new Invulnerable(this);
+        this.collisionBehavior = new CollectGeomesDamaged(this, 0, 1, this);
+        this.healthBehavior = new StandardHealth(this, 1);
 
         controlScheme = new ControlScheme();
         controlScheme.UP = Input.Keys.UP;
@@ -88,7 +87,7 @@ public class PlayerActor extends SpriteActor implements IProjectileObserver {
     private void fireProjectile(float delta) {
         if (lastDelta > 1f / ROUNDS_PER_SECOND) { // check if not over rate of fire (delta is the time since last frame)
             ProjectileActor projectile = new ProjectileActor(stage, SpriteRepository.getProjectile(), this, this.getRotation());
-            projectile.setScale(0.1f);
+            projectile.setScale(0.1f * SettingsRepository.getActorScale());
             stage.addProjectile(projectile);
 
             projectilesFired++;
@@ -131,6 +130,14 @@ public class PlayerActor extends SpriteActor implements IProjectileObserver {
         stage.addActor(drone);
     }
 
+    public int getRoundsPerSecond() {
+        return ROUNDS_PER_SECOND;
+    }
+
+    public void setRoundsPerSecond(int roundsPerSecond) {
+        this.ROUNDS_PER_SECOND = roundsPerSecond;
+    }
+
     @Override
     public void projectileHit(ProjectileActor projectile, SpriteActor victim) {
 
@@ -154,6 +161,10 @@ public class PlayerActor extends SpriteActor implements IProjectileObserver {
             return super.remove();
         }
         return false;
+    }
+
+    public DroneActor getDrone() {
+        return drone;
     }
 
     public class ControlScheme {

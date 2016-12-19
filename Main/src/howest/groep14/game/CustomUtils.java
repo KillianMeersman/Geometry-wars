@@ -17,6 +17,10 @@ public class CustomUtils {
         return random.nextInt(bound);
     }
 
+    public static float floatRandom() {
+        return random.nextFloat();
+    }
+
     public static boolean booleanRandom(int chance) {
         return random.nextInt(chance) == 9;
     }
@@ -76,10 +80,10 @@ public class CustomUtils {
         Vector2 positionB = new Vector2(actorB.getX(), actorB.getY());
         boolean x = false;
         boolean y = false;
-        if (Math.abs(positionA.x - positionB.x) < 30) {
+        if (Math.abs(positionA.x - positionB.x) < 30 * SettingsRepository.getActorScale()) {
             x = true;
         }
-        if (Math.abs(positionA.y - positionB.y) < 30) {
+        if (Math.abs(positionA.y - positionB.y) < 30 * SettingsRepository.getActorScale()) {
             y = true;
         }
         return x && y;

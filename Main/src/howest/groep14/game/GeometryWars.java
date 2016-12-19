@@ -35,7 +35,7 @@ public class GeometryWars extends Game {
 
     private GeometryWars() {
         try {
-            PlayerRepository.init();
+            //PlayerRepository.init();
             playerRepository = PlayerRepository.getInstance();
         } catch (Exception e) {
             dbConnection = false;

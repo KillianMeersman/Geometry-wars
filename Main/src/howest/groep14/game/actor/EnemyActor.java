@@ -39,6 +39,7 @@ public class EnemyActor extends SpriteActor {
 
     public enum ENEMY_TYPE {
         CUBE,
-        CIRCLE
+        CIRCLE,
+        SNAKE
     }
 }
