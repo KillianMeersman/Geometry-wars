@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import howest.groep14.game.actor.SpriteActor;
@@ -104,5 +105,9 @@ public class CustomUtils {
             }
         }
         return true;
+    }
+
+    public static Vector2 getCenterCoordinates(SpriteActor actor, Stage stage) {
+        return new Vector2((stage.getWidth() / 2) + ((actor.getWidth() * actor.getScaleX()) / 2), (stage.getHeight() / 2) + ((actor.getHeight() * actor.getScaleY()) / 2));
     }
 }

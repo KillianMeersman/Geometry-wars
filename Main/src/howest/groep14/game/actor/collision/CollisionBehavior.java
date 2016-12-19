@@ -28,6 +28,7 @@ public abstract class CollisionBehavior {
     protected abstract void damagePlayer(PlayerActor player);
 
     protected void checkEnemyCollisions(float delta) {
+
         for (EnemyActor enemy : owner.getStage().getEnemies()) {
             if (CustomUtils.isColliding(owner, enemy)) {
                 damageEnemy(enemy);

@@ -6,6 +6,7 @@ import howest.groep14.game.actor.attack.AttackBehavior;
 import howest.groep14.game.actor.collision.CollisionBehavior;
 import howest.groep14.game.actor.collision.DamagePlayersOnContact;
 import howest.groep14.game.actor.health.HealthBehavior;
+import howest.groep14.game.actor.health.StandardHealth;
 import howest.groep14.game.actor.movement.MovementBehavior;
 
 public class EnemyActor extends SpriteActor {
@@ -15,6 +16,7 @@ public class EnemyActor extends SpriteActor {
         super(stage, sprite);
         this.type = type;
         this.collisionBehavior = new DamagePlayersOnContact(this, 1, 0);
+        this.healthBehavior = new StandardHealth(this, 1);
     }
 
     public EnemyActor(GameStage stage, Sprite sprite, ENEMY_TYPE type, MovementBehavior movementBehavior, AttackBehavior attackBehavior,
@@ -40,6 +42,7 @@ public class EnemyActor extends SpriteActor {
     public enum ENEMY_TYPE {
         CUBE,
         CIRCLE,
-        SNAKE
+        SNAKE,
+        SNAKE_SEG
     }
 }

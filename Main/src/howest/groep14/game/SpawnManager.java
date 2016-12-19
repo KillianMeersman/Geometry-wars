@@ -10,20 +10,19 @@ import howest.groep14.game.actor.movement.Kamikaze;
 import howest.groep14.game.actor.movement.MovementBehavior;
 import howest.groep14.game.actor.movement.Snake;
 
-import java.util.Random;
-
 class SpawnManager extends Actor {
     private final int SPAWN_PLAYER_MARGIN = 100;
     private final float GEOME_LIFETIME = 5f;
 
-    private int CUBE_AMOUNT = 0;
-    private int CIRCLE_AMOUNT = 0;
-    private int SNAKE_AMOUNT = 1;
+    private int CUBE_AMOUNT = 15;
+    private int CIRCLE_AMOUNT = 5;
+    private final int MAX_CIRCLE_AMOUNT = 6;
+    private int SNAKE_AMOUNT = 0;
 
     private float CUBE_SPEED = 2f;
     private float CIRCLE_SPEED = 6f;
 
-    private int destoyed_cubes, destroyed_circles;
+    private int destoyed_cubes, cube_upgrades, circle_upgrades, destroyed_circles;
 
     private final GameStage stage;
 
@@ -54,7 +53,7 @@ class SpawnManager extends Actor {
         MovementBehavior kamikaze = new Kamikaze(enemyActor, stage.getPlayer(), CUBE_SPEED, false);
         enemyActor.setMovementBehavior(kamikaze);
         enemyActor.setScale(0.2f * SettingsRepository.getActorScale());
-        Vector2 position = getSpawnCoordinates(SPAWN_PLAYER_MARGIN);
+        Vector2 position = getEdgeSpawnCoordinates(-80);
 
         enemyActor.setPosition(position);
         enemyActor.setVisible(true);
@@ -63,7 +62,7 @@ class SpawnManager extends Actor {
 
     private void spawnCircle() {
         EnemyActor enemyActor = new EnemyActor(stage, SpriteRepository.getCircle(), EnemyActor.ENEMY_TYPE.CIRCLE);
-        Vector2 position = getSpawnCoordinates(SPAWN_PLAYER_MARGIN);
+        Vector2 position = getRandomSpawnCoordinates(SPAWN_PLAYER_MARGIN);
         enemyActor.setPosition(position);
         enemyActor.setVisible(true);
         enemyActor.setScale(0.2f * SettingsRepository.getActorScale());
@@ -98,14 +97,19 @@ class SpawnManager extends Actor {
             case CUBE:
                 cube_amount--;
                 destoyed_cubes++;
-                if (destoyed_cubes % 25 == 0) {
+                if (destoyed_cubes % (25 * (cube_upgrades + 1)) == 0) {
                     CUBE_AMOUNT++;
+                    cube_upgrades++;
                     increaseRateOfFire(1);
                 }
                 break;
             case CIRCLE:
                 circle_amount--;
                 destroyed_circles++;
+                if (destroyed_circles % (6 * (circle_upgrades + 1)) == 0) {
+                    CIRCLE_AMOUNT = Math.min(CIRCLE_AMOUNT + 1, MAX_CIRCLE_AMOUNT);
+                    circle_upgrades++;
+                }
                 break;
             case SNAKE:
                 snake_amount--;
@@ -114,14 +118,14 @@ class SpawnManager extends Actor {
         spawnGeome(actor.getX(), actor.getY());
     }
 
-    private Vector2 getSpawnCoordinates(float margin) {
+    private Vector2 getEdgeSpawnCoordinates(float edge_margin) {
         float x, y;
         if (CustomUtils.booleanRandom()) {
-            y = CustomUtils.booleanRandom() ? stage.getHeight() + 5 : -80;
-            x = CustomUtils.floatRandom() * stage.getWidth();
+            y = CustomUtils.booleanRandom() ? stage.getHeight() - edge_margin : 0 + edge_margin;
+            x = CustomUtils.floatRandom() * stage.getWidth() - edge_margin;
         } else {
-            y = CustomUtils.floatRandom() * stage.getHeight();
-            x = CustomUtils.booleanRandom() ? -80 : stage.getWidth();
+            y = CustomUtils.floatRandom() * stage.getHeight() - edge_margin;
+            x = CustomUtils.booleanRandom() ? 0 + edge_margin : stage.getWidth() - edge_margin;
         }
 
         return new Vector2(x, y);
@@ -133,8 +137,7 @@ class SpawnManager extends Actor {
         }
     }
 
-    /*
-    private Vector2 getSpawnCoordinates(float margin) {
+    private Vector2 getRandomSpawnCoordinates(float margin) {
         float x = 0;
         float y = 0;
         boolean xClear = false;
@@ -143,8 +146,8 @@ class SpawnManager extends Actor {
         while (!xClear || !yClear) {
             xClear = true;
             yClear = true;
-            x = random.nextInt(Math.round(stage.getWidth() - 100));
-            y = random.nextInt(Math.round(stage.getHeight() - 100));
+            x = CustomUtils.intRandom(Math.round(stage.getWidth() - 100));
+            y = CustomUtils.intRandom(Math.round(stage.getHeight() - 100));
 
             for (PlayerActor player : stage.getPlayers()) {
                 if (!(Math.abs(player.getX() - x) >= margin)) {
@@ -159,5 +162,4 @@ class SpawnManager extends Actor {
         }
         return new Vector2(x, y);
     }
-    */
 }

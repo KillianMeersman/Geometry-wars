@@ -3,6 +3,7 @@ package howest.groep14.game.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -13,10 +14,13 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import howest.groep14.game.*;
 import howest.groep14.game.actor.DroneActor;
+import howest.groep14.game.actor.EnemyActor;
 import howest.groep14.game.actor.PlayerActor;
+import howest.groep14.game.actor.collision.DamageEnemiesOnContact;
 import howest.groep14.game.actor.health.Shield;
 import howest.groep14.game.actor.health.StandardHealth;
 import howest.groep14.game.actor.movement.StayAroundActor;
+import howest.groep14.game.actor.movement.StayAroundActorCollectGeomes;
 
 public class GameScreen implements Screen {
     private GameStage stage;
@@ -36,15 +40,35 @@ public class GameScreen implements Screen {
         this.skin = skin;
 
         PlayerActor player = new PlayerActor(stage, SpriteRepository.getArrow());
-        player.setPosition(50, 50);
         player.setScale(0.3f * SettingsRepository.getActorScale());
+        player.setPosition(CustomUtils.getCenterCoordinates(player, stage));
         stage.addPlayer(player);
         stage.setKeyboardFocus(player);
 
         DroneActor droneActor = new DroneActor(stage, SpriteRepository.getGeome(), player);
         droneActor.setMovementBehavior(new StayAroundActor(droneActor, player, 25, 50, 3));
+        droneActor.setCollisionBehavior(new DamageEnemiesOnContact(droneActor, 1, 0));
         droneActor.setScale(0.2f * SettingsRepository.getActorScale());
         player.setDrone(droneActor);
+
+        /*
+        Texture text = new Texture("Desktop/Assets/bck_rectangle.png");
+        Sprite sprite  = new Sprite(text);
+        //actor.setPosition(stage.getWidth() / 2 - center.getWidth() / 2, stage.getHeight() / 2 - center.getHeight() / 2);
+        final int xAmount = 50;
+        final int yAmount = 25;
+        final float scaleX = stage.getWidth() / (sprite.getWidth() * xAmount);
+        final float scaleY = stage.getHeight() / (sprite.getHeight() * yAmount);
+        sprite.setScale(scaleX, scaleY);
+        for (int i = 0; i < 50; i++) {
+            for (int j = 0; j < 25; j++) {
+                SpriteActor actor = new SpriteActor(stage, new Sprite(sprite));
+                actor.setPosition(i * sprite.getWidth() * sprite.getScaleX(), j * sprite.getHeight() * sprite.getScaleY());
+                stage.addActor(actor);
+            }
+        }
+        */
+
 
         createUI();
     }
@@ -184,15 +208,21 @@ public class GameScreen implements Screen {
             } else {
                 lastDelta += delta;
             }
-
         }
 
         if (!paused) {
-            //score1Label.setText(stage.getPlayers().get(0).getScore() + " POINTS");
-            score1Label.setText(stage.getPlayers().get(0).getPosition().toString() + " " + stage.getPlayers().get(0).getScore() + " POINTS");
+            score1Label.setText(stage.getPlayers().get(0).getScore() + " POINTS");
+            /*
+            String string = "";
+            for (EnemyActor enemy : stage.getEnemies()) {
+                string += enemy.getPosition().toString() + "\n";
+            }
+            score1Label.setText(string);
+            */
             stage.act(delta);
         }
         stage.draw();
+
     }
 
     @Override

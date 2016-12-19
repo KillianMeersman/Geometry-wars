@@ -1,10 +1,12 @@
 package howest.groep14.game.actor.movement;
 
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import howest.groep14.game.CustomUtils;
 import howest.groep14.game.actor.SpriteActor;
 
 public class Bounce extends MovementBehavior {
     private float xMovement, yMovement, speed, rotation;
+    private float lastBounce = 0;
 
     public Bounce(SpriteActor owner, float speed, float rotation) {
         super(owner);

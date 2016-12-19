@@ -3,6 +3,9 @@ package howest.groep14.game.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -13,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import howest.groep14.game.CustomUtils;
 import howest.groep14.game.GeometryWars;
+import howest.groep14.game.actor.SpriteActor;
 import howest.groep14.game.player.PlayerRepository;
 
 public class MenuScreen implements Screen {

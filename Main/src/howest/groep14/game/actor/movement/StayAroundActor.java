@@ -3,9 +3,9 @@ package howest.groep14.game.actor.movement;
 import howest.groep14.game.actor.SpriteActor;
 
 public class StayAroundActor extends MovementBehavior {
-    private SpriteActor target;
-    private int MIN_DISTANCE, MAX_DISTANCE, MAX_SPEED;
-    private final float ACCEL = 0.5f;
+    protected SpriteActor target;
+    protected int MIN_DISTANCE, MAX_DISTANCE, MAX_SPEED;
+    protected final float ACCEL = 0.5f;
 
     private float speed_x = 0, speed_y = 0;
 

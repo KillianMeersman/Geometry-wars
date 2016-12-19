@@ -2,6 +2,7 @@ package howest.groep14.game.actor;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import howest.groep14.game.GameStage;
+import howest.groep14.game.actor.health.StandardHealth;
 
 public class GeomeActor extends SpriteActor {
     private final int scoreAmount;
@@ -10,6 +11,7 @@ public class GeomeActor extends SpriteActor {
 
     public GeomeActor(GameStage stage, Sprite sprite, int scoreAmount, float lifeTime) {
         super(stage, sprite);
+        this.healthBehavior = new StandardHealth(this, 1);
         this.scoreAmount = scoreAmount;
         this.lifeTime = lifeTime;
     }

@@ -1,10 +1,12 @@
 package howest.groep14.game.actor.movement;
 
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import howest.groep14.game.actor.SpriteActor;
 import howest.groep14.game.actor.health.HealthBehavior;
 
 class SnakeSegment extends MovementBehavior implements ISnake {
     private ISnake previousSegment;
+    private float lastX = 0, lastY = 0;
 
     SnakeSegment(SpriteActor owner, final ISnake previousSegment) {
         super(owner);
@@ -13,7 +15,7 @@ class SnakeSegment extends MovementBehavior implements ISnake {
             @Override
             public void damage(int damage) {
                 previousSegment.damage(1);
-                owner.remove();
+                owner.addAction(Actions.removeActor());
             }
 
             @Override
@@ -30,17 +32,19 @@ class SnakeSegment extends MovementBehavior implements ISnake {
 
     @Override
     public void move(float delta) {
-        owner.updatePositionAbsolute(previousSegment.getLastX() / 2, previousSegment.getLastY() / 2, false);
+        owner.updatePositionAbsolute(previousSegment.getLastX(), previousSegment.getLastY(), false);
+        this.lastX = previousSegment.getLastX();
+        this.lastY = previousSegment.getLastY();
     }
 
     @Override
     public float getLastX() {
-        return previousSegment.getLastX();
+        return lastX;
     }
 
     @Override
     public float getLastY() {
-        return previousSegment.getLastY();
+        return lastY;
     }
 
     @Override

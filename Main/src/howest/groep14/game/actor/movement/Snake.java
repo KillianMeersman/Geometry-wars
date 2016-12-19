@@ -1,6 +1,7 @@
 package howest.groep14.game.actor.movement;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import howest.groep14.game.CustomUtils;
 import howest.groep14.game.actor.EnemyActor;
 import howest.groep14.game.actor.SpriteActor;
@@ -22,8 +23,8 @@ public class Snake extends MovementBehavior implements ISnake {
         this.speed = speed;
         ISnake lastSegment = this;
         for (int i = 0; i < length; i++) {
-            EnemyActor segment = new EnemyActor(owner.getStage(), segmentSprite, EnemyActor.ENEMY_TYPE.SNAKE);
-            segment.setPosition(owner.getX(), owner.getY() - (25 * i));
+            EnemyActor segment = new EnemyActor(owner.getStage(), segmentSprite, EnemyActor.ENEMY_TYPE.SNAKE_SEG);
+            segment.setPosition(owner.getX() - (25 * i), owner.getY() - (25 * i));
             SnakeSegment mov = new SnakeSegment(segment, lastSegment);
             segment.setMovementBehavior(mov);
             DamagePlayersOnContact coll = new DamagePlayersOnContact(owner, 1, 0);
@@ -58,7 +59,7 @@ public class Snake extends MovementBehavior implements ISnake {
             for (SpriteActor segment : segments) {
                 segment.remove();
             }
-            owner.remove();
+            owner.addAction(Actions.removeActor());
         }
     }
 

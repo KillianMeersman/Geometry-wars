@@ -11,6 +11,7 @@ import howest.groep14.game.actor.attack.NoAttack;
 import howest.groep14.game.actor.collision.CollisionBehavior;
 import howest.groep14.game.actor.collision.NoCollisions;
 import howest.groep14.game.actor.health.HealthBehavior;
+import howest.groep14.game.actor.health.Invulnerable;
 import howest.groep14.game.actor.health.StandardHealth;
 import howest.groep14.game.actor.movement.MovementBehavior;
 import howest.groep14.game.actor.movement.NoMovement;
@@ -31,7 +32,7 @@ public class SpriteActor extends Actor { // An actor that holds a sprite, and up
 
         this.movementBehavior = new NoMovement(this);
         this.attackBehavior = new NoAttack(this);
-        this.healthBehavior = new StandardHealth(this, 1);
+        this.healthBehavior = new Invulnerable(this);
         this.collisionBehavior = new NoCollisions(this);
 
         setPosition(1, 1);

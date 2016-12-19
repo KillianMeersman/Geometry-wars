@@ -118,6 +118,10 @@ public class PlayerActor extends SpriteActor implements IProjectileObserver, IGe
 
     }
 
+    public int getKills() {
+        return kills;
+    }
+
     public ControlScheme getControlScheme() {
         return controlScheme;
     }
