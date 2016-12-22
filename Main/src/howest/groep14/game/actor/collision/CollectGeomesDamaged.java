@@ -16,6 +16,7 @@ public class CollectGeomesDamaged extends DamageOnContact {
     public void checkCollisions(float delta) {
         checkEnemyCollisions(delta);
         checkGeomeCollisions(delta);
+        checkCollisionCache();
     }
 
     @Override

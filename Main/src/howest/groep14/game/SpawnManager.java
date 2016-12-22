@@ -9,13 +9,19 @@ import howest.groep14.game.actor.movement.Bounce;
 import howest.groep14.game.actor.movement.Kamikaze;
 import howest.groep14.game.actor.movement.MovementBehavior;
 import howest.groep14.game.actor.movement.Snake;
+import howest.groep14.game.powers.ArmoredEnemies;
+import howest.groep14.game.powers.ChangeTimeSpeed;
+import howest.groep14.game.powers.up.DualFire;
 
 class SpawnManager extends Actor {
     private final int SPAWN_PLAYER_MARGIN = 100;
     private final float GEOME_LIFETIME = 5f;
+    private boolean powerupSpawned;
 
+    // Change this to change difficulty
     private int CUBE_AMOUNT = 15;
     private int CIRCLE_AMOUNT = 5;
+
     private final int MAX_CIRCLE_AMOUNT = 6;
     private int SNAKE_AMOUNT = 0;
 
@@ -92,6 +98,20 @@ class SpawnManager extends Actor {
         stage.addGeome(geome);
     }
 
+    private void spawnPowerUp(float x, float y) {
+        /*
+        GeomeActor geome = new PowerGeomeActor(stage, SpriteRepository.getGeome(), 1, GEOME_LIFETIME, new ChangeTimeSpeed(5f));
+        geome.setScale(0.2f);
+        geome.setPosition(x, y);
+        stage.addGeome(geome);
+        */
+            GeomeActor geome = new PowerGeomeActor(stage, SpriteRepository.getGeome(), 1, 15, new ArmoredEnemies(5f));
+            geome.setScale(0.2f);
+            geome.setPosition(x, y);
+            stage.addGeome(geome);
+            powerupSpawned = true;
+    }
+
     public void removeEnemy(EnemyActor actor) {
         switch (actor.getTypeCode()) {
             case CUBE:
@@ -115,7 +135,12 @@ class SpawnManager extends Actor {
                 snake_amount--;
                 break;
         }
-        spawnGeome(actor.getX(), actor.getY());
+        if (!powerupSpawned) {
+            spawnPowerUp(actor.getX(), actor.getY());
+        } else {
+            spawnGeome(actor.getX(), actor.getY());
+        }
+
     }
 
     private Vector2 getEdgeSpawnCoordinates(float edge_margin) {

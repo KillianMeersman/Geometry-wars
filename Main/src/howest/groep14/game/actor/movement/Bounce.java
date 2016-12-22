@@ -51,4 +51,15 @@ public class Bounce extends MovementBehavior {
         this.xMovement = (float) Math.cos(radians) * speed;
         this.yMovement = (float) Math.sin(radians) * speed;
     }
+
+    @Override
+    public void setSpeed(float speed) {
+        this.speed = speed;
+        calcMovement(rotation);
+    }
+
+    @Override
+    public float getSpeed() {
+        return speed;
+    }
 }

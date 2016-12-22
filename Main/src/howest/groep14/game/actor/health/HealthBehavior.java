@@ -12,4 +12,6 @@ public abstract class HealthBehavior {
     public abstract void damage(int damage);
 
     public abstract HealthBehavior copy(SpriteActor newOwner);
+
+    public abstract String toString();
 }

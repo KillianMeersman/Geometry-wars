@@ -9,7 +9,7 @@ import howest.groep14.game.GeometryWars;
 public class DesktopStarter {
     public static void main(String[] args){
         LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
-        cfg.title = "Example";
+        cfg.title = "Geometry Wars";
         cfg.fullscreen = false;
 
         cfg.width = 1920;

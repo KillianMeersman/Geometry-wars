@@ -22,6 +22,11 @@ class SnakeSegment extends MovementBehavior implements ISnake {
             public HealthBehavior copy(SpriteActor newOwner) {
                 return null;
             }
+
+            @Override
+            public String toString() {
+                return null;
+            }
         });
     }
 

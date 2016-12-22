@@ -5,8 +5,8 @@ import howest.groep14.game.GameStage;
 import howest.groep14.game.actor.health.StandardHealth;
 
 public class GeomeActor extends SpriteActor {
-    private final int scoreAmount;
-    private final float lifeTime;
+    protected final int scoreAmount;
+    protected final float lifeTime;
     private float time;
 
     public GeomeActor(GameStage stage, Sprite sprite, int scoreAmount, float lifeTime) {
@@ -23,20 +23,6 @@ public class GeomeActor extends SpriteActor {
         } else {
             time += delta;
         }
-        /*
-        for (PlayerActor player : stage.getPlayers()) {
-            if (player.getDrone() instanceof IGeomeCollector) {
-                if (CustomUtils.isColliding(player.getDrone(), this)) {
-                    player.updateScore(scoreAmount);
-                    this.remove();
-                }
-            }
-            if (CustomUtils.isColliding(player, this)) {
-                player.updateScore(scoreAmount);
-                this.remove();
-            }
-        }
-        */
     }
 
     @Override

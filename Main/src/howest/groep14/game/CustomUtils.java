@@ -76,19 +76,7 @@ public class CustomUtils {
         return (y + update > GeometryWars.getInstance().getGameScreen().getStage().getHeight() - sizeY / 2) || (y + update  < 0 - sizeY / 2);
     }
 
-    public static boolean isColliding(Actor actorA, Actor actorB) {
-        Vector2 positionA = new Vector2(actorA.getX(), actorA.getY());
-        Vector2 positionB = new Vector2(actorB.getX(), actorB.getY());
-        boolean x = false;
-        boolean y = false;
-        if (Math.abs(positionA.x - positionB.x) < 30 * SettingsRepository.getActorScale()) {
-            x = true;
-        }
-        if (Math.abs(positionA.y - positionB.y) < 30 * SettingsRepository.getActorScale()) {
-            y = true;
-        }
-        return x && y;
-    }
+
 
     public static TextButton generateTextButton(Skin skin, String text, float x, float y, float width, float height) {
         TextButton button = new TextButton(text, skin);
@@ -110,4 +98,5 @@ public class CustomUtils {
     public static Vector2 getCenterCoordinates(SpriteActor actor, Stage stage) {
         return new Vector2((stage.getWidth() / 2) + ((actor.getWidth() * actor.getScaleX()) / 2), (stage.getHeight() / 2) + ((actor.getHeight() * actor.getScaleY()) / 2));
     }
+
 }

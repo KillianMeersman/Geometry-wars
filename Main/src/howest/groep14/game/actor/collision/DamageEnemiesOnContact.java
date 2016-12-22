@@ -11,13 +11,8 @@ public class DamageEnemiesOnContact extends DamageOnContact {
     }
 
     public void checkCollisions(float delta) {
-        for (EnemyActor actor : owner.getStage().getEnemies()) {
-            if (CustomUtils.isColliding(actor, owner)) {
-                actor.damage(damage);
-                owner.collide(actor);
-                owner.damage(selfDamage);
-            }
-        }
+        checkEnemyCollisions(delta);
+        checkCollisionCache();
     }
 
     @Override

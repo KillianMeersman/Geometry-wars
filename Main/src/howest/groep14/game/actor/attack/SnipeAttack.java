@@ -1,14 +1,11 @@
 package howest.groep14.game.actor.attack;
 
 import howest.groep14.game.CustomUtils;
+import howest.groep14.game.actor.IProjectileObserver;
 import howest.groep14.game.actor.ProjectileActor;
 import howest.groep14.game.actor.SpriteActor;
-import howest.groep14.game.actor.collision.CollisionBehavior;
-import howest.groep14.game.actor.collision.DamagePlayersOnContact;
-import howest.groep14.game.actor.movement.MovementBehavior;
-import howest.groep14.game.actor.movement.StraightLine;
 
-public class SnipeAttack extends AttackBehavior {
+public class SnipeAttack extends AttackBehavior implements IProjectileObserver {
     private SpriteActor target;
     private ProjectileActor projectileTemplate;
     private final float TIME_BETWEEN_SHOTS;
@@ -41,5 +38,25 @@ public class SnipeAttack extends AttackBehavior {
         projectile.setPosition(owner.getPosition());
         projectile.setRotation(CustomUtils.getAngleToFace(owner, target));
         owner.getStage().addProjectile(projectile);
+    }
+
+    @Override
+    public void projectileHit(ProjectileActor projectile, SpriteActor victim) {
+
+    }
+
+    @Override
+    public void projectileOutOfBounds(ProjectileActor projectile) {
+
+    }
+
+    @Override
+    public void projectileDestroyed(ProjectileActor projectile) {
+
+    }
+
+    @Override
+    public SpriteActor getOwner() {
+        return owner;
     }
 }

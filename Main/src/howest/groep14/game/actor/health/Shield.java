@@ -32,4 +32,9 @@ public class Shield extends HealthBehavior{
     public HealthBehavior copy(SpriteActor newOwner) {
         return new Shield(newOwner, shieldActor.getSprite());
     }
+
+    @Override
+    public String toString() {
+        return "SHIELDED";
+    }
 }

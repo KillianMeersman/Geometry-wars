@@ -163,7 +163,7 @@ public class GameScreen implements Screen {
                 if (player.getHealthBehavior() instanceof Shield) {
                     ((Shield) player.getHealthBehavior()).remove();
                 }
-                player.setHealthBehavior(new StandardHealth(player, 1));
+                player.setHealthBehavior(new StandardHealth(player, 3));
             }
         } else {
             for (PlayerActor player : stage.getPlayers()) {
@@ -211,7 +211,9 @@ public class GameScreen implements Screen {
         }
 
         if (!paused) {
-            score1Label.setText(stage.getPlayers().get(0).getScore() + " POINTS");
+            score1Label.setText(stage.getPlayers().get(0).getScore() + " POINTS\n" +
+                    stage.getPlayers().get(0).getHealthBehavior().toString());
+            //score1Label.setText(Float.toString(stage.getPlayers().get(0).getRotation()));
             /*
             String string = "";
             for (EnemyActor enemy : stage.getEnemies()) {
