@@ -24,17 +24,16 @@ public class DamageOnContact extends CollisionBehavior {
     public void checkCollisions(float delta) {
         checkEnemyCollisions(delta);
         checkPlayerCollisions(delta);
+        checkCollisionCache();
     }
 
     @Override
     protected void damageEnemy(EnemyActor enemy) {
-        enemy.collide(owner);
         enemy.damage(damage);
     }
 
     @Override
     protected void damagePlayer(PlayerActor player) {
-        player.collide(owner);
         player.damage(damage);
     }
 

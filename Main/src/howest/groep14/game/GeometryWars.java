@@ -34,19 +34,7 @@ public class GeometryWars extends Game {
     }
 
     private GeometryWars() {
-        try {
-            //PlayerRepository.init();
-            playerRepository = PlayerRepository.getInstance();
-        } catch (Exception e) {
-            dbConnection = false;
-        }
-        /*
-        try {
-            playerRepository.createPlayer("waddup", "", "testing");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        */
+
     }
 
     public GameScreen getGameScreen() {
@@ -73,6 +61,11 @@ public class GeometryWars extends Game {
     @Override
     public void create(){
         SpriteRepository.init();
+        try {
+            PlayerRepository.init();
+        } catch (Exception e) {
+            dbConnection= false;
+        }
         skin = generateSkin();
 
         //camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());   //set Camera to the gamesize
@@ -87,7 +80,7 @@ public class GeometryWars extends Game {
         viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
         gameScreen = new GameScreen(viewport, skin);
-        gameScreen.setPlayerHealthEnabled(false);
+        //gameScreen.setPlayerHealthEnabled(false);
         menuScreen = new MenuScreen(viewport, skin);
         settingScreen = new SettingScreen(viewport, skin);
         setScreen(menuScreen);

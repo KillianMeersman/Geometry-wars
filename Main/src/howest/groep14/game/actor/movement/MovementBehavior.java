@@ -22,9 +22,29 @@ public abstract class MovementBehavior {
 
     public abstract void move(float delta);
 
+    public void setSpeed(float speed) {}
+
+    public void multiplySpeed(float factor) {
+        setSpeed(getSpeed() * factor);
+    }
+
+    public float getSpeed() {
+        return 0f;
+    }
+
     public void collide(SpriteActor victim) {}
 
     public void setPosition(float x, float y) {}
 
     public void setRotation(float degrees) {}
+
+    public static float getUpdatedRotation(float rotation, float update) {
+        rotation += update;
+        if (rotation > 360) {
+            rotation -= 360;
+        } else if (rotation < 0) {
+            rotation += 360;
+        }
+        return rotation;
+    }
 }

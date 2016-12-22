@@ -68,7 +68,7 @@ public class MenuScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 try {
-                    PlayerRepository repo = GeometryWars.getInstance().getPlayerRepository();
+                    PlayerRepository repo = PlayerRepository.getInstance();
                     if (repo.loginPlayer(usernameField.getText(), passwordField.getText())) {
                         loginNotification.setText("WELCOME " + repo.getActivePlayer().getUsername());
                     } else {

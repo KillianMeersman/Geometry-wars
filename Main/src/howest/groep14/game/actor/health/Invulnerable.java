@@ -16,4 +16,9 @@ public class Invulnerable extends HealthBehavior {
     public HealthBehavior copy(SpriteActor newOwner) {
         return new Invulnerable(newOwner);
     }
+
+    @Override
+    public String toString() {
+        return "GOD MODE";
+    }
 }

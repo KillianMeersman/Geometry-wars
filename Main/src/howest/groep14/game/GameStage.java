@@ -15,11 +15,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GameStage extends Stage {
-    private List<PlayerActor> players = new ArrayList<PlayerActor>();
-    private List<EnemyActor> enemies = new ArrayList<EnemyActor>();
-    private List<ProjectileActor> projectiles = new ArrayList<ProjectileActor>();
-    private List<GeomeActor> geomes = new ArrayList<GeomeActor>();
-    private SpawnManager spawnManager;
+    private final List<PlayerActor> players = new ArrayList<PlayerActor>();
+    private final List<EnemyActor> enemies = new ArrayList<EnemyActor>();
+    private final List<ProjectileActor> projectiles = new ArrayList<ProjectileActor>();
+    private final List<GeomeActor> geomes = new ArrayList<GeomeActor>();
+    private final SpawnManager spawnManager;
 
     public GameStage(Viewport viewport) {
         super(viewport);

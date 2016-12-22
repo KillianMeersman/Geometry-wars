@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import howest.groep14.game.*;
+import howest.groep14.game.actor.attack.FireInDirection;
 import howest.groep14.game.actor.collision.CollectGeomesDamaged;
 import howest.groep14.game.actor.health.StandardHealth;
 
@@ -14,14 +15,12 @@ public class PlayerActor extends SpriteActor implements IProjectileObserver, IGe
     private final float ACCEL = 1f;
     private final float ROT_SPEED = 5;
     private final float FRICTION = 0.92f;
-    private int ROUNDS_PER_SECOND = 15;
-    private int PROJECTILE_SPEED = 15;
 
     // Class vars
     private float speed_x = 0;
     private float speed_y = 0;
     private float lastDelta = 0;
-    private int score, kills, projectilesFired;
+    private int score, hits, projectilesFired;
     private ControlScheme controlScheme;
     private DroneActor drone;
 
@@ -30,7 +29,8 @@ public class PlayerActor extends SpriteActor implements IProjectileObserver, IGe
         setBounds(sprite.getX(), sprite.getY(), sprite.getWidth(), sprite.getHeight());
 
         this.collisionBehavior = new CollectGeomesDamaged(this, 0, 1, this);
-        this.healthBehavior = new StandardHealth(this, 1);
+        this.healthBehavior = new StandardHealth(this, 3);
+        this.attackBehavior = new FireInDirection(this);
 
         controlScheme = new ControlScheme();
         controlScheme.UP = Input.Keys.UP;
@@ -50,7 +50,9 @@ public class PlayerActor extends SpriteActor implements IProjectileObserver, IGe
 
     @Override
     public void act(float delta) {
-        super.act(delta);
+        this.movementBehavior.move(delta);
+        this.collisionBehavior.checkCollisions(delta);
+
         updatePositionAbsolute(speed_x *= FRICTION, speed_y *= FRICTION, true);
         checkInput(delta);
     }
@@ -85,6 +87,9 @@ public class PlayerActor extends SpriteActor implements IProjectileObserver, IGe
     }
 
     private void fireProjectile(float delta) {
+        attackBehavior.engage(delta);
+        projectilesFired++;
+        /*
         if (lastDelta > 1f / ROUNDS_PER_SECOND) { // check if not over rate of fire (delta is the time since last frame)
             ProjectileActor projectile = new ProjectileActor(stage, SpriteRepository.getProjectile(), this, this.getRotation());
             projectile.setScale(0.1f * SettingsRepository.getActorScale());
@@ -100,6 +105,7 @@ public class PlayerActor extends SpriteActor implements IProjectileObserver, IGe
         } else {
             lastDelta += delta; // add time since last frame to lastDelta)
         }
+        */
     }
 
     private void faceMouse() {
@@ -118,8 +124,8 @@ public class PlayerActor extends SpriteActor implements IProjectileObserver, IGe
 
     }
 
-    public int getKills() {
-        return kills;
+    public int getHits() {
+        return hits;
     }
 
     public ControlScheme getControlScheme() {
@@ -135,20 +141,25 @@ public class PlayerActor extends SpriteActor implements IProjectileObserver, IGe
     }
 
     public int getRoundsPerSecond() {
-        return ROUNDS_PER_SECOND;
+        return ((FireInDirection)attackBehavior).getROUNDS_PER_SECOND();
     }
 
     public void setRoundsPerSecond(int roundsPerSecond) {
-        this.ROUNDS_PER_SECOND = roundsPerSecond;
+        ((FireInDirection)attackBehavior).setROUNDS_PER_SECOND(roundsPerSecond);
     }
 
     @Override
     public void projectileHit(ProjectileActor projectile, SpriteActor victim) {
-
+        hits++;
     }
 
     @Override
     public void projectileOutOfBounds(ProjectileActor projectile) {
+
+    }
+
+    @Override
+    public void projectileDestroyed(ProjectileActor projectile) {
 
     }
 
@@ -174,39 +185,5 @@ public class PlayerActor extends SpriteActor implements IProjectileObserver, IGe
     public class ControlScheme {
         public int UP, DOWN, LEFT, RIGHT, ROTATE_LEFT, ROTATE_RIGHT, FIRE, POWERUP;
         public boolean FOLLOW_MOUSE = true;
-
-        /*
-        public void setFORWARD(int key) {
-            UP = key;
-        }
-
-        public int getForward() {
-            return UP;
-        }
-
-        public void setBACKWARDS(int key) {
-            DOWN = key;
-        }
-
-        public int getBACKWARDS() {
-            return DOWN;
-        }
-
-        public void setLEFT(int key) {
-            LEFT = key;
-        }
-
-        public int getLEFT() {
-            return LEFT;
-        }
-
-        public void setRIGHT(int key) {
-            RIGHT = key;
-        }
-
-        public int getRIGHT() {
-            return RIGHT;
-        }
-        */
     }
 }
