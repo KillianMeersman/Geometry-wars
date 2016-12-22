@@ -1,142 +1,113 @@
 package howest.groep14.game.screens;
 
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import howest.groep14.game.CustomUtils;
 import howest.groep14.game.GeometryWars;
-import howest.groep14.game.actor.SpriteActor;
-import howest.groep14.game.player.PlayerRepository;
+import sun.java2d.windows.GDIBlitLoops;
 
 public class MenuScreen implements Screen {
+
+    private int WIDTH;
+    private int HEIGHT;
+    private int ELEMENT_WIDTH;
+    private int ELEMENT_HEIGTH = 125;
+    float buttonWidth;
+    final float margin = 5;
+
     private Stage stage;
     private Viewport viewport;
     private Skin skin;
 
+    Texture background;
+    Texture btnCampaignInactive;
+    Texture btnQuitInactive;
+    Texture btnQuitActive;
+    Texture btnSettingsInactive;
+    Texture btnSettingsActive;
+    Texture btnStartInactive;
+    Texture btnStartActive;
+
     public MenuScreen(Viewport viewport, Skin skin) {
         this.viewport = viewport;
         this.skin = skin;
+        this.WIDTH = viewport.getScreenWidth();
+        this.HEIGHT = viewport.getScreenHeight();
+        this.buttonWidth = WIDTH / 2 - 120;
         stage = new Stage(viewport);
+
+        background = new Texture("Desktop/Assets/MainMenu/screen.png");
+
+        btnStartInactive = new Texture("Desktop/Assets/MainMenu/btn-start-game.png");
+        btnStartActive = new Texture("Desktop/Assets/MainMenu/btn-start-game-active.png");
+
+        btnCampaignInactive = new Texture("Desktop/Assets/MainMenu/btn-campaign.png");
+
+        btnSettingsInactive = new Texture("Desktop/Assets/MainMenu/btn-settings.png");
+        btnSettingsActive = new Texture("Desktop/Assets/MainMenu/btn-settings-active.png");
+
+        btnQuitInactive = new Texture("Desktop/Assets/MainMenu/btn-quit.png");
+        btnQuitActive = new Texture("Desktop/Assets/MainMenu/btn-quit-active.png");
+
+
     }
-
-    private void createUI( int width, int height) {
-        stage.clear();
-        float buttonWidth = width / 2;
-        float element_width;
-        float element_height;
-        final float margin = 15;
-
-
-        element_width = 300;
-        element_height = 25;
-        final TextField usernameField = new TextField("", skin);
-        usernameField.setWidth(element_width);
-        usernameField.setHeight(element_height);
-        usernameField.setPosition(width - element_width - margin, height - element_height - margin);
-        stage.addActor(usernameField);
-
-        final TextField passwordField = new TextField("", skin);
-        passwordField.setWidth(element_width);
-        passwordField.setHeight(element_height);
-        passwordField.setPosition(width - element_width - margin, height - element_height * 2 - margin * 2);
-        stage.addActor(passwordField);
-
-        final Label loginNotification = new Label("", skin);
-        loginNotification.setWidth(300);
-        loginNotification.setHeight(50);
-        loginNotification.setPosition(width - 300 - margin, height - 205);
-        stage.addActor(loginNotification);
-        if (!GeometryWars.getInstance().connectionReady()) {
-            loginNotification.setText("CONNECTION UNAVAILABLE");
-        }
-
-        element_width = 140;
-        element_height = 50;
-        TextButton loginButton = CustomUtils.generateTextButton(skin, "LOGIN", width - 300 - margin, height - 150, element_width,element_height);
-        loginButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                try {
-                    PlayerRepository repo = PlayerRepository.getInstance();
-                    if (repo.loginPlayer(usernameField.getText(), passwordField.getText())) {
-                        loginNotification.setText("WELCOME " + repo.getActivePlayer().getUsername());
-                    } else {
-                        loginNotification.setText("INVALID LOGIN");
-                    }
-                } catch (Exception e) {
-                    loginNotification.setText("USER NOT FOUND");
-                }
-            }
-        });
-        stage.addActor(loginButton);
-
-        TextButton registerButton = CustomUtils.generateTextButton(skin, "REGISTER", width - element_width - margin, height - 150, element_width, element_height);
-        stage.addActor(registerButton);
-
-        TextButton campaignButton = CustomUtils.generateTextButton(skin, "C A M P A I G N (not available)", width / 4, height - 125, buttonWidth, 75);
-        stage.addActor(campaignButton);
-
-        TextButton skirmishButton = CustomUtils.generateTextButton(skin, "S K I R M I S H", width / 4, height - 215, buttonWidth, 75);
-        skirmishButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                GeometryWars main = GeometryWars.getInstance();
-                main.setScreen(main.getGameScreen());
-            }
-        });
-        stage.addActor(skirmishButton);
-
-        TextButton multiPlayer = CustomUtils.generateTextButton(skin, "M U L T I P L A Y E R (not available)", width / 4, height - 305, buttonWidth, 75);
-        stage.addActor(multiPlayer);
-
-        TextButton quitButton = CustomUtils.generateTextButton(skin, "Q U I T", width / 4, height - 395, buttonWidth / 2 - 15, 75);
-        stage.addActor(quitButton);
-        quitButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                Gdx.app.exit();
-            }
-        });
-
-        TextButton settingsButton = CustomUtils.generateTextButton(skin, "S E T T I N G S", width / 2 + 15, height - 395, buttonWidth / 2 - 15, 75);
-
-        settingsButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                GeometryWars main = GeometryWars.getInstance();
-                main.setScreen(main.getSettingScreen());
-            }
-        });
-
-        stage.addActor(settingsButton);
-    }
-
     @Override
     public void show() {
-        Gdx.input.setInputProcessor(stage);
+
     }
 
     @Override
     public void render(float delta) {
-        stage.act(delta);
+        float color = 230 / 255f;
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        Gdx.gl.glClearColor(color, color, color, 1);
+        stage.getBatch().begin();
+        stage.getBatch().draw(background, 0, 0, WIDTH, HEIGHT);
+
+        if( WIDTH/2 - buttonWidth/2 < Gdx.input.getX() && Gdx.input.getX() < WIDTH/2 - buttonWidth/2 + buttonWidth
+                && HEIGHT-350 < HEIGHT - Gdx.input.getY() && HEIGHT - Gdx.input.getY()< HEIGHT-350 + ELEMENT_HEIGTH){
+            stage.getBatch().draw(btnStartActive, WIDTH/2 - buttonWidth/2,HEIGHT-350,buttonWidth,ELEMENT_HEIGTH);
+            if(Gdx.input.isTouched()){
+                GeometryWars main = GeometryWars.getInstance();
+                main.setScreen(main.getGameScreen());
+            }
+        } else {
+            stage.getBatch().draw(btnStartInactive, WIDTH/2 - buttonWidth/2,HEIGHT-350,buttonWidth,ELEMENT_HEIGTH);
+        }
+
+        stage.getBatch().draw(btnCampaignInactive, WIDTH/2 - buttonWidth/2,HEIGHT-350-margin-ELEMENT_HEIGTH,buttonWidth,ELEMENT_HEIGTH);
+        if( WIDTH/2 - buttonWidth/2 < Gdx.input.getX() && Gdx.input.getX() < WIDTH/2 - buttonWidth/2 + buttonWidth
+                && HEIGHT-350 - margin*2-ELEMENT_HEIGTH*2 < HEIGHT - Gdx.input.getY() && HEIGHT - Gdx.input.getY()< HEIGHT-350 - margin*2-ELEMENT_HEIGTH*2 + ELEMENT_HEIGTH){
+            stage.getBatch().draw(btnSettingsActive, WIDTH/2 - buttonWidth/2,HEIGHT-350-margin*2-ELEMENT_HEIGTH*2,buttonWidth,ELEMENT_HEIGTH);
+            if(Gdx.input.isTouched()){
+                /* TODO Go to Settings*/
+            }
+        } else {
+            stage.getBatch().draw(btnSettingsInactive, WIDTH/2 - buttonWidth/2,HEIGHT-350-margin*2-ELEMENT_HEIGTH*2,buttonWidth,ELEMENT_HEIGTH);
+        }
+
+        if( WIDTH/2 - buttonWidth/2 < Gdx.input.getX() && Gdx.input.getX() < WIDTH/2 - buttonWidth/2 + buttonWidth
+                && HEIGHT-350 - margin*3-ELEMENT_HEIGTH*3 < HEIGHT - Gdx.input.getY() && HEIGHT - Gdx.input.getY()< HEIGHT-350 - margin*3-ELEMENT_HEIGTH*3 + ELEMENT_HEIGTH){
+            stage.getBatch().draw(btnQuitActive, WIDTH/2 - buttonWidth/2,HEIGHT-350-margin*3-ELEMENT_HEIGTH*3,buttonWidth,ELEMENT_HEIGTH);
+            if(Gdx.input.isTouched()){
+               Gdx.app.exit();
+            }
+        } else {
+            stage.getBatch().draw(btnQuitInactive, WIDTH/2 - buttonWidth/2,HEIGHT-350-margin*3-ELEMENT_HEIGTH*3,buttonWidth,ELEMENT_HEIGTH);
+        }
+        stage.getBatch().end();
+
         stage.draw();
     }
 
     @Override
     public void resize(int width, int height) {
-        //GeometryWars.getInstance().getViewPort().setWorldSize(width, height);
-        createUI(width, height);
+
     }
 
     @Override

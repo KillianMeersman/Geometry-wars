@@ -5,7 +5,6 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -13,8 +12,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.utils.viewport.*;
 import howest.groep14.game.player.PlayerRepository;
 import howest.groep14.game.screens.GameScreen;
-import howest.groep14.game.screens.MainMenuScreen;
 import howest.groep14.game.screens.MenuScreen;
+import howest.groep14.game.screens.MenuScreenOld;
 import howest.groep14.game.screens.SettingScreen;
 
 public class GeometryWars extends Game {
@@ -22,8 +21,7 @@ public class GeometryWars extends Game {
 
     private Viewport viewport;
     private GameScreen gameScreen;
-    private MenuScreen menuScreen; /*menuScreen Deleten */
-    private MainMenuScreen mainMenuScreen;
+    private MenuScreen menuScreen;
     private SettingScreen settingScreen;
     private PlayerRepository playerRepository;
 
@@ -46,8 +44,6 @@ public class GeometryWars extends Game {
     public MenuScreen getMenuScreen() {
         return menuScreen;
     }
-
-    public MainMenuScreen getMainMenuScreen(){ return mainMenuScreen; }
 
     public SettingScreen getSettingScreen() {
         return settingScreen;
@@ -86,9 +82,8 @@ public class GeometryWars extends Game {
         gameScreen = new GameScreen(viewport, skin);
         //gameScreen.setPlayerHealthEnabled(false);
         menuScreen = new MenuScreen(viewport, skin);
-        mainMenuScreen = new MainMenuScreen(viewport, skin);
         settingScreen = new SettingScreen(viewport, skin);
-        setScreen(mainMenuScreen);
+        setScreen(menuScreen);
     }
 
     private Skin generateSkin() {

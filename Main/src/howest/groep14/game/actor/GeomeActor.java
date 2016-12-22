@@ -21,6 +21,7 @@ public class GeomeActor extends SpriteActor {
         if (time >= lifeTime) {
             this.remove();
         } else {
+
             time += delta;
         }
     }

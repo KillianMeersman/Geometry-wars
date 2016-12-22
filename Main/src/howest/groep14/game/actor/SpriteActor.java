@@ -190,6 +190,12 @@ public class SpriteActor extends Actor { // An actor that holds a sprite, and up
     }
 
     @Override
+    public void scaleBy(float scale) {
+        super.scaleBy(scale);
+        sprite.scale(scale);
+    }
+
+    @Override
     protected void positionChanged() {
         super.positionChanged();
         sprite.setPosition(getX(), getY());

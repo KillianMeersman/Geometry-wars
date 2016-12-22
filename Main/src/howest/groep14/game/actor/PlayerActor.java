@@ -6,6 +6,7 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import howest.groep14.game.*;
 import howest.groep14.game.actor.attack.FireInDirection;
+import howest.groep14.game.actor.attack.MultipleFireInDirection;
 import howest.groep14.game.actor.collision.CollectGeomesDamaged;
 import howest.groep14.game.actor.health.StandardHealth;
 

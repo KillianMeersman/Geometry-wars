@@ -5,22 +5,32 @@ import howest.groep14.game.actor.IProjectileObserver;
 import howest.groep14.game.actor.SpriteActor;
 import howest.groep14.game.actor.movement.MovementBehavior;
 
-public class DualFireInDirection extends FireInDirection {
+public class MultipleFireInDirection extends FireInDirection {
+    private int streams = 1;
+    private int angleIncrease;
 
-    public DualFireInDirection(IProjectileObserver owner) {
+    public MultipleFireInDirection(IProjectileObserver owner, int streams) {
         super(owner);
+        this.streams = streams;
+        calcAngleIncrease();
     }
 
-    public DualFireInDirection(FireInDirection copy) {
+    public MultipleFireInDirection(FireInDirection copy, int streams) {
         super(copy.observer);
+        this.streams = streams;
         this.ROUNDS_PER_SECOND = copy.ROUNDS_PER_SECOND;
+        calcAngleIncrease();
     }
 
     @Override
     public void engage(float delta) {
         if (isCooldownOver()) {
             fireProjectile(owner.getRotation(), true);  // Fire forwards
-            fireProjectile(MovementBehavior.getUpdatedRotation(owner.getRotation(), 180), false);    // Fire backwards
+            for (int i = 0; i < streams; i++) {
+                fireProjectile(MovementBehavior.getUpdatedRotation(owner.getRotation(), angleIncrease * i), false);    // Fire backwards
+            }
+
+
             lastDelta = 0;
         } else {
             lastDelta += delta;
@@ -30,5 +40,9 @@ public class DualFireInDirection extends FireInDirection {
     @Override
     public AttackBehavior copy(SpriteActor newOwner) {
         return super.copy(newOwner);
+    }
+
+    private void calcAngleIncrease() {
+        angleIncrease = 360 / streams;
     }
 }

@@ -11,6 +11,7 @@ import howest.groep14.game.actor.movement.MovementBehavior;
 
 public class EnemyActor extends SpriteActor {
     private ENEMY_TYPE type;
+    private byte animationCycles = 0;
 
     public EnemyActor(GameStage stage, Sprite sprite, ENEMY_TYPE type) {
         super(stage, sprite);
@@ -26,13 +27,32 @@ public class EnemyActor extends SpriteActor {
     }
 
     @Override
+    public void act(float delta) {
+        super.act(delta);
+        if (removed) {
+            popOutAnimation();
+        }
+    }
+
+    @Override
     public boolean remove() {
         if (!removed) {
             removed = true;
+        }
+        if (animationCycles >= 10) {
             stage.removeEnemy(this);
             return super.remove();
         }
         return false;
+    }
+
+    private void popOutAnimation() {
+        if (this.animationCycles < 10) {
+            this.scaleBy(-0.002f);
+            animationCycles++;
+        } else {
+            this.remove();
+        }
     }
 
     public ENEMY_TYPE getTypeCode() {

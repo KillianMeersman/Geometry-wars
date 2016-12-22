@@ -2,7 +2,7 @@ package howest.groep14.game.powers.up;
 
 import howest.groep14.game.actor.IProjectileObserver;
 import howest.groep14.game.actor.SpriteActor;
-import howest.groep14.game.actor.attack.DualFireInDirection;
+import howest.groep14.game.actor.attack.MultipleFireInDirection;
 import howest.groep14.game.actor.attack.FireInDirection;
 import howest.groep14.game.powers.PowerBehavior;
 
@@ -18,7 +18,7 @@ public class DualFire extends PowerBehavior {
     @Override
     public void startPower(SpriteActor target) {
         this.originalBehavior = (FireInDirection) target.getAttackBehavior();
-        target.setAttackBehavior(new DualFireInDirection(originalBehavior));
+        target.setAttackBehavior(new MultipleFireInDirection(originalBehavior, 2));
     }
 
     @Override
