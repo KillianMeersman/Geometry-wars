@@ -26,7 +26,7 @@ public class RegisterScreen implements Screen {
 
     @Override
     public void show() {
-
+        Gdx.input.setInputProcessor(stage);
     }
 
     private void createUI(int width, int height) {

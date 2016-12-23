@@ -85,7 +85,7 @@ public class GeometryWars extends Game {
 
         gameScreen = new GameScreen(viewport, skin);
         //gameScreen.setPlayerHealthEnabled(false);
-        menuScreen = new MenuScreen(viewport, skin);
+        //menuScreen = new MenuScreen(viewport, skin);
         settingScreen = new SettingScreen(viewport, skin);
         loginScreen = new LoginScreen(viewport,skin);
         registerScreen = new RegisterScreen(viewport, skin);
