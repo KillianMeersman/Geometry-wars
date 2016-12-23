@@ -17,4 +17,6 @@ public abstract class PowerBehavior {
     public abstract void startPower(SpriteActor target); // Method for start of power (for timed powers)
     public abstract void doPower(SpriteActor target);    // Intermediate method
     public abstract void endPower(SpriteActor target);  // Method for end of power
+
+    public abstract String toString();
 }

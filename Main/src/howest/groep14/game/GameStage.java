@@ -96,5 +96,6 @@ public class GameStage extends Stage {
 
     public void removeGeome(GeomeActor actor) {
         geomes.remove(actor);
+        spawnManager.removeGeome(actor);
     }
 }

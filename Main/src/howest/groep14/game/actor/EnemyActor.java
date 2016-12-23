@@ -16,7 +16,7 @@ public class EnemyActor extends SpriteActor {
     public EnemyActor(GameStage stage, Sprite sprite, ENEMY_TYPE type) {
         super(stage, sprite);
         this.type = type;
-        this.collisionBehavior = new DamagePlayersOnContact(this, 1, 0);
+        this.collisionBehavior = new DamagePlayersOnContact(this, 1, 1);
         this.healthBehavior = new StandardHealth(this, 1);
     }
 

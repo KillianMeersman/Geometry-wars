@@ -5,10 +5,10 @@ import howest.groep14.game.actor.SpriteActor;
 import howest.groep14.game.actor.attack.MultipleFireInDirection;
 import howest.groep14.game.actor.attack.FireInDirection;
 
-public class DualFire extends PowerBehavior {
+public class Quadfire extends PowerBehavior {
     private FireInDirection originalBehavior;
 
-    public DualFire(float duration) {
+    public Quadfire(float duration) {
         super(duration);
     }
 
@@ -16,7 +16,7 @@ public class DualFire extends PowerBehavior {
     public void startPower(SpriteActor target) {
         if (target instanceof IProjectileObserver) {
             this.originalBehavior = (FireInDirection) target.getAttackBehavior();
-            target.setAttackBehavior(new MultipleFireInDirection(originalBehavior, 2));
+            target.setAttackBehavior(new MultipleFireInDirection(originalBehavior, 4));
         }
     }
 
@@ -30,5 +30,10 @@ public class DualFire extends PowerBehavior {
         if (target instanceof IProjectileObserver) {
             target.setAttackBehavior(originalBehavior);
         }
+    }
+
+    @Override
+    public String toString() {
+        return "Quadfire!";
     }
 }

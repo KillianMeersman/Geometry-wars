@@ -32,4 +32,9 @@ public class ArmoredEnemies extends PowerBehavior {
             }
         }
     }
+
+    @Override
+    public String toString() {
+        return "Armored enemies!";
+    }
 }

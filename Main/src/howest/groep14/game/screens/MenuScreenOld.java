@@ -26,7 +26,7 @@ public class MenuScreenOld implements Screen {
         stage = new Stage(viewport);
     }
 
-    private void createUI( int width, int height) {
+    private void createUI(int width, int height) {
         stage.clear();
         float buttonWidth = width / 2;
         float element_width;
@@ -78,6 +78,14 @@ public class MenuScreenOld implements Screen {
         stage.addActor(loginButton);
 
         TextButton registerButton = CustomUtils.generateTextButton(skin, "REGISTER", width - element_width - margin, height - 150, element_width, element_height);
+        registerButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                super.clicked(event, x, y);
+                GeometryWars main = GeometryWars.getInstance();
+                main.setScreen(main.getRegisterScreen());
+            }
+        });
         stage.addActor(registerButton);
 
         TextButton campaignButton = CustomUtils.generateTextButton(skin, "C A M P A I G N (not available)", width / 4, height - 125, buttonWidth, 75);
@@ -87,6 +95,7 @@ public class MenuScreenOld implements Screen {
         skirmishButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                super.clicked(event, x, y);
                 GeometryWars main = GeometryWars.getInstance();
                 main.setScreen(main.getGameScreen());
             }

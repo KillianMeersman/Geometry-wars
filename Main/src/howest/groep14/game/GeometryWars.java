@@ -21,6 +21,7 @@ public class GeometryWars extends Game {
     private MenuScreen menuScreen;
     private MenuScreenOld menuScreenOld;
     private LoginScreen loginScreen;
+    private RegisterScreen registerScreen;
     private SettingScreen settingScreen;
     private PlayerRepository playerRepository;
 
@@ -87,6 +88,7 @@ public class GeometryWars extends Game {
         menuScreen = new MenuScreen(viewport, skin);
         settingScreen = new SettingScreen(viewport, skin);
         loginScreen = new LoginScreen(viewport,skin);
+        registerScreen = new RegisterScreen(viewport, skin);
         menuScreenOld = new MenuScreenOld(viewport,skin);
         setScreen(menuScreenOld);
     }
@@ -143,5 +145,9 @@ public class GeometryWars extends Game {
 
     public boolean connectionReady() {
         return dbConnection;
+    }
+
+    public RegisterScreen getRegisterScreen() {
+        return registerScreen;
     }
 }

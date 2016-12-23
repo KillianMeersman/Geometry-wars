@@ -9,6 +9,10 @@ import howest.groep14.game.powers.PowerBehavior;
 public class ShieldTarget extends PowerBehavior {
     HealthBehavior originalBehavior;
 
+    public ShieldTarget(float duration) {
+        super(duration);
+    }
+
     @Override
     public void startPower(SpriteActor target) {
         originalBehavior = target.getHealthBehavior();
@@ -23,5 +27,10 @@ public class ShieldTarget extends PowerBehavior {
     @Override
     public void endPower(SpriteActor target) {
         target.setHealthBehavior(originalBehavior);
+    }
+
+    @Override
+    public String toString() {
+        return "Shield!";
     }
 }

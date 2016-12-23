@@ -4,18 +4,19 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import howest.groep14.game.actor.*;
+import howest.groep14.game.actor.health.DeathObserver;
+import howest.groep14.game.actor.health.IDeathObserver;
 import howest.groep14.game.actor.health.Invulnerable;
+import howest.groep14.game.actor.health.StandardHealthHide;
 import howest.groep14.game.actor.movement.Bounce;
 import howest.groep14.game.actor.movement.Kamikaze;
 import howest.groep14.game.actor.movement.MovementBehavior;
 import howest.groep14.game.actor.movement.Snake;
-import howest.groep14.game.powers.DualFire;
+import howest.groep14.game.powers.*;
 
-// TODO add proper powerup spawning
-class SpawnManager extends Actor {
+class SpawnManager extends Actor implements IDeathObserver {
     private final int SPAWN_PLAYER_MARGIN = 100;
     private final float GEOME_LIFETIME = 5f;
-    private boolean powerupSpawned;
 
     // Change this to change difficulty
     private int CUBE_AMOUNT = 15;
@@ -28,12 +29,14 @@ class SpawnManager extends Actor {
     private float CIRCLE_SPEED = 6f;
 
     private int destoyed_cubes, cube_upgrades, circle_upgrades, destroyed_circles;
+    private boolean armored_enemies, changeTime, dualFire, extraLife, shield;
+
 
     private final GameStage stage;
 
     private int cube_amount = 0, circle_amount = 0, snake_amount = 0, geome_amount = 0;
 
-    SpawnManager(GameStage stage) {
+    public SpawnManager(GameStage stage) {
         this.stage = stage;
     }
 
@@ -98,17 +101,31 @@ class SpawnManager extends Actor {
     }
 
     private void spawnPowerUp(float x, float y) {
-        /*
-        GeomeActor geome = new PowerGeomeActor(stage, SpriteRepository.getGeome(), 1, GEOME_LIFETIME, new ChangeTimeSpeed(5f));
-        geome.setScale(0.2f);
-        geome.setPosition(x, y);
-        stage.addGeome(geome);
-        */
-            GeomeActor geome = new PowerGeomeActor(stage, SpriteRepository.getGeome(), 1, 15, new DualFire(10f));
+        PowerBehavior pow;
+        switch (CustomUtils.intRandom(6)) {
+            case 1: pow = new ArmoredEnemies(10f);
+                armored_enemies = true;
+                break;
+            case 2: pow = new ChangeTimeSpeed(5f, 1.2f);
+                changeTime = true;
+                break;
+            case 3: pow = new Quadfire(5f);
+                dualFire = true;
+                break;
+            case 4: pow = new ExtraLife();
+                extraLife = true;
+                break;
+            case 5: //pow = new ShieldTarget(10f);
+                //shield = true;    // broken
+                //break;
+            default: pow = new ChangeTimeSpeed(10f, 0.5f);
+                changeTime = true;
+        }
+            GeomeActor geome = new PowerGeomeActor(stage, SpriteRepository.getGeome(), 1, 15, pow, PowerGeomeActor.POWER.DUAL_FIRE);
+            geome.setHealthBehavior(new DeathObserver((StandardHealthHide)geome.getHealthBehavior(), this));
             geome.setScale(0.2f);
             geome.setPosition(x, y);
             stage.addGeome(geome);
-            powerupSpawned = true;
     }
 
     public void removeEnemy(EnemyActor actor) {
@@ -134,12 +151,43 @@ class SpawnManager extends Actor {
                 snake_amount--;
                 break;
         }
-        if (!powerupSpawned) {
+        if (CustomUtils.booleanRandom(15)) {
             spawnPowerUp(actor.getX(), actor.getY());
         } else {
             spawnGeome(actor.getX(), actor.getY());
         }
+    }
 
+    public void removeGeome(GeomeActor actor) {
+        if (actor instanceof PowerGeomeActor) {
+            switch (((PowerGeomeActor) actor).getPowerFlag()) {
+                case ARMORED_ENEMIES:
+                    if (armored_enemies) {
+                        armored_enemies = false;
+                    }
+                    break;
+                case CHANGE_TIME:
+                    if (changeTime) {
+                        changeTime = false;
+                    }
+                    break;
+                case DUAL_FIRE:
+                    if (dualFire) {
+                        dualFire = false;
+                    }
+                    break;
+                case EXTRA_LIFE:
+                    if (extraLife) {
+                        extraLife = false;
+                    }
+                    break;
+                case SHIELD:
+                    if (shield) {
+                        shield = false;
+                    }
+                    break;
+            }
+        }
     }
 
     private Vector2 getEdgeSpawnCoordinates(float edge_margin) {
@@ -185,5 +233,11 @@ class SpawnManager extends Actor {
             }
         }
         return new Vector2(x, y);
+    }
+
+    @Override
+    public void actorDeath(SpriteActor actor) {
+        GeometryWars.getInstance().getGameScreen().getCenterLabel().setVisible(true);
+        GeometryWars.getInstance().getGameScreen().setCenterTopLabel(((PowerGeomeActor)actor).getPowerBehavior().toString(), 3);
     }
 }

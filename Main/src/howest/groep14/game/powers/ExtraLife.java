@@ -21,4 +21,9 @@ public class ExtraLife extends PowerBehavior {
     public void endPower(SpriteActor target) {
 
     }
+
+    @Override
+    public String toString() {
+        return "Extra life!";
+    }
 }

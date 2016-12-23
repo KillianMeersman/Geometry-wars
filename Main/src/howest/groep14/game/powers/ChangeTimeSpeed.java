@@ -38,4 +38,9 @@ public class ChangeTimeSpeed extends PowerBehavior {
             mov.setSpeed(mov.getSpeed() * factor);
         }
     }
+
+    @Override
+    public String toString() {
+        return "Time x" + factor + "!";
+    }
 }

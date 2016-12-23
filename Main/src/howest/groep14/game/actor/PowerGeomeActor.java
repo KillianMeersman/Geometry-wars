@@ -11,12 +11,13 @@ public class PowerGeomeActor extends GeomeActor {
     private float totalPowerDelta = 0f;
     private boolean powerActive;
     private SpriteActor powerTarget;
+    private POWER powerFlag;
 
-    public PowerGeomeActor(GameStage stage, Sprite sprite, int scoreAmount, float lifeTime, PowerBehavior powerBehavior) {
+    public PowerGeomeActor(GameStage stage, Sprite sprite, int scoreAmount, float lifeTime, PowerBehavior powerBehavior, POWER powerFlag) {
         super(stage, sprite, scoreAmount, lifeTime);
         this.healthBehavior = new StandardHealthHide(this, 1);
         this.powerBehavior = powerBehavior;
-
+        this.powerFlag = powerFlag;
     }
 
     @Override
@@ -39,5 +40,21 @@ public class PowerGeomeActor extends GeomeActor {
             powerTarget = victim;
             powerActive = true;
         }
+    }
+
+    public POWER getPowerFlag() {
+        return powerFlag;
+    }
+
+    public PowerBehavior getPowerBehavior() {
+        return powerBehavior;
+    }
+
+    public enum POWER {
+        ARMORED_ENEMIES,
+        CHANGE_TIME,
+        DUAL_FIRE,
+        EXTRA_LIFE,
+        SHIELD
     }
 }

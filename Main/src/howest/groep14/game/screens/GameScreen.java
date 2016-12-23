@@ -21,7 +21,7 @@ import howest.groep14.game.actor.movement.StayAroundActor;
 
 public class GameScreen implements Screen {
     private GameStage stage;
-    private Label score1Label, score2Label, centerLabel, debugLabel;
+    private Label score1Label, score2Label, centerLabel, centerTopLabel, debugLabel;
     private TextButton toMenuButton, restartButton;
     private Skin skin;
 
@@ -29,6 +29,7 @@ public class GameScreen implements Screen {
     private boolean paused = false;
     private boolean gameOver = false;
     private float lastDelta = 0.2f;
+    private float messageDelta, messageDuration;
 
     private boolean playerHealthEnabled = true;
 
@@ -88,6 +89,11 @@ public class GameScreen implements Screen {
         centerLabel.setPosition(screenWidth / 2, screenHeight / 2, Align.center);
         stage.addActor(centerLabel);
 
+        centerTopLabel = new Label("", skin);
+        centerTopLabel.setVisible(false);
+        centerTopLabel.setPosition(screenWidth / 2, screenHeight - 10, Align.top);
+        stage.addActor(centerTopLabel);
+
         debugLabel = new Label("", skin);
         debugLabel.setVisible(false);
         debugLabel.setPosition(25, 25, Align.bottomLeft);
@@ -100,7 +106,7 @@ public class GameScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 GeometryWars main = GeometryWars.getInstance();
-                main.setScreen(main.getMenuScreen());
+                main.setScreen(main.getMenuScreenOld());
             }
         });
         stage.addActor(toMenuButton);
@@ -127,6 +133,26 @@ public class GameScreen implements Screen {
 
     public Label getCenterLabel() {
         return centerLabel;
+    }
+
+    public Label getCenterTopLabel() {
+        return centerTopLabel;
+    }
+
+    public void setCenterTopLabel(String message, float duration) {
+        centerTopLabel.setText(message);
+        centerTopLabel.setVisible(true);
+        this.messageDuration = duration;
+    }
+
+    private void updateCenterTopLabel(float delta) {
+        if (messageDelta >= messageDuration) {
+            centerTopLabel.setText("");
+            centerTopLabel.setVisible(false);
+            messageDelta = 0;
+        } else {
+            messageDelta += delta;
+        }
     }
 
     public Label getDebugLabel() {
@@ -208,6 +234,7 @@ public class GameScreen implements Screen {
         }
 
         if (!paused) {
+            updateCenterTopLabel(delta);
             score1Label.setText(stage.getPlayers().get(0).getScore() + " POINTS\n" +
                     stage.getPlayers().get(0).getHealthBehavior().toString());
             //score1Label.setText(Float.toString(stage.getPlayers().get(0).getRotation()));
@@ -221,7 +248,6 @@ public class GameScreen implements Screen {
             stage.act(delta);
         }
         stage.draw();
-
     }
 
     @Override
