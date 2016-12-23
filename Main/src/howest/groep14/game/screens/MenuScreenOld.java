@@ -13,12 +13,15 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import howest.groep14.game.CustomUtils;
 import howest.groep14.game.GeometryWars;
+import howest.groep14.game.player.GameMapper;
+import howest.groep14.game.player.Player;
 import howest.groep14.game.player.PlayerRepository;
 
 public class MenuScreenOld implements Screen {
     private Stage stage;
     private Viewport viewport;
     private Skin skin;
+    private Player loggedInPlayer;
 
     public MenuScreenOld(Viewport viewport, Skin skin) {
         this.viewport = viewport;
@@ -66,7 +69,10 @@ public class MenuScreenOld implements Screen {
                 try {
                     PlayerRepository repo = PlayerRepository.getInstance();
                     if (repo.loginPlayer(usernameField.getText(), passwordField.getText())) {
-                        loginNotification.setText("WELCOME " + repo.getActivePlayer().getUsername());
+                        loggedInPlayer = PlayerRepository.getInstance().getPlayerByUsername(usernameField.getText());
+                        loggedInPlayer.getShips().addAll(PlayerRepository.getInstance().getPlayerShipsByPlayerID(loggedInPlayer));
+                        int highScore = GameMapper.getInstance().getHighScoreByShipID(loggedInPlayer.getShips().get(0).getID());
+                        loginNotification.setText("WELCOME " + repo.getActivePlayer().getUsername() + " [" + (highScore < 0 ? 0 : highScore) + "]");
                     } else {
                         loginNotification.setText("INVALID LOGIN");
                     }
@@ -96,8 +102,14 @@ public class MenuScreenOld implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
-                GeometryWars main = GeometryWars.getInstance();
-                main.setScreen(main.getGameScreen());
+                if (loggedInPlayer != null) {
+                    GeometryWars main = GeometryWars.getInstance();
+                    main.newGame(loggedInPlayer);
+                    main.setScreen(main.getGameScreen());
+                } else {
+                    loginNotification.setText("PLEASE LOG IN TO PLAY");
+                }
+
             }
         });
         stage.addActor(skirmishButton);
@@ -162,5 +174,9 @@ public class MenuScreenOld implements Screen {
     @Override
     public void dispose() {
 
+    }
+
+    public Player getLoggedInPlayer() {
+        return loggedInPlayer;
     }
 }

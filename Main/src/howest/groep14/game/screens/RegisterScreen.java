@@ -10,14 +10,18 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import howest.groep14.game.CustomUtils;
 import howest.groep14.game.GeometryWars;
+import howest.groep14.game.player.PlayerRepository;
+import java.sql.SQLException;
 
 public class RegisterScreen implements Screen {
     private Stage stage;
     private Viewport viewport;
     private Skin skin;
+    private Label notificationLabel;
 
     public RegisterScreen(Viewport viewport, Skin skin) {
         this.viewport = viewport;
@@ -41,7 +45,7 @@ public class RegisterScreen implements Screen {
         usernameLabel.setPosition(x_center - 350, height - 50);
         stage.addActor(usernameLabel);
 
-        TextField usernameField = new TextField("", skin);
+        final TextField usernameField = new TextField("", skin);
         usernameField.setWidth(500);
         usernameField.setHeight(20);
         usernameField.setPosition(x_center - 250, height - 50);
@@ -53,7 +57,7 @@ public class RegisterScreen implements Screen {
         emailLabel.setPosition(x_center - 350, height - 100);
         stage.addActor(emailLabel);
 
-        TextField emailField = new TextField("", skin);
+        final TextField emailField = new TextField("", skin);
         emailField.setWidth(500);
         emailField.setHeight(20);
         emailField.setPosition(x_center - 250, height - 100);
@@ -65,20 +69,36 @@ public class RegisterScreen implements Screen {
         passwordLabel.setPosition(x_center - 350, height - 150);
         stage.addActor(passwordLabel);
 
-        TextField passwordField = new TextField("", skin);
+        final TextField passwordField = new TextField("", skin);
         passwordField.setWidth(500);
         passwordField.setHeight(20);
         passwordField.setPosition(x_center - 250, height - 150);
         stage.addActor(passwordField);
+
 
         TextButton registerButton = CustomUtils.generateTextButton(skin, "R E G I S T E R", x_center - 350, height - 250, 650, 50);
         stage.addActor(registerButton);
         registerButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                doRegister();
+                try {
+                    notificationLabel.setText("REGISTERING...");
+                    doRegister(usernameField.getText(), emailField.getText(), passwordField.getText());
+                    notificationLabel.setText("REGISTERED");
+                } catch (SQLException e) {
+                    notificationLabel.setText("USERNAME TAKEN");
+                }
             }
         });
+
+        final Label notificationLabel = new Label("TEST", skin);
+        notificationLabel.setWidth(100);
+        notificationLabel.setHeight(20);
+        notificationLabel.setPosition(x_center, height - 300, Align.center);
+        this.notificationLabel = notificationLabel;
+        stage.addActor(notificationLabel);
+
+
 
         TextButton backButton = CustomUtils.generateTextButton(skin, "B A C K", x_center - 350, height - 310, 650, 50);
         stage.addActor(backButton);
@@ -92,7 +112,8 @@ public class RegisterScreen implements Screen {
         });
     }
 
-    private void doRegister() {
+    private void doRegister(String username, String email, String password) throws SQLException {
+        PlayerRepository.getInstance().createPlayer(username, email, password);
     }
 
     @Override

@@ -1,20 +1,23 @@
-package howest.groep14.game;
+package howest.groep14.game.player;
 
-/**
- * Created by Timo on 22/12/2016.
- */
+import com.badlogic.gdx.Game;
 
-import java.io.IOException;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 
 public class GameMapper {
 
     private Connection connection;
     private String sqlUser, sqlPassword;
+    private static GameMapper instance;
 
-    public GameMapper(String sqlUser, String sqlPassword) throws SQLException {
+    public static GameMapper getInstance() throws SQLException {
+        if (instance == null) {
+            instance = new GameMapper("geometry-wars", "jEzPRAyKE6FsiiIjQXwq");
+        }
+        return instance;
+    }
+
+    private GameMapper(String sqlUser, String sqlPassword) throws SQLException {
         this.sqlUser = sqlUser;
         this.sqlPassword = sqlPassword;
 
@@ -46,55 +49,63 @@ public class GameMapper {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
-
     }
-
-
-
 
     public int getHighscore() throws SQLException {
         try {
+            Class.forName("com.mysql.jdbc.Driver");
             PreparedStatement prep = connection.prepareStatement("SELECT score FROM gameShips ORDER BY DESC LIMIT 1;");
             ResultSet results = prep.executeQuery();
-
 
             int score = results.getInt("score");
 
             return score;
 
-        }catch (SQLException e) {
+        }catch (Exception e) {
             e.printStackTrace();
         }
         return 0;
     }
 
+    public int getHighScoreByShipID(int shipID) {
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            PreparedStatement prep = connection.prepareStatement("SELECT score FROM gameShips WHERE shipID = ? ORDER BY DESC LIMIT 1;");
+            prep.setInt(1, shipID);
+            ResultSet results = prep.executeQuery();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
 
-    public void addGame(int gameID, int difficultyID, int gameMode, String level) throws SQLException {
+
+    public int addGame(int difficultyID, int gameMode, String level) throws SQLException {
         try {
             Class.forName("com.mysql.jdbc.Driver");
 
             PreparedStatement prep = connection.prepareStatement("INSERT INTO games" +
-                    "(gameID, difficultyID, gameMode, level)" +
-                    "VALUES (?, ?, ?, ?);");
-            prep.setInt(1, gameID);
-            prep.setInt(2, difficultyID);
-            prep.setInt(3, gameMode);
-            prep.setString(4,level);
+                    "(difficultyID, gameMode, level)" +
+                    "VALUES (?, ?, ?);", Statement.RETURN_GENERATED_KEYS);
+            prep.setInt(1, difficultyID);
+            prep.setInt(2, gameMode);
+            prep.setString(3,level);
 
             int affectedRows  = prep.executeUpdate();
             if (affectedRows == 0) {
                 throw new SQLException("Game creation failed");
             }
-
+            ResultSet generatedKey = prep.getGeneratedKeys();
+            if (generatedKey.next()) {
+                return generatedKey.getInt(1);
+            } else {
+                throw new SQLException("Game creation failed, no ID obtained");
+            }
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
+        return -1;
     }
-
-
-
-
-
 
     public void finalize() throws Throwable {
         super.finalize();

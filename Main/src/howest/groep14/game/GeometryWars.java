@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.utils.viewport.*;
+import howest.groep14.game.player.Player;
 import howest.groep14.game.player.PlayerRepository;
 import howest.groep14.game.screens.*;
 
@@ -57,8 +58,8 @@ public class GeometryWars extends Game {
         return viewport;
     }
 
-    public void newGame() {
-        gameScreen = new GameScreen(viewport, skin);
+    public void newGame(Player player) {
+        gameScreen = new GameScreen(viewport, skin, player);
         setScreen(gameScreen);
     }
 
@@ -83,7 +84,6 @@ public class GeometryWars extends Game {
                 */
         viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
-        gameScreen = new GameScreen(viewport, skin);
         //gameScreen.setPlayerHealthEnabled(false);
         //menuScreen = new MenuScreen(viewport, skin);
         settingScreen = new SettingScreen(viewport, skin);

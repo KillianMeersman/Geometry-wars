@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import howest.groep14.game.GeometryWars;
+import howest.groep14.game.player.Player;
 
 public class MenuScreen implements Screen {
 
@@ -21,6 +22,7 @@ public class MenuScreen implements Screen {
     private Stage stage;
     private Viewport viewport;
     private Skin skin;
+    private Player loggedInPlayer;
 
     Texture background;
     Texture btnCampaignInactive;
@@ -126,5 +128,9 @@ public class MenuScreen implements Screen {
     @Override
     public void dispose() {
 
+    }
+
+    public Player getLoggedInPlayer() {
+        return loggedInPlayer;
     }
 }

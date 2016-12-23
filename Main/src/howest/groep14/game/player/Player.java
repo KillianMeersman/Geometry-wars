@@ -1,9 +1,13 @@
 package howest.groep14.game.player;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Player {
     private int id;
     private String username, email;
     private byte[] passwordHash, passwordSalt;
+    private List<Ship> ships = new ArrayList<Ship>();
 
     public Player(int id, String username, byte[] passwordHash, byte[] passwordSalt) {
         this.id = id;
@@ -46,5 +50,9 @@ public class Player {
 
     public void setPasswordSalt(byte[] passwordSalt) {
         this.passwordSalt = passwordSalt;
+    }
+
+    public List<Ship> getShips() {
+        return ships;
     }
 }

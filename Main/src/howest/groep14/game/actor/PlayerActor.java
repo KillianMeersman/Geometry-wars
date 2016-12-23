@@ -9,6 +9,7 @@ import howest.groep14.game.actor.attack.FireInDirection;
 import howest.groep14.game.actor.attack.MultipleFireInDirection;
 import howest.groep14.game.actor.collision.CollectGeomesDamaged;
 import howest.groep14.game.actor.health.StandardHealth;
+import howest.groep14.game.player.Player;
 
 public class PlayerActor extends SpriteActor implements IProjectileObserver, IGeomeCollector {
     // Constants
@@ -16,24 +17,25 @@ public class PlayerActor extends SpriteActor implements IProjectileObserver, IGe
     private final float ACCEL = 1f;
     private final float ROT_SPEED = 5;
     private final float FRICTION = 0.92f;
-    private final float BOMB_COOLDOWN = 5f;
 
     // Class vars
     private float speed_x = 0;
     private float speed_y = 0;
-    private float totalDelta = 0;
     private int score, hits, projectilesFired;
-    private int bombs = 3;
     private ControlScheme controlScheme;
     private DroneActor drone;
+    private Player player;
+    private boolean enabled = true;
 
-    public PlayerActor(GameStage stage, Sprite sprite) {
+    public PlayerActor(GameStage stage, Sprite sprite, Player player) {
         super(stage, sprite);
         setBounds(sprite.getX(), sprite.getY(), sprite.getWidth(), sprite.getHeight());
 
         this.collisionBehavior = new CollectGeomesDamaged(this, 0, 1, this);
         this.healthBehavior = new StandardHealth(this, 3);
         this.attackBehavior = new FireInDirection(this);
+
+        this.player = player;
 
         controlScheme = new ControlScheme();
         controlScheme.UP = Input.Keys.UP;
@@ -46,8 +48,8 @@ public class PlayerActor extends SpriteActor implements IProjectileObserver, IGe
         controlScheme.POWERUP = Input.Buttons.RIGHT;
     }
 
-    public PlayerActor(GameStage stage, Sprite sprite, ControlScheme controlScheme) {
-        this(stage, sprite);
+    public PlayerActor(GameStage stage, Sprite sprite, Player player, ControlScheme controlScheme) {
+        this(stage, sprite, player);
         this.controlScheme = controlScheme;
     }
 
@@ -89,7 +91,7 @@ public class PlayerActor extends SpriteActor implements IProjectileObserver, IGe
             fireProjectile(delta);
         }
         if (Gdx.input.isKeyPressed(controlScheme.POWERUP) || Gdx.input.isButtonPressed(controlScheme.POWERUP)) {
-            fireProjectileBomb(delta);
+            //fireProjectileBomb(delta);
         }
     }
 
@@ -179,6 +181,18 @@ public class PlayerActor extends SpriteActor implements IProjectileObserver, IGe
 
     public DroneActor getDrone() {
         return drone;
+    }
+
+    public Player getPlayer() {
+        return player;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 
     public class ControlScheme {

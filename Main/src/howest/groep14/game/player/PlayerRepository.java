@@ -5,6 +5,7 @@ import javax.crypto.spec.PBEKeySpec;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -63,6 +64,10 @@ public class PlayerRepository {
         return player;
     }
 
+    public List<Ship> getPlayerShipsByPlayerID(Player player) {
+        return playerMapper.getShipsByPlayerID(player);
+    }
+
     public void updatePlayer(Player player) {
         playerMapper.updatePlayer(player);
     }
@@ -77,6 +82,9 @@ public class PlayerRepository {
         int id = playerMapper.addPlayer(username, email, hash, salt);
         Player player = new Player(id, username, hash, salt);
         players.add(player);
+        id = playerMapper.addShip(player.getId(), 3, 1, 15);
+        Ship ship = new Ship(id, 3, 1, 15, player);
+        player.getShips().add(ship);
         return player;
     }
 

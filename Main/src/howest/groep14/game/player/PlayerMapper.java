@@ -121,6 +121,50 @@ class PlayerMapper {
         return -1;
     }
 
+    public int addShip(int playerID, int health, int damage, int fireRate) {
+        try {
+            PreparedStatement prep = connection.prepareStatement("INSERT INTO ships (playerID, health, damage, fireRate) VALUES (?, ?, ?, ?)"
+                    , Statement.RETURN_GENERATED_KEYS);
+            prep.setInt(1, playerID);
+            prep.setInt(2, health);
+            prep.setInt(3, damage);
+            prep.setInt(4, fireRate);
+
+            int affectedRows  = prep.executeUpdate();
+            if (affectedRows == 0) {
+                throw new SQLException("Ship creation failed");
+            }
+            ResultSet generatedKey = prep.getGeneratedKeys();
+            if (generatedKey.next()) {
+                return generatedKey.getInt(1);
+            } else {
+                throw new SQLException("Ship creation failed, no ID obtained");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
+
+    public List<Ship> getShipsByPlayerID(Player player) {
+        try {
+            PreparedStatement prep = connection.prepareStatement("SELECT * FROM ships WHERE playerID = ?");
+            prep.setInt(1, player.getId());
+            ResultSet results = prep.executeQuery();
+            List<Ship> ships = new ArrayList<Ship>();
+            while (results.next()) {
+                Ship ship = new Ship(results.getInt("shipID"), results.getInt("health"), results.getInt("damage"), results.getInt("fireRate"), player);
+                ships.add(ship);
+            }
+            return ships;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
     public void updatePlayer(Player player) {
         try {
             PreparedStatement prep = connection.prepareStatement("UPDATE players SET username = ?, email = ?, passwordHash = ?, passwordSalt = ?" +

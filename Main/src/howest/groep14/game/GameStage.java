@@ -48,10 +48,13 @@ public class GameStage extends Stage {
     }
 
     public void removePlayer(PlayerActor actor) {
-        players.remove(actor);
-        if (players.size() < 1) {
-            GeometryWars.getInstance().getGameScreen().gameOver();
+        actor.setEnabled(false);
+        for (PlayerActor player: players) {
+            if (player.isEnabled()) {
+                break;
+            }
         }
+        GeometryWars.getInstance().getGameScreen().gameOver();
     }
 
     public PlayerActor getPlayer() {

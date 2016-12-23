@@ -18,6 +18,10 @@ import howest.groep14.game.actor.collision.DamageEnemiesOnContact;
 import howest.groep14.game.actor.health.Shield;
 import howest.groep14.game.actor.health.StandardHealth;
 import howest.groep14.game.actor.movement.StayAroundActor;
+import howest.groep14.game.player.GameMapper;
+import howest.groep14.game.player.Player;
+
+import java.sql.SQLException;
 
 public class GameScreen implements Screen {
     private GameStage stage;
@@ -33,21 +37,21 @@ public class GameScreen implements Screen {
 
     private boolean playerHealthEnabled = true;
 
-    public GameScreen(Viewport viewport, Skin skin) {
+    public GameScreen(Viewport viewport, Skin skin, Player player) {
         stage = new GameStage(viewport);
         this.skin = skin;
 
-        PlayerActor player = new PlayerActor(stage, SpriteRepository.getArrow());
-        player.setScale(0.3f * SettingsRepository.getActorScale());
-        player.setPosition(CustomUtils.getCenterCoordinates(player, stage));
-        stage.addPlayer(player);
-        stage.setKeyboardFocus(player);
+        PlayerActor playerActor = new PlayerActor(stage, SpriteRepository.getArrow(), player);
+        playerActor.setScale(0.3f * SettingsRepository.getActorScale());
+        playerActor.setPosition(CustomUtils.getCenterCoordinates(playerActor, stage));
+        stage.addPlayer(playerActor);
+        stage.setKeyboardFocus(playerActor);
 
-        DroneActor droneActor = new DroneActor(stage, SpriteRepository.getGeome(), player);
-        droneActor.setMovementBehavior(new StayAroundActor(droneActor, player, 25, 50, 3));
+        DroneActor droneActor = new DroneActor(stage, SpriteRepository.getGeome(), playerActor);
+        droneActor.setMovementBehavior(new StayAroundActor(droneActor, playerActor, 25, 50, 3));
         droneActor.setCollisionBehavior(new DamageEnemiesOnContact(droneActor, 1, 0));
         droneActor.setScale(0.2f * SettingsRepository.getActorScale());
-        player.setDrone(droneActor);
+        playerActor.setDrone(droneActor);
 
         /*
         Texture text = new Texture("Desktop/Assets/bck_rectangle.png");
@@ -117,7 +121,7 @@ public class GameScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 GeometryWars main = GeometryWars.getInstance();
-                main.newGame();
+                main.newGame(stage.getPlayer().getPlayer());
             }
         });
         stage.addActor(restartButton);
@@ -173,6 +177,15 @@ public class GameScreen implements Screen {
         centerLabel.setVisible(true);
         toMenuButton.setVisible(true);
         restartButton.setVisible(true);
+        try {
+            GameMapper mapper = GameMapper.getInstance();
+            for (PlayerActor playerActor : stage.getPlayers()) {
+                int id = mapper.addGame(1, 1, "empty");
+                mapper.addHighscore(id, playerActor.getPlayer().getShips().get(0).getID(), playerActor.getScore());
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public boolean isPlayerHealthEnabled() {
