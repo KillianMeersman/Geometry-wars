@@ -1,5 +1,6 @@
 package howest.groep14.game;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
@@ -7,23 +8,23 @@ public class SpriteRepository {
     private static Sprite cube, circle, arrow, geome, projectile, shield;
 
     public static void init() {
-        Texture texture = new Texture("Desktop/Assets/cube.png");
+        Texture texture = new Texture(Gdx.files.internal("cube.png"));
         texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         cube = new Sprite(texture);
 
-        texture = new Texture("Desktop/Assets/circle.png");
+        texture = new Texture(Gdx.files.internal("circle.png"));
         circle = new Sprite(texture);
 
-        texture = new Texture("Desktop/Assets/arrow.png");
+        texture = new Texture(Gdx.files.internal("arrow.png"));
         arrow = new Sprite(texture);
 
-        texture = new Texture("Desktop/Assets/geome.png");
+        texture = new Texture(Gdx.files.internal("geome.png"));
         geome = new Sprite(texture);
 
-        texture = new Texture("Desktop/Assets/projectile.png");
+        texture = new Texture(Gdx.files.internal("projectile.png"));
         projectile = new Sprite(texture);
 
-        texture = new Texture("Desktop/Assets/shield.png");
+        texture = new Texture(Gdx.files.internal("shield.png"));
         shield = new Sprite(texture);
     }
 

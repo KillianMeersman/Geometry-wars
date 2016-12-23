@@ -12,7 +12,7 @@ public class FireInDirection extends AttackBehavior {
     protected IProjectileObserver observer;
     protected int ROUNDS_PER_SECOND = 15;
     protected float lastDelta = 0f;
-    protected Sound shootSound = Gdx.audio.newSound(Gdx.files.internal("Desktop/Assets/laser.mp3"));
+    protected Sound shootSound = Gdx.audio.newSound(Gdx.files.internal("laser.mp3"));
 
     public FireInDirection(IProjectileObserver owner) {
         super(owner.getOwner());
