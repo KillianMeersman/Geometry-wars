@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import howest.groep14.game.CustomUtils;
+import howest.groep14.game.GeometryWars;
 
 public class RegisterScreen implements Screen {
     private Stage stage;
@@ -70,12 +71,23 @@ public class RegisterScreen implements Screen {
         passwordField.setPosition(x_center - 250, height - 150);
         stage.addActor(passwordField);
 
-        TextButton quitButton = CustomUtils.generateTextButton(skin, "R E G I S T E R", x_center - 350, height - 250, 650, 50);
-        stage.addActor(quitButton);
-        quitButton.addListener(new ClickListener() {
+        TextButton registerButton = CustomUtils.generateTextButton(skin, "R E G I S T E R", x_center - 350, height - 250, 650, 50);
+        stage.addActor(registerButton);
+        registerButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 doRegister();
+            }
+        });
+
+        TextButton backButton = CustomUtils.generateTextButton(skin, "B A C K", x_center - 350, height - 310, 650, 50);
+        stage.addActor(backButton);
+        backButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                super.clicked(event, x, y);
+                GeometryWars main = GeometryWars.getInstance();
+                main.setScreen(main.getMenuScreenOld());
             }
         });
     }
