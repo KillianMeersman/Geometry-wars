@@ -12,7 +12,6 @@ import howest.groep14.game.actor.collision.CollisionBehavior;
 import howest.groep14.game.actor.collision.NoCollisions;
 import howest.groep14.game.actor.health.HealthBehavior;
 import howest.groep14.game.actor.health.Invulnerable;
-import howest.groep14.game.actor.health.StandardHealth;
 import howest.groep14.game.actor.movement.MovementBehavior;
 import howest.groep14.game.actor.movement.NoMovement;
 
@@ -72,9 +71,6 @@ public class SpriteActor extends Actor { // An actor that holds a sprite, and up
     @Override
     public void act(float delta) {
         super.act(delta);
-        this.movementBehavior.move(delta);
-        this.attackBehavior.engage(delta);
-        this.collisionBehavior.checkCollisions(delta);
     }
 
     // Position & rotation

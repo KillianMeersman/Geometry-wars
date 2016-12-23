@@ -12,12 +12,12 @@ public class FireInDirection extends AttackBehavior {
     protected IProjectileObserver observer;
     protected int ROUNDS_PER_SECOND = 15;
     protected float lastDelta = 0f;
-    protected boolean ignoreTime = false;
     protected Sound shootSound = Gdx.audio.newSound(Gdx.files.internal("Desktop/Assets/laser.mp3"));
 
     public FireInDirection(IProjectileObserver owner) {
         super(owner.getOwner());
         this.observer = owner;
+        this.lastDelta = 1f / ROUNDS_PER_SECOND;
     }
 
     @Override
@@ -58,13 +58,5 @@ public class FireInDirection extends AttackBehavior {
 
     public void setROUNDS_PER_SECOND(int ROUNDS_PER_SECOND) {
         this.ROUNDS_PER_SECOND = ROUNDS_PER_SECOND;
-    }
-
-    public boolean isIgnoreTime() {
-        return ignoreTime;
-    }
-
-    public void setIgnoreTime(boolean ignoreTime) {
-        this.ignoreTime = ignoreTime;
     }
 }

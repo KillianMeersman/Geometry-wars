@@ -18,6 +18,9 @@ public class GeomeActor extends SpriteActor {
 
     public void act(float delta) {
         super.act(delta);
+        this.movementBehavior.move(delta);
+        this.attackBehavior.engage(delta);
+        this.collisionBehavior.checkCollisions(delta);
         if (time >= lifeTime) {
             this.remove();
         } else {

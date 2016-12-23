@@ -13,7 +13,6 @@ import com.badlogic.gdx.utils.viewport.*;
 import howest.groep14.game.player.PlayerRepository;
 import howest.groep14.game.screens.GameScreen;
 import howest.groep14.game.screens.MenuScreen;
-import howest.groep14.game.screens.MenuScreenOld;
 import howest.groep14.game.screens.SettingScreen;
 
 public class GeometryWars extends Game {

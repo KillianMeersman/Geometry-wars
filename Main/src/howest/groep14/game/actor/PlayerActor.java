@@ -16,12 +16,14 @@ public class PlayerActor extends SpriteActor implements IProjectileObserver, IGe
     private final float ACCEL = 1f;
     private final float ROT_SPEED = 5;
     private final float FRICTION = 0.92f;
+    private final float BOMB_COOLDOWN = 5f;
 
     // Class vars
     private float speed_x = 0;
     private float speed_y = 0;
-    private float lastDelta = 0;
+    private float totalDelta = 0;
     private int score, hits, projectilesFired;
+    private int bombs = 3;
     private ControlScheme controlScheme;
     private DroneActor drone;
 
@@ -51,6 +53,7 @@ public class PlayerActor extends SpriteActor implements IProjectileObserver, IGe
 
     @Override
     public void act(float delta) {
+        super.act(delta);
         this.movementBehavior.move(delta);
         this.collisionBehavior.checkCollisions(delta);
 
@@ -85,28 +88,23 @@ public class PlayerActor extends SpriteActor implements IProjectileObserver, IGe
         if (Gdx.input.isKeyPressed(controlScheme.FIRE) || Gdx.input.isButtonPressed(controlScheme.FIRE)) {
             fireProjectile(delta);
         }
+        if (Gdx.input.isKeyPressed(controlScheme.POWERUP) || Gdx.input.isButtonPressed(controlScheme.POWERUP)) {
+            fireProjectileBomb(delta);
+        }
     }
 
     private void fireProjectile(float delta) {
         attackBehavior.engage(delta);
         projectilesFired++;
-        /*
-        if (lastDelta > 1f / ROUNDS_PER_SECOND) { // check if not over rate of fire (delta is the time since last frame)
-            ProjectileActor projectile = new ProjectileActor(stage, SpriteRepository.getProjectile(), this, this.getRotation());
-            projectile.setScale(0.1f * SettingsRepository.getActorScale());
-            stage.addProjectile(projectile);
+    }
 
-            projectilesFired++;
-            lastDelta = 0; // reset lastDelta
-
-
-            Sound shootSound = Gdx.audio.newSound(Gdx.files.internal("Desktop/Assets/laser.mp3"));
-            shootSound.play(0.06f);
-
-        } else {
-            lastDelta += delta; // add time since last frame to lastDelta)
+    private void fireProjectileBomb(float delta) {
+        if (this.attackBehavior instanceof FireInDirection) {
+            FireInDirection original = (FireInDirection) this.attackBehavior;
+            this.attackBehavior = new MultipleFireInDirection(this, 60, 50);
+            this.attackBehavior.engage(delta);
+            this.attackBehavior = original;
         }
-        */
     }
 
     private void faceMouse() {

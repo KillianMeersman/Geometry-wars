@@ -1,6 +1,5 @@
 package howest.groep14.game.actor.movement;
 
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import howest.groep14.game.CustomUtils;
 import howest.groep14.game.actor.SpriteActor;
 

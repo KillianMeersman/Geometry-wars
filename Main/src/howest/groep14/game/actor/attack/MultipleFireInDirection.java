@@ -1,6 +1,5 @@
 package howest.groep14.game.actor.attack;
 
-import howest.groep14.game.CustomUtils;
 import howest.groep14.game.actor.IProjectileObserver;
 import howest.groep14.game.actor.SpriteActor;
 import howest.groep14.game.actor.movement.MovementBehavior;
@@ -9,9 +8,10 @@ public class MultipleFireInDirection extends FireInDirection {
     private int streams = 1;
     private int angleIncrease;
 
-    public MultipleFireInDirection(IProjectileObserver owner, int streams) {
+    public MultipleFireInDirection(IProjectileObserver owner, int streams, int roundsPerSecond) {
         super(owner);
         this.streams = streams;
+        this.ROUNDS_PER_SECOND = roundsPerSecond;
         calcAngleIncrease();
     }
 
@@ -29,8 +29,6 @@ public class MultipleFireInDirection extends FireInDirection {
             for (int i = 0; i < streams; i++) {
                 fireProjectile(MovementBehavior.getUpdatedRotation(owner.getRotation(), angleIncrease * i), false);    // Fire backwards
             }
-
-
             lastDelta = 0;
         } else {
             lastDelta += delta;

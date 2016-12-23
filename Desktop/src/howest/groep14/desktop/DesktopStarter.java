@@ -1,6 +1,5 @@
 package howest.groep14.desktop;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import howest.groep14.game.GeometryWars;

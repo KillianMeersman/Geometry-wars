@@ -1,7 +1,5 @@
 package howest.groep14.game.actor.collision;
 
-import howest.groep14.game.CustomUtils;
-import howest.groep14.game.actor.EnemyActor;
 import howest.groep14.game.actor.SpriteActor;
 
 public class DamageEnemiesOnContact extends DamageOnContact {

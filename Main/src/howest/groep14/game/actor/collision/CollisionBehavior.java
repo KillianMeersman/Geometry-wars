@@ -2,13 +2,11 @@ package howest.groep14.game.actor.collision;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import howest.groep14.game.CustomUtils;
 import howest.groep14.game.SettingsRepository;
 import howest.groep14.game.actor.EnemyActor;
 import howest.groep14.game.actor.GeomeActor;
 import howest.groep14.game.actor.PlayerActor;
 import howest.groep14.game.actor.SpriteActor;
-import howest.groep14.game.actor.movement.MovementBehavior;
 
 import java.util.ArrayList;
 import java.util.List;

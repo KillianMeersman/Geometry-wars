@@ -1,4 +1,4 @@
-package howest.groep14.game.powers.up;
+package howest.groep14.game.powers;
 
 import howest.groep14.game.actor.SpriteActor;
 import howest.groep14.game.actor.health.StandardHealth;

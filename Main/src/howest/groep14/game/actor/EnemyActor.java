@@ -29,6 +29,9 @@ public class EnemyActor extends SpriteActor {
     @Override
     public void act(float delta) {
         super.act(delta);
+        this.movementBehavior.move(delta);
+        this.attackBehavior.engage(delta);
+        this.collisionBehavior.checkCollisions(delta);
         if (removed) {
             popOutAnimation();
         }

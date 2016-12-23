@@ -1,15 +1,11 @@
 package howest.groep14.game;
 
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import howest.groep14.game.actor.GeomeActor;
 import howest.groep14.game.actor.PlayerActor;
-import howest.groep14.game.actor.collision.NoCollisions;
 import howest.groep14.game.actor.ProjectileActor;
 import howest.groep14.game.actor.EnemyActor;
-import howest.groep14.game.actor.health.Invulnerable;
-import howest.groep14.game.actor.health.StandardHealth;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,12 +22,6 @@ public class GameStage extends Stage {
         spawnManager = new SpawnManager(this);
         addActor(spawnManager);
     }
-
-    @Override
-    public void act() {
-        super.act();
-    }
-
 
 
     private void test_shield() {

@@ -9,10 +9,9 @@ import howest.groep14.game.actor.movement.Bounce;
 import howest.groep14.game.actor.movement.Kamikaze;
 import howest.groep14.game.actor.movement.MovementBehavior;
 import howest.groep14.game.actor.movement.Snake;
-import howest.groep14.game.powers.ArmoredEnemies;
-import howest.groep14.game.powers.ChangeTimeSpeed;
-import howest.groep14.game.powers.up.DualFire;
+import howest.groep14.game.powers.DualFire;
 
+// TODO add proper powerup spawning
 class SpawnManager extends Actor {
     private final int SPAWN_PLAYER_MARGIN = 100;
     private final float GEOME_LIFETIME = 5f;
@@ -105,7 +104,7 @@ class SpawnManager extends Actor {
         geome.setPosition(x, y);
         stage.addGeome(geome);
         */
-            GeomeActor geome = new PowerGeomeActor(stage, SpriteRepository.getGeome(), 1, 15, new ArmoredEnemies(5f));
+            GeomeActor geome = new PowerGeomeActor(stage, SpriteRepository.getGeome(), 1, 15, new DualFire(5f));
             geome.setScale(0.2f);
             geome.setPosition(x, y);
             stage.addGeome(geome);
@@ -126,7 +125,7 @@ class SpawnManager extends Actor {
             case CIRCLE:
                 circle_amount--;
                 destroyed_circles++;
-                if (destroyed_circles % (6 * (circle_upgrades + 1)) == 0) {
+                if (destroyed_circles % (25 * (circle_upgrades + 1)) == 0) {
                     CIRCLE_AMOUNT = Math.min(CIRCLE_AMOUNT + 1, MAX_CIRCLE_AMOUNT);
                     circle_upgrades++;
                 }

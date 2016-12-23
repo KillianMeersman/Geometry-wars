@@ -3,7 +3,6 @@ package howest.groep14.game.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -14,13 +13,11 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import howest.groep14.game.*;
 import howest.groep14.game.actor.DroneActor;
-import howest.groep14.game.actor.EnemyActor;
 import howest.groep14.game.actor.PlayerActor;
 import howest.groep14.game.actor.collision.DamageEnemiesOnContact;
 import howest.groep14.game.actor.health.Shield;
 import howest.groep14.game.actor.health.StandardHealth;
 import howest.groep14.game.actor.movement.StayAroundActor;
-import howest.groep14.game.actor.movement.StayAroundActorCollectGeomes;
 
 public class GameScreen implements Screen {
     private GameStage stage;
@@ -173,7 +170,7 @@ public class GameScreen implements Screen {
         initDebugLabel();
     }
 
-    private void initDebugLabel() {;
+    private void initDebugLabel() {
         if (!playerHealthEnabled) {
             debugLabel.setText("SHIELD ENABLED (C to enable)");
             debugLabel.setVisible(true);
