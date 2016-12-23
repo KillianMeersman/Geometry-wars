@@ -70,9 +70,12 @@ public class GameMapper {
     public int getHighScoreByShipID(int shipID) {
         try {
             Class.forName("com.mysql.jdbc.Driver");
-            PreparedStatement prep = connection.prepareStatement("SELECT score FROM gameShips WHERE shipID = ? ORDER BY DESC LIMIT 1;");
+            PreparedStatement prep = connection.prepareStatement("SELECT * FROM gameShips WHERE shipID = ? ORDER BY score DESC LIMIT 1;");
             prep.setInt(1, shipID);
             ResultSet results = prep.executeQuery();
+            if (results.next()) {
+                return results.getInt("score");
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
