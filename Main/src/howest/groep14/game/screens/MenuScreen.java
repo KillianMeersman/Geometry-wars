@@ -39,18 +39,18 @@ public class MenuScreen implements Screen {
         this.buttonWidth = WIDTH / 2 - 120;
         stage = new Stage(viewport);
 
-        background = new Texture("Desktop/Assets/MainMenu/screen.png");
+        background = new Texture(Gdx.files.internal("screen.png"));
 
-        btnStartInactive = new Texture("Desktop/Assets/MainMenu/btn-start-game.png");
-        btnStartActive = new Texture("Desktop/Assets/MainMenu/btn-start-game-active.png");
+        btnStartInactive = new Texture(Gdx.files.internal("btn-start-game.png"));
+        btnStartActive = new Texture(Gdx.files.internal("btn-start-game-active.png"));
 
-        btnCampaignInactive = new Texture("Desktop/Assets/MainMenu/btn-campaign.png");
+        btnCampaignInactive = new Texture(Gdx.files.internal("btn-campaign.png"));
 
-        btnSettingsInactive = new Texture("Desktop/Assets/MainMenu/btn-settings.png");
-        btnSettingsActive = new Texture("Desktop/Assets/MainMenu/btn-settings-active.png");
+        btnSettingsInactive = new Texture(Gdx.files.internal("btn-settings.png"));
+        btnSettingsActive = new Texture(Gdx.files.internal("btn-settings-active.png"));
 
-        btnQuitInactive = new Texture("Desktop/Assets/MainMenu/btn-quit.png");
-        btnQuitActive = new Texture("Desktop/Assets/MainMenu/btn-quit-active.png");
+        btnQuitInactive = new Texture(Gdx.files.internal("btn-quit.png"));
+        btnQuitActive = new Texture(Gdx.files.internal("btn-quit-active.png"));
 
 
     }

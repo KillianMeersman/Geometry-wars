@@ -104,7 +104,7 @@ class SpawnManager extends Actor {
         geome.setPosition(x, y);
         stage.addGeome(geome);
         */
-            GeomeActor geome = new PowerGeomeActor(stage, SpriteRepository.getGeome(), 1, 15, new DualFire(5f));
+            GeomeActor geome = new PowerGeomeActor(stage, SpriteRepository.getGeome(), 1, 15, new DualFire(10f));
             geome.setScale(0.2f);
             geome.setPosition(x, y);
             stage.addGeome(geome);

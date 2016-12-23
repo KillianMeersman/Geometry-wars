@@ -118,7 +118,7 @@ public class PlayerActor extends SpriteActor implements IProjectileObserver, IGe
     public void updateScore(int scoreUpdate) {
         score += scoreUpdate;
 
-        Sound blipSound = Gdx.audio.newSound(Gdx.files.internal("Desktop/Assets/blip.mp3"));
+        Sound blipSound = Gdx.audio.newSound(Gdx.files.internal("blip.mp3"));
         blipSound.play(0.5f);
 
     }
