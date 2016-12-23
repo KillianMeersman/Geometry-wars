@@ -11,10 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.utils.viewport.*;
 import howest.groep14.game.player.PlayerRepository;
-import howest.groep14.game.screens.GameScreen;
-import howest.groep14.game.screens.LoginScreen;
-import howest.groep14.game.screens.MenuScreen;
-import howest.groep14.game.screens.SettingScreen;
+import howest.groep14.game.screens.*;
 
 public class GeometryWars extends Game {
     private Skin skin;
@@ -22,6 +19,7 @@ public class GeometryWars extends Game {
     private Viewport viewport;
     private GameScreen gameScreen;
     private MenuScreen menuScreen;
+    private MenuScreenOld menuScreenOld;
     private LoginScreen loginScreen;
     private SettingScreen settingScreen;
     private PlayerRepository playerRepository;
@@ -45,6 +43,8 @@ public class GeometryWars extends Game {
     public MenuScreen getMenuScreen() {
         return menuScreen;
     }
+
+    public MenuScreenOld getMenuScreenOld() {return menuScreenOld;}
 
     public SettingScreen getSettingScreen() {
         return settingScreen;
@@ -87,7 +87,8 @@ public class GeometryWars extends Game {
         menuScreen = new MenuScreen(viewport, skin);
         settingScreen = new SettingScreen(viewport, skin);
         loginScreen = new LoginScreen(viewport,skin);
-        setScreen(loginScreen);
+        menuScreenOld = new MenuScreenOld(viewport,skin);
+        setScreen(menuScreenOld);
     }
 
     private Skin generateSkin() {
