@@ -17,13 +17,13 @@ import howest.groep14.game.GeometryWars;
 import howest.groep14.game.player.PlayerRepository;
 import java.sql.SQLException;
 
-public class RegisterScreen implements Screen {
+public class RegisterScreenOld implements Screen {
     private Stage stage;
     private Viewport viewport;
     private Skin skin;
     private Label notificationLabel;
 
-    public RegisterScreen(Viewport viewport, Skin skin) {
+    public RegisterScreenOld(Viewport viewport, Skin skin) {
         this.viewport = viewport;
         this.skin = skin;
         stage = new Stage(viewport);

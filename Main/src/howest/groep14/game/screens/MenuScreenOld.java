@@ -90,7 +90,7 @@ public class MenuScreenOld implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
                 GeometryWars main = GeometryWars.getInstance();
-                main.setScreen(main.getRegisterScreen());
+                main.setScreen(main.getRegisterScreenOld());
             }
         });
         stage.addActor(registerButton);
@@ -133,7 +133,7 @@ public class MenuScreenOld implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 GeometryWars main = GeometryWars.getInstance();
-                main.setScreen(main.getSettingScreen());
+                main.setScreen(main.getSettingScreenOld());
             }
         });
 

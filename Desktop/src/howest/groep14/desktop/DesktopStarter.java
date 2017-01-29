@@ -11,8 +11,8 @@ public class DesktopStarter {
         cfg.title = "Geometry Wars";
         cfg.fullscreen = false;
 
-        cfg.width = 1620;
-        cfg.height = 800;
+        cfg.width = 1280;
+        cfg.height = 1080;
 
         new LwjglApplication(GeometryWars.getInstance(), cfg);
     }

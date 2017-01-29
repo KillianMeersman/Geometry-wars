@@ -15,9 +15,9 @@ public class MenuScreen implements Screen {
     private int WIDTH;
     private int HEIGHT;
     private int ELEMENT_WIDTH;
-    private int ELEMENT_HEIGTH = 125;
+    private int ELEMENT_HEIGTH = 100;
     float buttonWidth;
-    final float margin = 5;
+    final float margin = 10;
 
     private Stage stage;
     private Viewport viewport;
@@ -36,8 +36,8 @@ public class MenuScreen implements Screen {
     public MenuScreen(Viewport viewport, Skin skin) {
         this.viewport = viewport;
         this.skin = skin;
-        this.WIDTH = viewport.getScreenWidth();
-        this.HEIGHT = viewport.getScreenHeight();
+        this.WIDTH = Gdx.graphics.getWidth();
+        this.HEIGHT = Gdx.graphics.getHeight();
         this.buttonWidth = WIDTH / 2 - 120;
         stage = new Stage(viewport);
 
@@ -58,22 +58,25 @@ public class MenuScreen implements Screen {
     }
     @Override
     public void show() {
-
+        Gdx.input.setInputProcessor(stage);
     }
 
     @Override
     public void render(float delta) {
+
         float color = 230 / 255f;
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         Gdx.gl.glClearColor(color, color, color, 1);
         stage.getBatch().begin();
         stage.getBatch().draw(background, 0, 0, WIDTH, HEIGHT);
 
+
         if( WIDTH/2 - buttonWidth/2 < Gdx.input.getX() && Gdx.input.getX() < WIDTH/2 - buttonWidth/2 + buttonWidth
                 && HEIGHT-350 < HEIGHT - Gdx.input.getY() && HEIGHT - Gdx.input.getY()< HEIGHT-350 + ELEMENT_HEIGTH){
             stage.getBatch().draw(btnStartActive, WIDTH/2 - buttonWidth/2,HEIGHT-350,buttonWidth,ELEMENT_HEIGTH);
             if(Gdx.input.isTouched()){
                 GeometryWars main = GeometryWars.getInstance();
+                main.newGame(loggedInPlayer);
                 main.setScreen(main.getGameScreen());
             }
         } else {

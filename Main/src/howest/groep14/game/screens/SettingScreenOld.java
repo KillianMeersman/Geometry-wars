@@ -9,10 +9,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
-public class SettingScreen implements Screen {
+public class SettingScreenOld implements Screen {
     private final Stage stage;
 
-    public SettingScreen(Viewport viewport, Skin skin) {
+    public SettingScreenOld(Viewport viewport, Skin skin) {
         float screenWidth = Gdx.graphics.getWidth();
         float screenHeight = Gdx.graphics.getHeight();
         stage = new Stage(viewport);
