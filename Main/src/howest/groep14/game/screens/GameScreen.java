@@ -182,7 +182,7 @@ public class GameScreen implements Screen {
             GameMapper mapper = GameMapper.getInstance();
             for (PlayerActor playerActor : stage.getPlayers()) {
                 try {
-                    if (PlayerRepository.getInstance().getActivePlayer() != null) {
+                    if (PlayerRepository.getInstance().getActivePlayer() != null && playerActor.getPlayer() != null) {
                         int id = mapper.addGame(1, 1, "empty");
                         mapper.addHighscore(id, playerActor.getPlayer().getShips().get(0).getID(), playerActor.getScore());
                     }
