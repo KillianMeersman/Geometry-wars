@@ -121,14 +121,27 @@ public class LoginScreen implements Screen {
             }
         });
         stage.addActor(loginBtn);
-        stage.getBatch().draw(registerButton,WIDTH/2-25-(WIDTH/4-50),HEIGHT/2-WIDTH/8+70, WIDTH/4-50,WIDTH/20);
 
+        stage.getBatch().draw(registerButton,WIDTH/2-25-(WIDTH/4-50),HEIGHT/2-WIDTH/8+70, WIDTH/4-50,WIDTH/20);
+        TextButton registerBtn = CustomUtils.generateTextButton(skin, "", WIDTH/2-25-(WIDTH/4-50),HEIGHT/2-WIDTH/8+70, BUTTON_WIDTH, BUTTON_HEIGHT);
+        registerBtn.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                doRegister();
+            }
+        });
+        stage.addActor(registerBtn);
 
 
         stage.getBatch().end();
         stage.draw();
        
 
+    }
+
+    private void doRegister() {
+        GeometryWars main = GeometryWars.getInstance();
+        main.setScreen(main.getRegisterScreenOld());
     }
 
     @Override

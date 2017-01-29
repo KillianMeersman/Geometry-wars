@@ -107,7 +107,7 @@ public class RegisterScreenOld implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
                 GeometryWars main = GeometryWars.getInstance();
-                main.setScreen(main.getMenuScreenOld());
+                main.setScreen(main.getLoginScreen());
             }
         });
     }

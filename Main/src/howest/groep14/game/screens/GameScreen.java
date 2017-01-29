@@ -111,7 +111,7 @@ public class GameScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 GeometryWars main = GeometryWars.getInstance();
-                main.setScreen(main.getMenuScreenOld());
+                main.setScreen(main.getMenuScreen());
             }
         });
         stage.addActor(toMenuButton);
