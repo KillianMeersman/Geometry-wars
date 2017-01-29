@@ -3,7 +3,7 @@ package howest.groep14.game.actor;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import howest.groep14.game.CustomUtils;
 import howest.groep14.game.GameStage;
-import howest.groep14.game.actor.collision.DamageEnemiesOnContact;
+import howest.groep14.game.actor.collision.DamageEnemyActor;
 import howest.groep14.game.actor.movement.StraightLine;
 
 public class ProjectileActor extends SpriteActor {
@@ -18,7 +18,7 @@ public class ProjectileActor extends SpriteActor {
         this.setPosition(owner.getOwner().getPosition());
         int bounces = CustomUtils.booleanRandom(10) ? 1 : 0;
         this.movementBehavior = new StraightLine(this, this.getRotation(), DEFAULT_SPEED, bounces);
-        this.collisionBehavior = new DamageEnemiesOnContact(this, 1, 1);
+        this.collisionBehavior = new DamageEnemyActor(this, 1, 1);
     }
 
     public ProjectileActor(GameStage stage, Sprite sprite, IProjectileObserver owner, float rotation) {
@@ -28,7 +28,7 @@ public class ProjectileActor extends SpriteActor {
         this.setPosition(owner.getOwner().getPosition());
         int bounces = CustomUtils.booleanRandom(10) ? 1 : 0;
         this.movementBehavior = new StraightLine(this, rotation, DEFAULT_SPEED, bounces);
-        this.collisionBehavior = new DamageEnemiesOnContact(this, 1, 1);
+        this.collisionBehavior = new DamageEnemyActor(this, 1, 1);
     }
 
     public ProjectileActor(ProjectileActor copy) {

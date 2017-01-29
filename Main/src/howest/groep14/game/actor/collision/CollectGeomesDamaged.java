@@ -20,7 +20,7 @@ public class CollectGeomesDamaged extends DamageOnContact {
     }
 
     @Override
-    protected void damageGeome(GeomeActor geome) {
+    protected void contactGeome(GeomeActor geome) {
         geome.damage(999);
         geomeCollector.updateScore(geome.getScoreAmount());
     }

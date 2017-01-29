@@ -3,7 +3,7 @@ package howest.groep14.game.actor.collision;
 import howest.groep14.game.actor.IGeomeCollector;
 import howest.groep14.game.actor.SpriteActor;
 
-public class CollectGeomes extends DamageEnemiesOnContact {
+public class CollectGeomes extends DamageEnemyActor {
     private IGeomeCollector IGeomeCollector;
 
     public CollectGeomes(SpriteActor owner, IGeomeCollector IGeomeCollector) {

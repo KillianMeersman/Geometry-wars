@@ -21,7 +21,7 @@ public class SpriteActor extends Actor { // An actor that holds a sprite, and up
     protected MovementBehavior movementBehavior;
     protected AttackBehavior attackBehavior;
     protected HealthBehavior healthBehavior;
-    protected CollisionBehavior collisionBehavior;
+    protected  CollisionBehavior collisionBehavior;
 
     protected boolean removed = false;
 
@@ -202,16 +202,16 @@ public class SpriteActor extends Actor { // An actor that holds a sprite, and up
         return stage;
     }
 
-    public void damage(int damage) {
-        healthBehavior.damage(damage);
-    }
-
     public void outOfBounds() {
 
     }
 
-    public void collide(SpriteActor victim) {
-        this.collisionBehavior.collide(victim);
+    public void collide(SpriteActor collider) {
+        this.collisionBehavior.collide(collider);
+    }
+
+    public void damage(int amount) {
+        this.healthBehavior.damage(amount);
     }
 
 }

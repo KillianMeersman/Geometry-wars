@@ -45,7 +45,7 @@ public class FireInDirection extends AttackBehavior {
 
     protected void fireProjectile(float direction, boolean playSound) {
         ProjectileActor projectile = new ProjectileActor(owner.getStage(), SpriteRepository.getProjectile(), observer, direction);
-        projectile.setScale(0.1f * SettingsRepository.getActorScale());
+        projectile.setScale(0.1f * SettingsRepository.getInstance().getActorScale());
         owner.getStage().addProjectile(projectile);
         if (playSound) {
             shootSound.play(0.06f);

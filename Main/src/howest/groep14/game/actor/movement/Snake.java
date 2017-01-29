@@ -5,7 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import howest.groep14.game.CustomUtils;
 import howest.groep14.game.actor.EnemyActor;
 import howest.groep14.game.actor.SpriteActor;
-import howest.groep14.game.actor.collision.DamagePlayersOnContact;
+import howest.groep14.game.actor.collision.DamagePlayerActor;
 
 public class Snake extends MovementBehavior implements ISnake {
     private int length;
@@ -27,7 +27,7 @@ public class Snake extends MovementBehavior implements ISnake {
             segment.setPosition(owner.getX() - (25 * i), owner.getY() - (25 * i));
             SnakeSegment mov = new SnakeSegment(segment, lastSegment);
             segment.setMovementBehavior(mov);
-            DamagePlayersOnContact coll = new DamagePlayersOnContact(owner, 1, 0);
+            DamagePlayerActor coll = new DamagePlayerActor(owner, 1, 0);
             segment.setCollisionBehavior(coll);
             segments[i] = segment;
 

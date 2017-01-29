@@ -6,6 +6,7 @@ import howest.groep14.game.actor.SpriteActor;
 import howest.groep14.game.actor.movement.MovementBehavior;
 
 public class ChangeTimeSpeed extends PowerBehavior {
+
     protected final float factor;
 
     public ChangeTimeSpeed(float duration, float factor) {
@@ -26,9 +27,11 @@ public class ChangeTimeSpeed extends PowerBehavior {
     @Override
     public void endPower(SpriteActor target) {
         updateSpeeds(1f / factor, target);
+        target.getStage().getSpawnManager().timePowerDone();
     }
 
     private void updateSpeeds(float factor, SpriteActor target) {
+        target.getStage().getSpawnManager().updateEnemySpeedMult(factor);
         for (EnemyActor enemy : target.getStage().getEnemies()) {
             MovementBehavior mov = enemy.getMovementBehavior();
             mov.setSpeed(mov.getSpeed() * factor);
@@ -37,6 +40,7 @@ public class ChangeTimeSpeed extends PowerBehavior {
             MovementBehavior mov = projectile.getMovementBehavior();
             mov.setSpeed(mov.getSpeed() * factor);
         }
+
     }
 
     @Override

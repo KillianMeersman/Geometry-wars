@@ -14,9 +14,11 @@ import howest.groep14.game.actor.movement.MovementBehavior;
 import howest.groep14.game.actor.movement.Snake;
 import howest.groep14.game.powers.*;
 
-class SpawnManager extends Actor implements IDeathObserver {
+public class SpawnManager extends Actor implements IDeathObserver {
     private final int SPAWN_PLAYER_MARGIN = 100;
     private final float GEOME_LIFETIME = 5f;
+
+    private boolean hasTimePower = false;
 
     // Change this to change difficulty
     private int CUBE_AMOUNT = 15;
@@ -29,15 +31,23 @@ class SpawnManager extends Actor implements IDeathObserver {
     private float CIRCLE_SPEED = 6f;
 
     private int destoyed_cubes, cube_upgrades, circle_upgrades, destroyed_circles;
-    private boolean armored_enemies, changeTime, dualFire, extraLife, shield;
-
 
     private final GameStage stage;
 
     private int cube_amount = 0, circle_amount = 0, snake_amount = 0, geome_amount = 0;
 
-    public SpawnManager(GameStage stage) {
+    SpawnManager(GameStage stage) {
         this.stage = stage;
+    }
+
+    public void updateEnemySpeedAdd(float amount) {
+        CUBE_SPEED += amount;
+        CIRCLE_SPEED += amount;
+    }
+
+    public void updateEnemySpeedMult(float amount) {
+        CUBE_SPEED *= amount;
+        CIRCLE_SPEED *= amount;
     }
 
     @Override
@@ -60,7 +70,7 @@ class SpawnManager extends Actor implements IDeathObserver {
         EnemyActor enemyActor = new EnemyActor(stage, SpriteRepository.getCube(), EnemyActor.ENEMY_TYPE.CUBE);
         MovementBehavior kamikaze = new Kamikaze(enemyActor, stage.getPlayer(), CUBE_SPEED, false);
         enemyActor.setMovementBehavior(kamikaze);
-        enemyActor.setScale(0.2f * SettingsRepository.getActorScale());
+        enemyActor.setScale(0.2f * SettingsRepository.getInstance().getActorScale());
         Vector2 position = getEdgeSpawnCoordinates(-80);
 
         enemyActor.setPosition(position);
@@ -73,7 +83,7 @@ class SpawnManager extends Actor implements IDeathObserver {
         Vector2 position = getRandomSpawnCoordinates(SPAWN_PLAYER_MARGIN);
         enemyActor.setPosition(position);
         enemyActor.setVisible(true);
-        enemyActor.setScale(0.2f * SettingsRepository.getActorScale());
+        enemyActor.setScale(0.2f * SettingsRepository.getInstance().getActorScale());
 
         MovementBehavior mov = new Bounce(enemyActor, CIRCLE_SPEED, CustomUtils.intRandom(360));
         enemyActor.setMovementBehavior(mov);
@@ -104,22 +114,22 @@ class SpawnManager extends Actor implements IDeathObserver {
         PowerBehavior pow;
         switch (CustomUtils.intRandom(6)) {
             case 1: pow = new ArmoredEnemies(10f);
-                armored_enemies = true;
                 break;
-            case 2: pow = new ChangeTimeSpeed(5f, 1.2f);
-                changeTime = true;
-                break;
-            case 3: pow = new Quadfire(5f);
-                dualFire = true;
-                break;
+            case 2:
+                if (!hasTimePower) {
+                    pow = new ChangeTimeSpeed(5f, 1.2f);
+                    hasTimePower = true;
+                    break;
+                }
+            case 3:
+                if (!hasTimePower) {
+                    pow = new ChangeTimeSpeed(10f, 0.5f);
+                    hasTimePower = true;
+                    break;
+                }
             case 4: pow = new ExtraLife();
-                extraLife = true;
                 break;
-            case 5: //pow = new ShieldTarget(10f);
-                //shield = true;    // broken
-                //break;
-            default: pow = new ChangeTimeSpeed(10f, 0.5f);
-                changeTime = true;
+            default: pow = new Quadfire(5f);
         }
             GeomeActor geome = new PowerGeomeActor(stage, SpriteRepository.getGeome(), 1, 15, pow, PowerGeomeActor.POWER.DUAL_FIRE);
             geome.setHealthBehavior(new DeathObserver((StandardHealthHide)geome.getHealthBehavior(), this));
@@ -159,35 +169,7 @@ class SpawnManager extends Actor implements IDeathObserver {
     }
 
     public void removeGeome(GeomeActor actor) {
-        if (actor instanceof PowerGeomeActor) {
-            switch (((PowerGeomeActor) actor).getPowerFlag()) {
-                case ARMORED_ENEMIES:
-                    if (armored_enemies) {
-                        armored_enemies = false;
-                    }
-                    break;
-                case CHANGE_TIME:
-                    if (changeTime) {
-                        changeTime = false;
-                    }
-                    break;
-                case DUAL_FIRE:
-                    if (dualFire) {
-                        dualFire = false;
-                    }
-                    break;
-                case EXTRA_LIFE:
-                    if (extraLife) {
-                        extraLife = false;
-                    }
-                    break;
-                case SHIELD:
-                    if (shield) {
-                        shield = false;
-                    }
-                    break;
-            }
-        }
+
     }
 
     private Vector2 getEdgeSpawnCoordinates(float edge_margin) {
@@ -239,5 +221,9 @@ class SpawnManager extends Actor implements IDeathObserver {
     public void actorDeath(SpriteActor actor) {
         GeometryWars.getInstance().getGameScreen().getCenterLabel().setVisible(true);
         GeometryWars.getInstance().getGameScreen().setCenterTopLabel(((PowerGeomeActor)actor).getPowerBehavior().toString(), 3);
+    }
+
+    public void timePowerDone() {
+        hasTimePower = false;
     }
 }

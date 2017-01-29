@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import howest.groep14.game.CustomUtils;
 import howest.groep14.game.GeometryWars;
+import howest.groep14.game.SettingsRepository;
 import howest.groep14.game.player.GameMapper;
 import howest.groep14.game.player.Player;
 import howest.groep14.game.player.PlayerRepository;
@@ -102,7 +103,7 @@ public class MenuScreenOld implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
-                if (loggedInPlayer != null) {
+                if (loggedInPlayer != null || !SettingsRepository.getInstance().isLoginRequired()) {
                     GeometryWars main = GeometryWars.getInstance();
                     main.newGame(loggedInPlayer);
                     main.setScreen(main.getGameScreen());

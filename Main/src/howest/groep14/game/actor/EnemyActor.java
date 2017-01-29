@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import howest.groep14.game.GameStage;
 import howest.groep14.game.actor.attack.AttackBehavior;
 import howest.groep14.game.actor.collision.CollisionBehavior;
-import howest.groep14.game.actor.collision.DamagePlayersOnContact;
+import howest.groep14.game.actor.collision.DamagePlayerActor;
 import howest.groep14.game.actor.health.HealthBehavior;
 import howest.groep14.game.actor.health.StandardHealth;
 import howest.groep14.game.actor.movement.MovementBehavior;
@@ -16,7 +16,7 @@ public class EnemyActor extends SpriteActor {
     public EnemyActor(GameStage stage, Sprite sprite, ENEMY_TYPE type) {
         super(stage, sprite);
         this.type = type;
-        this.collisionBehavior = new DamagePlayersOnContact(this, 1, 1);
+        this.collisionBehavior = new DamagePlayerActor(this, 1, 1);
         this.healthBehavior = new StandardHealth(this, 1);
     }
 

@@ -27,8 +27,11 @@ public class PlayerRepository {
         return instance;
     }
 
+    public void addGame() {
+
+    }
+
     private PlayerRepository(String sqlUser, String sqlPassword) throws Exception {
-        // "geometry-wars", "jEzPRAyKE6FsiiIjQXwq"
         this.playerMapper = new PlayerMapper(sqlUser, sqlPassword);
         this.players = new ArrayList<Player>();
     }

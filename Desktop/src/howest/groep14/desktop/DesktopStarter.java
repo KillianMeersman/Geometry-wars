@@ -14,6 +14,6 @@ public class DesktopStarter {
         cfg.width = 1620;
         cfg.height = 800;
 
-        new LwjglApplication(GeometryWars.getInstance(),cfg);
+        new LwjglApplication(GeometryWars.getInstance(), cfg);
     }
 }

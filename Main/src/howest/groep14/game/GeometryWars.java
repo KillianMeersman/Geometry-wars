@@ -34,9 +34,7 @@ public class GeometryWars extends Game {
         return instance;
     }
 
-    private GeometryWars() {
-
-    }
+    private GeometryWars() {}
 
     public GameScreen getGameScreen() {
         return gameScreen;
@@ -52,7 +50,7 @@ public class GeometryWars extends Game {
         return settingScreen;
     }
 
-    public LoginScreen getLoginScreen(){return loginScreen;};
+    public LoginScreen getLoginScreen(){return loginScreen;}
 
     public Viewport getViewPort() {
         return viewport;
@@ -85,11 +83,11 @@ public class GeometryWars extends Game {
         viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
         //gameScreen.setPlayerHealthEnabled(false);
-        //menuScreen = new MenuScreen(viewport, skin);
+        menuScreen = new MenuScreen(viewport, skin);
         settingScreen = new SettingScreen(viewport, skin);
-        loginScreen = new LoginScreen(viewport,skin);
+        loginScreen = new LoginScreen(viewport, skin);
         registerScreen = new RegisterScreen(viewport, skin);
-        menuScreenOld = new MenuScreenOld(viewport,skin);
+        menuScreenOld = new MenuScreenOld(viewport, skin);
         setScreen(menuScreenOld);
     }
 

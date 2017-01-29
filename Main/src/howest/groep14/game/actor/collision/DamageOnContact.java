@@ -6,6 +6,7 @@ import howest.groep14.game.actor.PlayerActor;
 import howest.groep14.game.actor.SpriteActor;
 
 public class DamageOnContact extends CollisionBehavior {
+    protected static byte typeCode = 1;
     protected int damage, selfDamage;
 
     public DamageOnContact(SpriteActor owner, int damage, int selfDamage) {
@@ -27,17 +28,23 @@ public class DamageOnContact extends CollisionBehavior {
     }
 
     @Override
-    protected void damageEnemy(EnemyActor enemy) {
+    protected void contactEnemy(EnemyActor enemy) {
+        enemy.collide(owner);
         enemy.damage(damage);
+        owner.damage(selfDamage);
     }
 
     @Override
-    protected void damagePlayer(PlayerActor player) {
+    protected void contactPlayer(PlayerActor player) {
+        player.collide(owner);
         player.damage(damage);
+        owner.damage(selfDamage);
     }
 
     @Override
-    protected void damageGeome(GeomeActor geome) {
+    protected void contactGeome(GeomeActor geome) {
+        geome.collide(owner);
         geome.damage(damage);
+        owner.damage(selfDamage);
     }
 }

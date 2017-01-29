@@ -20,8 +20,8 @@ public class DamageEnemiesCollectGeomes extends DamageOnContact {
     }
 
     @Override
-    protected void damageGeome(GeomeActor geome) {
-        super.damageGeome(geome);
+    protected void contactGeome(GeomeActor geome) {
+        super.contactGeome(geome);
         geomeCollector.updateScore(geome.getScoreAmount());
     }
 }

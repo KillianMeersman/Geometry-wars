@@ -14,12 +14,13 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import howest.groep14.game.*;
 import howest.groep14.game.actor.DroneActor;
 import howest.groep14.game.actor.PlayerActor;
-import howest.groep14.game.actor.collision.DamageEnemiesOnContact;
+import howest.groep14.game.actor.collision.DamageEnemyActor;
 import howest.groep14.game.actor.health.Shield;
 import howest.groep14.game.actor.health.StandardHealth;
 import howest.groep14.game.actor.movement.StayAroundActor;
 import howest.groep14.game.player.GameMapper;
 import howest.groep14.game.player.Player;
+import howest.groep14.game.player.PlayerRepository;
 
 import java.sql.SQLException;
 
@@ -42,15 +43,15 @@ public class GameScreen implements Screen {
         this.skin = skin;
 
         PlayerActor playerActor = new PlayerActor(stage, SpriteRepository.getArrow(), player);
-        playerActor.setScale(0.3f * SettingsRepository.getActorScale());
+        playerActor.setScale(0.3f * SettingsRepository.getInstance().getActorScale());
         playerActor.setPosition(CustomUtils.getCenterCoordinates(playerActor, stage));
         stage.addPlayer(playerActor);
         stage.setKeyboardFocus(playerActor);
 
         DroneActor droneActor = new DroneActor(stage, SpriteRepository.getGeome(), playerActor);
         droneActor.setMovementBehavior(new StayAroundActor(droneActor, playerActor, 25, 50, 3));
-        droneActor.setCollisionBehavior(new DamageEnemiesOnContact(droneActor, 1, 0));
-        droneActor.setScale(0.2f * SettingsRepository.getActorScale());
+        droneActor.setCollisionBehavior(new DamageEnemyActor(droneActor, 1, 0));
+        droneActor.setScale(0.2f * SettingsRepository.getInstance().getActorScale());
         playerActor.setDrone(droneActor);
 
         /*
@@ -180,8 +181,13 @@ public class GameScreen implements Screen {
         try {
             GameMapper mapper = GameMapper.getInstance();
             for (PlayerActor playerActor : stage.getPlayers()) {
-                int id = mapper.addGame(1, 1, "empty");
-                mapper.addHighscore(id, playerActor.getPlayer().getShips().get(0).getID(), playerActor.getScore());
+                try {
+                    if (PlayerRepository.getInstance().getActivePlayer() != null) {
+                        int id = mapper.addGame(1, 1, "empty");
+                        mapper.addHighscore(id, playerActor.getPlayer().getShips().get(0).getID(), playerActor.getScore());
+                    }
+                } catch (SQLException ex) {
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();

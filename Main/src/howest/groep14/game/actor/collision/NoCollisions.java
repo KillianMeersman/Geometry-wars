@@ -22,17 +22,17 @@ public class NoCollisions extends CollisionBehavior {
     }
 
     @Override
-    protected void damagePlayer(PlayerActor player) {
+    protected void contactPlayer(PlayerActor player) {
 
     }
 
     @Override
-    protected void damageEnemy(EnemyActor enemy) {
+    protected void contactEnemy(EnemyActor enemy) {
 
     }
 
     @Override
-    protected void damageGeome(GeomeActor geome) {
+    protected void contactGeome(GeomeActor geome) {
 
     }
 }
