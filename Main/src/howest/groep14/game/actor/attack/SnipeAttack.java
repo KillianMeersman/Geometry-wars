@@ -6,10 +6,10 @@ import howest.groep14.game.actor.ProjectileActor;
 import howest.groep14.game.actor.SpriteActor;
 
 public class SnipeAttack extends AttackBehavior implements IProjectileObserver {
-    private SpriteActor target;
-    private ProjectileActor projectileTemplate;
-    private final float TIME_BETWEEN_SHOTS;
-    private float totalDelta = 0;
+    protected SpriteActor target;
+    protected ProjectileActor projectileTemplate;
+    protected final float TIME_BETWEEN_SHOTS;
+    protected float totalDelta = 0;
 
     public SnipeAttack(SpriteActor owner, SpriteActor target, ProjectileActor projectileTemplate, float timeBetweenShots) {
         super(owner);

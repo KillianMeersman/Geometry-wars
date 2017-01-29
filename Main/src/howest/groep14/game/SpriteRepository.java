@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
 public class SpriteRepository {
-    private static Sprite cube, circle, arrow, geome, projectile, shield;
+    private static Sprite cube, circle, arrow, geome, projectile, blueProjectile, redProjectile, shield;
 
     public static void init() {
         Texture texture = new Texture(Gdx.files.internal("cube.png"));
@@ -23,6 +23,12 @@ public class SpriteRepository {
 
         texture = new Texture(Gdx.files.internal("projectile.png"));
         projectile = new Sprite(texture);
+
+        texture = new Texture(Gdx.files.internal("blueProjectile.png"));
+        blueProjectile = new Sprite(texture);
+
+        texture = new Texture(Gdx.files.internal("redProjectile.png"));
+        redProjectile = new Sprite(texture);
 
         texture = new Texture(Gdx.files.internal("shield.png"));
         shield = new Sprite(texture);
@@ -46,6 +52,14 @@ public class SpriteRepository {
 
     public static Sprite getProjectile() {
         return new Sprite(projectile);
+    }
+
+    public static Sprite getBlueProjectile() {
+        return new Sprite(blueProjectile);
+    }
+
+    public static Sprite getRedProjectile() {
+        return new Sprite(redProjectile);
     }
 
     public static Sprite getShield() {

@@ -10,6 +10,7 @@ public class Shield extends HealthBehavior{
 
     public Shield(SpriteActor owner, Sprite sprite) {
         super(owner);
+        /*
         this.shieldActor = new SpriteActor(owner.getStage(), sprite);
         HealthBehavior inv = new Invulnerable(shieldActor);
         shieldActor.setHealthBehavior(inv);
@@ -17,6 +18,7 @@ public class Shield extends HealthBehavior{
         shieldActor.setMovementBehavior(stay);
         shieldActor.setScale(owner.getScaleX(), owner.getScaleY());
         owner.getStage().addActor(shieldActor);
+        */
     }
 
     @Override
@@ -25,7 +27,7 @@ public class Shield extends HealthBehavior{
     }
 
     public void remove() {
-        shieldActor.remove();
+        //shieldActor.remove();
     }
 
     @Override

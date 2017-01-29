@@ -10,6 +10,10 @@ import howest.groep14.game.actor.attack.MultipleFireInDirection;
 import howest.groep14.game.actor.collision.CollectGeomesDamaged;
 import howest.groep14.game.actor.health.StandardHealth;
 import howest.groep14.game.player.Player;
+import howest.groep14.game.powers.PowerBehavior;
+
+import java.util.HashSet;
+import java.util.Set;
 
 public class PlayerActor extends SpriteActor implements IProjectileObserver, IGeomeCollector {
     // Constants
@@ -26,6 +30,11 @@ public class PlayerActor extends SpriteActor implements IProjectileObserver, IGe
     private DroneActor drone;
     private Player player;
     private boolean enabled = true;
+    private Set<PowerBehavior> powers = new HashSet<PowerBehavior>();
+
+    public Set<PowerBehavior> getPowers() {
+        return powers;
+    }
 
     public PlayerActor(GameStage stage, Sprite sprite, Player player) {
         super(stage, sprite);

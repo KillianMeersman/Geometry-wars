@@ -1,6 +1,7 @@
 package howest.groep14.game.powers;
 
 import howest.groep14.game.actor.IProjectileObserver;
+import howest.groep14.game.actor.PlayerActor;
 import howest.groep14.game.actor.SpriteActor;
 import howest.groep14.game.actor.attack.MultipleFireInDirection;
 import howest.groep14.game.actor.attack.FireInDirection;
@@ -14,9 +15,11 @@ public class Quadfire extends PowerBehavior {
 
     @Override
     public void startPower(SpriteActor target) {
-        if (target instanceof IProjectileObserver) {
+        if (target instanceof IProjectileObserver && !(target.getAttackBehavior() instanceof MultipleFireInDirection)) {
             this.originalBehavior = (FireInDirection) target.getAttackBehavior();
             target.setAttackBehavior(new MultipleFireInDirection(originalBehavior, 4));
+        } else {
+            this.originalBehavior = new FireInDirection((PlayerActor) target);
         }
     }
 
@@ -26,7 +29,7 @@ public class Quadfire extends PowerBehavior {
     }
 
     @Override
-    public void endPower(SpriteActor target) {
+    public void endPower(SpriteActor target ) {
         if (target instanceof IProjectileObserver) {
             target.setAttackBehavior(originalBehavior);
         }

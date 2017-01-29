@@ -3,6 +3,7 @@ package howest.groep14.game.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -14,6 +15,9 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import howest.groep14.game.*;
 import howest.groep14.game.actor.DroneActor;
 import howest.groep14.game.actor.PlayerActor;
+import howest.groep14.game.actor.ProjectileActor;
+import howest.groep14.game.actor.attack.SnipeAttack;
+import howest.groep14.game.actor.attack.SnipeEnemiesAttack;
 import howest.groep14.game.actor.collision.DamageEnemyActor;
 import howest.groep14.game.actor.health.Shield;
 import howest.groep14.game.actor.health.StandardHealth;
@@ -51,6 +55,7 @@ public class GameScreen implements Screen {
         DroneActor droneActor = new DroneActor(stage, SpriteRepository.getGeome(), playerActor);
         droneActor.setMovementBehavior(new StayAroundActor(droneActor, playerActor, 25, 50, 3));
         droneActor.setCollisionBehavior(new DamageEnemyActor(droneActor, 1, 0));
+        droneActor.setAttackBehavior(new SnipeEnemiesAttack(droneActor, playerActor, 0.1f));
         droneActor.setScale(0.2f * SettingsRepository.getInstance().getActorScale());
         playerActor.setDrone(droneActor);
 
@@ -71,7 +76,6 @@ public class GameScreen implements Screen {
             }
         }
         */
-
 
         createUI();
     }

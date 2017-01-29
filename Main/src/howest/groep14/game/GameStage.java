@@ -61,6 +61,10 @@ public class GameStage extends Stage {
         return players.get(CustomUtils.intRandom(players.size()));
     }
 
+    public EnemyActor getEnemy() {
+        return enemies.get(CustomUtils.intRandom(enemies.size()));
+    }
+
     public List<EnemyActor> getEnemies() {
         return enemies;
     }
