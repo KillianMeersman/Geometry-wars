@@ -2,9 +2,9 @@ package howest.groep14.game.actor.collision;
 
 import howest.groep14.game.actor.SpriteActor;
 
-public class DamageEnemiesOnContact extends DamageOnContact {
+public class DamageEnemyActor extends DamageOnContact {
 
-    public DamageEnemiesOnContact(SpriteActor owner, int damage, int selfDamage) {
+    public DamageEnemyActor(SpriteActor owner, int damage, int selfDamage) {
         super(owner, damage, selfDamage);
     }
 
@@ -15,6 +15,6 @@ public class DamageEnemiesOnContact extends DamageOnContact {
 
     @Override
     public CollisionBehavior copy(SpriteActor newOwner) {
-        return new DamageEnemiesOnContact(newOwner, damage, selfDamage);
+        return new DamageEnemyActor(newOwner, damage, selfDamage);
     }
 }
