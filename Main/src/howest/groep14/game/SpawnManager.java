@@ -143,7 +143,7 @@ public class SpawnManager extends Actor implements IDeathObserver {
             case CUBE:
                 cube_amount--;
                 destoyed_cubes++;
-                if (destoyed_cubes % (25 * (cube_upgrades + 1)) == 0) {
+                if (destoyed_cubes % (50 * (cube_upgrades + 1)) == 0) {
                     CUBE_AMOUNT++;
                     cube_upgrades++;
                     increaseRateOfFire(1);
@@ -219,7 +219,7 @@ public class SpawnManager extends Actor implements IDeathObserver {
 
     @Override
     public void actorDeath(SpriteActor actor) {
-        GeometryWars.getInstance().getGameScreen().getCenterLabel().setVisible(true);
+        GeometryWars.getInstance().getGameScreen().getCenterTopLabel().setVisible(true);
         GeometryWars.getInstance().getGameScreen().setCenterTopLabel(((PowerGeomeActor)actor).getPowerBehavior().toString(), 3);
     }
 

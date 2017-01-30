@@ -39,6 +39,7 @@ public class GameScreen implements Screen {
     private boolean gameOver = false;
     private float lastDelta = 0.2f;
     private float messageDelta, messageDuration;
+    private boolean secondPlayer = false;
 
     private boolean playerHealthEnabled = true;
 
@@ -46,17 +47,20 @@ public class GameScreen implements Screen {
         stage = new GameStage(viewport);
         this.skin = skin;
 
-        PlayerActor playerActor = new PlayerActor(stage, SpriteRepository.getArrow(), player);
+        Sprite projectileSprite = SpriteRepository.getBlueProjectile();
+        projectileSprite.setScale(0.15f * SettingsRepository.getInstance().getActorScale());
+        PlayerActor playerActor = new PlayerActor(stage, SpriteRepository.getArrow(), player, projectileSprite);
         playerActor.setScale(0.3f * SettingsRepository.getInstance().getActorScale());
         playerActor.setPosition(CustomUtils.getCenterCoordinates(playerActor, stage));
         stage.addPlayer(playerActor);
-        stage.setKeyboardFocus(playerActor);
 
-        DroneActor droneActor = new DroneActor(stage, SpriteRepository.getGeome(), playerActor);
+        DroneActor droneActor = new DroneActor(stage, SpriteRepository.getAttackDrone(), playerActor);
         droneActor.setMovementBehavior(new StayAroundActor(droneActor, playerActor, 25, 50, 3));
         droneActor.setCollisionBehavior(new DamageEnemyActor(droneActor, 1, 0));
-        droneActor.setAttackBehavior(new SnipeEnemiesAttack(droneActor, playerActor, 0.1f));
-        droneActor.setScale(0.2f * SettingsRepository.getInstance().getActorScale());
+        projectileSprite = new Sprite(projectileSprite);
+        projectileSprite.setScale(0.075f * SettingsRepository.getInstance().getActorScale());
+        droneActor.setAttackBehavior(new SnipeEnemiesAttack(droneActor, playerActor, 0.1f, projectileSprite));
+        droneActor.setScale(0.3f * SettingsRepository.getInstance().getActorScale());
         playerActor.setDrone(droneActor);
 
         /*
@@ -89,8 +93,9 @@ public class GameScreen implements Screen {
         score1Label.setPosition(10, screenHeight - 10, Align.topLeft);
         stage.addActor(score1Label);
 
-        score2Label = new Label("NO SECOND PLAYER", skin);
+        score2Label = new Label("PRESS INSERT TO JOIN", skin);
         score2Label.setPosition(screenWidth - 10, screenHeight - 10, Align.topRight);
+        score2Label.setAlignment(Align.right, Align.right);
         stage.addActor(score2Label);
 
         centerLabel = new Label("", skin);
@@ -202,7 +207,7 @@ public class GameScreen implements Screen {
         return playerHealthEnabled;
     }
 
-    public void setPlayerHealthEnabled(boolean playerHealthEnabled) {
+    private void setPlayerHealthEnabled(boolean playerHealthEnabled) {
         this.playerHealthEnabled = playerHealthEnabled;
         if (playerHealthEnabled) {
             for (PlayerActor player : stage.getPlayers()) {
@@ -221,10 +226,10 @@ public class GameScreen implements Screen {
 
     private void initDebugLabel() {
         if (!playerHealthEnabled) {
-            debugLabel.setText("SHIELD ENABLED (C to enable)");
+            debugLabel.setText("HEALTH ENABLED (C to disable)");
             debugLabel.setVisible(true);
         } else {
-            debugLabel.setText("SHIELD DISABLED (C to disable)");
+            debugLabel.setText("HEALTH DISABLED (C to enable)");
         }
     }
 
@@ -255,11 +260,18 @@ public class GameScreen implements Screen {
                 lastDelta += delta;
             }
         }
+        if (Gdx.input.isKeyPressed(Input.Keys.INSERT) && !secondPlayer) {
+            spawnSecondPlayer();
+        }
 
         if (!paused) {
             updateCenterTopLabel(delta);
             score1Label.setText(stage.getPlayers().get(0).getScore() + " POINTS\n" +
                     stage.getPlayers().get(0).getHealthBehavior().toString());
+            if (secondPlayer) {
+                score2Label.setText(stage.getPlayers().get(1).getScore() + " POINTS\n" +
+                    stage.getPlayers().get(0).getHealthBehavior().toString());
+            }
             //score1Label.setText(Float.toString(stage.getPlayers().get(0).getRotation()));
             /*
             String string = "";
@@ -271,6 +283,40 @@ public class GameScreen implements Screen {
             stage.act(delta);
         }
         stage.draw();
+    }
+
+    private void spawnSecondPlayer() {
+        Sprite projectileSprite = SpriteRepository.getRedProjectile();
+        projectileSprite.setScale(0.15f * SettingsRepository.getInstance().getActorScale());
+        PlayerActor playerActor = new PlayerActor(stage, SpriteRepository.getArrow(), null, projectileSprite);
+        playerActor.setScale(0.3f * SettingsRepository.getInstance().getActorScale());
+        playerActor.setPosition(CustomUtils.getCenterCoordinates(playerActor, stage));
+
+        PlayerActor.ControlScheme scheme = playerActor.getControlScheme();
+        scheme.FOLLOW_MOUSE = false;
+        scheme.ROTATE_RIGHT = Input.Keys.NUMPAD_9;
+        scheme.ROTATE_LEFT = Input.Keys.NUMPAD_7;
+        scheme.UP = Input.Keys.NUMPAD_8;
+        scheme.DOWN = Input.Keys.NUMPAD_5;
+        scheme.LEFT = Input.Keys.NUMPAD_4;
+        scheme.RIGHT = Input.Keys.NUMPAD_6;
+        scheme.FIRE = Input.Keys.ENTER;
+
+        if (!playerHealthEnabled) {
+            playerActor.setHealthBehavior(new Shield(playerActor, null));
+        }
+
+        stage.addPlayer(playerActor);
+
+        DroneActor droneActor = new DroneActor(stage, SpriteRepository.getAttackDrone(), playerActor);
+        droneActor.setMovementBehavior(new StayAroundActor(droneActor, playerActor, 25, 50, 3));
+        droneActor.setCollisionBehavior(new DamageEnemyActor(droneActor, 1, 0));
+        projectileSprite = new Sprite(projectileSprite);
+        projectileSprite.setScale(0.075f * SettingsRepository.getInstance().getActorScale());
+        droneActor.setAttackBehavior(new SnipeEnemiesAttack(droneActor, playerActor, 0.1f, projectileSprite));
+        droneActor.setScale(0.3f * SettingsRepository.getInstance().getActorScale());
+        playerActor.setDrone(droneActor);
+        secondPlayer = true;
     }
 
     @Override

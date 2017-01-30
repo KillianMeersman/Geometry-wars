@@ -27,6 +27,14 @@ public class PlayerRepository {
         return instance;
     }
 
+    public Player getGuest() {
+        Player guest = new Player(0, "Guest", null, null);
+        Ship ship = new Ship(0, 3, 1, 1, guest);
+        guest.getShips().add(ship);
+        activePlayer = guest;
+        return guest;
+    }
+
     public void addGame() {
 
     }

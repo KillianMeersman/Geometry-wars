@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import howest.groep14.game.CustomUtils;
 import howest.groep14.game.GeometryWars;
+import howest.groep14.game.SettingsRepository;
 import howest.groep14.game.player.GameMapper;
 import howest.groep14.game.player.Player;
 import howest.groep14.game.player.PlayerRepository;
@@ -28,7 +29,6 @@ public class LoginScreen implements Screen {
     private Stage stage;
     private Viewport viewport;
     private Skin skin;
-    private Player loggedInPlayer;
 
     Texture background;
     Texture loginScreen;
@@ -59,8 +59,12 @@ public class LoginScreen implements Screen {
     public void doLogin(){
         try {
             PlayerRepository repo = PlayerRepository.getInstance();
-            if (repo.loginPlayer(usernameField.getText(), passwordField.getText())) {
-                loggedInPlayer = PlayerRepository.getInstance().getPlayerByUsername(usernameField.getText());
+            if (!SettingsRepository.getInstance().isLoginRequired()) {
+                PlayerRepository.getInstance().getGuest();
+                GeometryWars main = GeometryWars.getInstance();
+                main.setScreen(main.getMenuScreen());
+            } else if (repo.loginPlayer(usernameField.getText(), passwordField.getText())) {
+                Player loggedInPlayer = PlayerRepository.getInstance().getPlayerByUsername(usernameField.getText());
                 loggedInPlayer.getShips().addAll(PlayerRepository.getInstance().getPlayerShipsByPlayerID(loggedInPlayer));
                 GeometryWars main = GeometryWars.getInstance();
                 main.setScreen(main.getMenuScreen());

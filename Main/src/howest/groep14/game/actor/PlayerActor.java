@@ -31,20 +31,22 @@ public class PlayerActor extends SpriteActor implements IProjectileObserver, IGe
     private Player player;
     private boolean enabled = true;
     private Set<PowerBehavior> powers = new HashSet<PowerBehavior>();
+    private Sprite projectileSprite;
 
     public Set<PowerBehavior> getPowers() {
         return powers;
     }
 
-    public PlayerActor(GameStage stage, Sprite sprite, Player player) {
+    public PlayerActor(GameStage stage, Sprite sprite, Player player, Sprite projectileSprite) {
         super(stage, sprite);
         setBounds(sprite.getX(), sprite.getY(), sprite.getWidth(), sprite.getHeight());
 
         this.collisionBehavior = new CollectGeomesDamaged(this, 0, 1, this);
         this.healthBehavior = new StandardHealth(this, 3);
-        this.attackBehavior = new FireInDirection(this);
+        this.attackBehavior = new FireInDirection(this, projectileSprite);
 
         this.player = player;
+        this.projectileSprite = projectileSprite;
 
         controlScheme = new ControlScheme();
         controlScheme.UP = Input.Keys.UP;
@@ -57,13 +59,14 @@ public class PlayerActor extends SpriteActor implements IProjectileObserver, IGe
         controlScheme.POWERUP = Input.Buttons.RIGHT;
     }
 
-    public PlayerActor(GameStage stage, Sprite sprite, Player player, ControlScheme controlScheme) {
-        this(stage, sprite, player);
+    public PlayerActor(GameStage stage, Sprite sprite, Player player, Sprite projectileSprite, ControlScheme controlScheme) {
+        this(stage, sprite, player, projectileSprite);
         this.controlScheme = controlScheme;
     }
 
     @Override
     public void act(float delta) {
+        stage.setKeyboardFocus(this);
         super.act(delta);
         this.movementBehavior.move(delta);
         this.collisionBehavior.checkCollisions(delta);
@@ -91,12 +94,12 @@ public class PlayerActor extends SpriteActor implements IProjectileObserver, IGe
             if (Gdx.input.isKeyPressed(controlScheme.ROTATE_LEFT)) {
                 updateRotation(ROT_SPEED);
             }
-            if (Gdx.input.isKeyPressed(controlScheme.ROTATE_LEFT)) {
+            if (Gdx.input.isKeyPressed(controlScheme.ROTATE_RIGHT)) {
                 updateRotation(-ROT_SPEED);
             }
         }
 
-        if (Gdx.input.isKeyPressed(controlScheme.FIRE) || Gdx.input.isButtonPressed(controlScheme.FIRE)) {
+        if ((Gdx.input.isButtonPressed(controlScheme.FIRE) && controlScheme.FOLLOW_MOUSE) || Gdx.input.isKeyPressed(controlScheme.FIRE)) {
             fireProjectile(delta);
         }
         if (Gdx.input.isKeyPressed(controlScheme.POWERUP) || Gdx.input.isButtonPressed(controlScheme.POWERUP)) {
@@ -112,7 +115,7 @@ public class PlayerActor extends SpriteActor implements IProjectileObserver, IGe
     private void fireProjectileBomb(float delta) {
         if (this.attackBehavior instanceof FireInDirection) {
             FireInDirection original = (FireInDirection) this.attackBehavior;
-            this.attackBehavior = new MultipleFireInDirection(this, 60, 50);
+            //this.attackBehavior = new MultipleFireInDirection(this, 60, 50);
             this.attackBehavior.engage(delta);
             this.attackBehavior = original;
         }

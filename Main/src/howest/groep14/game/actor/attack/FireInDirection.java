@@ -2,6 +2,7 @@ package howest.groep14.game.actor.attack;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import howest.groep14.game.SettingsRepository;
 import howest.groep14.game.SpriteRepository;
 import howest.groep14.game.actor.IProjectileObserver;
@@ -13,16 +14,22 @@ public class FireInDirection extends AttackBehavior {
     protected int ROUNDS_PER_SECOND = 15;
     protected float lastDelta = 0f;
     protected Sound shootSound = Gdx.audio.newSound(Gdx.files.internal("laser.mp3"));
+    protected Sprite projectileSprite;
 
-    public FireInDirection(IProjectileObserver owner) {
+    public FireInDirection(IProjectileObserver owner, Sprite projectileSprite) {
         super(owner.getOwner());
         this.observer = owner;
         this.lastDelta = 1f / ROUNDS_PER_SECOND;
+        this.projectileSprite = projectileSprite;
+    }
+
+    public Sprite getProjectileSprite() {
+        return projectileSprite;
     }
 
     @Override
     public AttackBehavior copy(SpriteActor newOwner) {
-        FireInDirection copy = new FireInDirection(observer);
+        FireInDirection copy = new FireInDirection(observer, projectileSprite);
         copy.target = target;
         copy.ROUNDS_PER_SECOND = ROUNDS_PER_SECOND;
         copy.lastDelta = lastDelta;
@@ -44,8 +51,7 @@ public class FireInDirection extends AttackBehavior {
     }
 
     protected void fireProjectile(float direction, boolean playSound) {
-        ProjectileActor projectile = new ProjectileActor(owner.getStage(), SpriteRepository.getRedProjectile(), observer, direction);
-        projectile.setScale(0.1f * SettingsRepository.getInstance().getActorScale());
+        ProjectileActor projectile = new ProjectileActor(owner.getStage(), new Sprite(projectileSprite), observer, direction);
         owner.getStage().addProjectile(projectile);
         if (playSound) {
             shootSound.play(0.06f);

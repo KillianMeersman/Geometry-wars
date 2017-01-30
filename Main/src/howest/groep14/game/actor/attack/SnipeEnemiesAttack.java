@@ -13,12 +13,14 @@ public class SnipeEnemiesAttack extends AttackBehavior implements IProjectileObs
     protected final float TIME_BETWEEN_SHOTS;
     protected float totalDelta = 0;
     protected int shots = 0;
+    private Sprite projectileSprite;
 
 
-    public SnipeEnemiesAttack(SpriteActor owner, PlayerActor player, float timeBetweenShots) {
+    public SnipeEnemiesAttack(SpriteActor owner, PlayerActor player, float timeBetweenShots, Sprite projectileSprite) {
         super(owner);
         this.player = player;
         this.TIME_BETWEEN_SHOTS = timeBetweenShots;
+        this.projectileSprite = projectileSprite;
 
     }
 
@@ -41,11 +43,11 @@ public class SnipeEnemiesAttack extends AttackBehavior implements IProjectileObs
             target = owner.getStage().getEnemy();
             shots = 0;
         }
-        Sprite projectile = SpriteRepository.getBlueProjectile();
-        projectile.setScale(0.04f);
-        ProjectileActor pro = new ProjectileActor(owner.getStage(), projectile, this);
+        float angle = CustomUtils.getAngleToFace(owner, target);
+        ProjectileActor pro = new ProjectileActor(owner.getStage(), new Sprite(projectileSprite), this);
         pro.setPosition(owner.getPosition());
-        pro.setRotation(CustomUtils.getAngleToFace(owner, target));
+        pro.setRotation(angle);
+        owner.setRotation(angle);
         owner.getStage().addProjectile(pro);
     }
 

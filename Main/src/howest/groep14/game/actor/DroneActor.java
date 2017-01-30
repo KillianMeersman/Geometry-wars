@@ -17,6 +17,10 @@ public class DroneActor extends SpriteActor {
         this.collisionBehavior = new CollectGeomes(this, player);
     }
 
+    public PlayerActor getPlayer() {
+        return player;
+    }
+
     @Override
     public void act(float delta) {
         super.act(delta);

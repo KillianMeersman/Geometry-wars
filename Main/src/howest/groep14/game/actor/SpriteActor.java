@@ -76,7 +76,6 @@ public class SpriteActor extends Actor { // An actor that holds a sprite, and up
     // Position & rotation
     public void updateRotation(float angle) {
         this.setRotation(this.getRotation() + angle);
-        sprite.setRotation(sprite.getRotation() + angle);
     }
 
     // Update the position along the X- and Y-axis directly (don't move in the direction you are facing)
