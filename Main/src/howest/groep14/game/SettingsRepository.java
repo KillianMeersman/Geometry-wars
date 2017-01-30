@@ -6,7 +6,7 @@ public class SettingsRepository {
     private static SettingsRepository instance = new SettingsRepository();
     private SettingsMapper mapper;
     private boolean dbaccess = false;
-    private float actorScale = 0.5f;
+    private float actorScale = 0.8f;
     private boolean login_required = false;
     private static final String SQL_USER = "geometry-wars";
     private static final String SQL_PWD = "jEzPRAyKE6FsiiIjQXwq";
@@ -16,7 +16,11 @@ public class SettingsRepository {
     }
 
     private SettingsRepository() {
-        tryDbAccess();
+        try {
+            tryDbAccess();
+        } catch (Exception e) {
+            ;
+        }
     }
 
     public boolean hasDbAccess() {
@@ -35,7 +39,13 @@ public class SettingsRepository {
 
     private void init() {
         try {
-            login_required = !(mapper.getSetting("login-required").equals("false"));
+            if (dbaccess) {
+                login_required = !(mapper.getSetting("login-required").equals("false"));
+            } else {
+                login_required = false;
+                dbaccess = false;
+            }
+
         } catch (SQLException e) {
             dbaccess = false;
             login_required = false;
