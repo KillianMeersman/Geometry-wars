@@ -1,0 +1,3 @@
++ Fixed order of rotations
++ Added rate of fire to PlayerEntity
++ Added BASE_ROTATION to Mesh
